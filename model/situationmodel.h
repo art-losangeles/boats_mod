@@ -15,21 +15,26 @@
 #include <QObject>
 
 class TrackModel;
+class BoatModel;
 
 class SituationModel : public QObject {
         Q_OBJECT
     public:
         SituationModel(QObject *parent = 0);
-        ~SituationModel() {}
+        ~SituationModel();
 
         int size() const { return m_tracks.size();};
+        void addingBoat(BoatModel *boat) {emit boatAdded(boat);};
+        void removingBoat(BoatModel *boat) {emit boatRemoved(boat);};
 
     signals:
         void trackAdded(TrackModel *track);
         void trackRemoved(TrackModel *track);
+        void boatAdded(BoatModel *boat);
+        void boatRemoved(BoatModel *boat);
 
     public slots:
-        TrackModel * addTrack();
+        void addTrack(TrackModel *track);
         void deleteTrack(TrackModel *track);
 
     private:

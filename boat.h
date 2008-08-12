@@ -34,7 +34,7 @@ class BoatGraphicsItem : public QObject, public QGraphicsItem {
     public slots:
         void setHeading(int value);
         void setPosition(QPointF position);
-        void deleteItem();
+        void deleteItem(BoatModel *boat);
 
     private:
         BoatModel *m_boat;

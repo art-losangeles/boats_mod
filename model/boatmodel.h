@@ -20,7 +20,7 @@ class TrackModel;
 class BoatModel : public QObject {
         Q_OBJECT
     public:
-        BoatModel(QObject *parent = 0, TrackModel *track = 0);
+        BoatModel(TrackModel *track, QObject *parent = 0);
         ~BoatModel();
 
         TrackModel* track() const { return m_track; }
@@ -33,7 +33,6 @@ class BoatModel : public QObject {
     signals:
         void headingChanged(int heading);
         void positionChanged(QPointF position);
-        void boatDeleted();
 
     private:
         TrackModel *m_track;

@@ -13,7 +13,7 @@
 
 #include "model/boatmodel.h"
 
-BoatModel::BoatModel(QObject *parent, TrackModel* track)
+BoatModel::BoatModel(TrackModel* track, QObject *parent)
         : QObject(parent),
         m_track(track),
         m_position(),
@@ -22,7 +22,7 @@ BoatModel::BoatModel(QObject *parent, TrackModel* track)
 }
 
 BoatModel::~BoatModel() {
-    emit boatDeleted();
+    std::cout << "delete Boat " << this << std::endl;
 }
 
 void BoatModel::setHeading(const qreal& theValue, bool update) {

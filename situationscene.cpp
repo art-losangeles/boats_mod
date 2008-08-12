@@ -29,26 +29,27 @@ SituationScene::SituationScene(SituationModel *situation)
     connect(this, SIGNAL(selectionChanged()),
             this, SLOT(setSelectedModels()));
 
-    // react to model track add
+    // react to model track add/remove
     connect(situation, SIGNAL(trackAdded(TrackModel*)),
             this, SLOT(addTrack(TrackModel*)));
-}
+    connect(situation, SIGNAL(trackRemoved(TrackModel*)),
+            this, SLOT(deleteTrack(TrackModel*)));
 
-void SituationScene::addTrack(TrackModel *track) {
-    std::cout << "Treating addTrack" << std::endl;
-    // react to model boat add
-    connect(track, SIGNAL(boatAdded(BoatModel*)),
+    // react to model boat add/remove
+    connect(situation, SIGNAL(boatAdded(BoatModel*)),
             this, SLOT(addBoatItem(BoatModel*)));
 }
 
+void SituationScene::addTrack(TrackModel *track) {
+    std::cout << "Treating addTrack " << std::endl;
+}
+
 void SituationScene::deleteTrack(TrackModel *track) {
-    std::cout << "Treating deleteTrack" << std::endl;
-    disconnect(track, SIGNAL(boatAdded(BoatModel*)),
-               this, SLOT(addBoatItem(BoatModel*)));
+    std::cout << "Treating deleteTrack " << std::endl;
 }
 
 void SituationScene::addBoatItem(BoatModel *boat) {
-    std::cout << "Treating addBoatItem" << std::endl;
+    std::cout << "adding boat graphics for model " << boat << std::endl;
     BoatGraphicsItem *boatItem = new BoatGraphicsItem(boat);
     addItem(boatItem);
 }
@@ -80,7 +81,9 @@ void SituationScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     if (event->button() == Qt::LeftButton) {
         std::cout << "Mouse released with " << m_movingModels.size() << " items selected" << std::endl;
         if (!m_movingModels.isEmpty() && event->scenePos() != m_fromPosition) {
-            std::cout << "Detected move for " << m_movingModels.size() << "events" << std::endl;
+            std::cout << "Detected move for " << m_movingModels.size() << " items" << std::endl;
+            foreach(BoatModel* boat, selectedModels())
+                boat->setPosition(boat->position()+(event->scenePos()-m_fromPosition));
         }
         m_movingModels.clear();
     }

@@ -20,6 +20,7 @@ TrackModel::TrackModel(SituationModel *situation, QObject *parent)
         m_situation(situation),
         m_color() {
     static int track_id = 0;
+    std::cout << "new track " << this << std::endl;
 
     switch (track_id % 6) {
         case 0: m_color = QColor(Qt::yellow); break;
@@ -32,21 +33,33 @@ TrackModel::TrackModel(SituationModel *situation, QObject *parent)
     track_id++;
 }
 
-TrackModel::~TrackModel() {}
+TrackModel::~TrackModel() {
+    std::cout << "end track " << this << std::endl;
+}
 
-BoatModel * TrackModel::addBoat() {
-    BoatModel *boat = new BoatModel(this, this);
-    std::cout << "Adding Boat " << m_boats.size() << std::endl;
+BoatModel * TrackModel::addBoat(BoatModel *boat) {
     m_boats.push_back(boat);
-    emit boatAdded(boat);
+    std::cout << "Adding Boat " << m_boats.size() << std::endl;
+    m_situation->addingBoat(boat);
     return boat;
 }
 
 void TrackModel::deleteBoat(BoatModel *boat) {
-    std::cout << "Removing Boat " << m_boats.indexOf(boat) << std::endl;
+    std::cout << "Removing Boat " << m_boats.indexOf(boat)+1 << std::endl;
     m_boats.removeOne(boat);
-    emit boatRemoved(boat);
-    delete boat;
-    if (size() == 0)
-        m_situation->deleteTrack(this);
+    m_situation->removingBoat(boat);
+}
+
+void TrackModel::displayBoats() {
+    std::cout << "Displaying boats" << std::endl;
+    foreach (BoatModel* boat, m_boats) {
+        m_situation->addingBoat(boat);
+    }
+}
+
+void TrackModel::hideBoats() {
+    std::cout << "Hiding boats" << std::endl;
+    foreach (BoatModel* boat, m_boats) {
+        m_situation->removingBoat(boat);
+    }
 }

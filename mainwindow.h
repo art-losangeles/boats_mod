@@ -14,6 +14,9 @@
 
 #include <QMainWindow>
 #include <QGraphicsView>
+#include <QUndoStack>
+
+#include "model/trackmodel.h"
 
 class SituationModel;
 class SituationScene;
@@ -24,6 +27,11 @@ class MainWindow : public QMainWindow {
     public:
         MainWindow(QWidget *parent = 0);
         ~MainWindow();
+    public slots:
+        void addTrack();
+        void deleteTrack();
+        void addBoat();
+        void deleteBoat();
     private:
         void createActions();
         void createMenus();
@@ -39,8 +47,13 @@ class MainWindow : public QMainWindow {
         QAction *addBoatAction;
         QAction *deleteBoatAction;
         QAction *changeHeadingAction;
+        QAction *undoAction;
+        QAction *redoAction;
+
+        QUndoStack *undoStack;
 
         QMenu *trackMenu;
+        QMenu *historyMenu;
 };
 
 #endif

@@ -9,12 +9,15 @@
 // Copyright: See COPYING file that comes with this distribution
 //
 //
+#include <iostream>
+
 #include <QPainter>
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsScene>
 
 #include "boat.h"
 
+#include "model/situationmodel.h"
 #include "model/trackmodel.h"
 #include "model/boatmodel.h"
 
@@ -32,26 +35,33 @@ BoatGraphicsItem::BoatGraphicsItem(BoatModel *boat)
             this, SLOT(setHeading(int)));
     connect(boat, SIGNAL(positionChanged(QPointF)),
             this, SLOT(setPosition(QPointF)));
-    connect(boat, SIGNAL(boatDeleted()),
-            this, SLOT(deleteItem()));
+    connect(boat->track()->situation(), SIGNAL(boatRemoved(BoatModel*)),
+            this, SLOT(deleteItem(BoatModel*)));
 }
 
 
 BoatGraphicsItem::~BoatGraphicsItem() {}
 
 void BoatGraphicsItem::setHeading(int value) {
-    m_angle = value;
-    update();
+    if (m_angle != value) {
+        m_angle = value;
+        update();
+    }
 }
 
 void BoatGraphicsItem::setPosition(QPointF position) {
-    setPos(position);
-    update();
+    if (pos() != position) {
+        setPos(position);
+        update();
+    }
 }
 
-void BoatGraphicsItem::deleteItem() {
-    scene()->removeItem(this);
-    delete this;
+void BoatGraphicsItem::deleteItem(BoatModel *boat) {
+    if (boat == m_boat) {
+        std::cout << "deleting boatGraphics for model" << m_boat << std::endl;
+        scene()->removeItem(this);
+        delete this;
+    }
 }
 
 QRectF BoatGraphicsItem::boundingRect() const {

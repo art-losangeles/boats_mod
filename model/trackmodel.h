@@ -24,15 +24,15 @@ class TrackModel : public QObject {
         TrackModel(SituationModel* situation = 0, QObject *parent = 0);
         ~TrackModel();
 
-        BoatModel * addBoat();
+        BoatModel * addBoat(BoatModel *boat);
         void deleteBoat(BoatModel *boat);
 
+        void displayBoats();
+        void hideBoats();
+
+        SituationModel* situation() const { return m_situation; }
         QColor color() const { return m_color;};
         int size() const { return m_boats.size();};
-
-    signals:
-        void boatAdded(BoatModel *boat);
-        void boatRemoved(BoatModel *boat);
 
     private:
         SituationModel *m_situation;
