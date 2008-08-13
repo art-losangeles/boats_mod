@@ -32,9 +32,13 @@ class MainWindow : public QMainWindow {
         void deleteTrack();
         void addBoat();
         void deleteBoat();
+    protected:
+        void closeEvent(QCloseEvent *event);
     private:
         void createActions();
         void createMenus();
+        void writeSettings();
+        void readSettings();
 
         SituationModel *situation;
         SituationScene *scene;

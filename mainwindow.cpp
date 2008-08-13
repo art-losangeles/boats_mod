@@ -14,6 +14,8 @@
 #include <QStatusBar>
 #include <QAction>
 #include <QMenuBar>
+#include <QSettings>
+#include <QCloseEvent>
 
 #include "mainwindow.h"
 
@@ -48,6 +50,9 @@ MainWindow::MainWindow(QWidget *parent)
     setMenuBar(menubar);
     addToolBar(toolbar);
     setStatusBar(new QStatusBar);
+
+
+    readSettings();
 }
 
 MainWindow::~MainWindow() {}
@@ -102,6 +107,29 @@ void MainWindow::createMenus() {
     historyMenu = menubar->addMenu(tr("&History"));
     historyMenu->addAction(undoAction);
     historyMenu->addAction(redoAction);
+}
+
+void MainWindow::writeSettings() {
+    QSettings settings("Boats");
+
+    settings.beginGroup("MainWindow");
+    settings.setValue("size", size());
+    settings.setValue("pos", pos());
+    settings.endGroup();
+}
+
+void MainWindow::readSettings() {
+    QSettings settings("Boats");
+
+    settings.beginGroup("MainWindow");
+    resize(settings.value("size", QSize(400, 400)).toSize());
+    move(settings.value("pos", QPoint(200, 200)).toPoint());
+    settings.endGroup();
+}
+
+void MainWindow::closeEvent(QCloseEvent *event) {
+    writeSettings();
+    event->accept();
 }
 
 void MainWindow::addTrack() {
