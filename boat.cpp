@@ -107,6 +107,7 @@ void BoatGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *
     path.cubicTo(-21, 15, -24, 0, 0, -60);
     painter->drawPath(path);
 
+    painter->drawText(-10,25,20,20,Qt::AlignCenter,QString::number(m_order));
     //previous try
     //painter->setPen(Qt::blue);
     //QPainterPath oldpath(QPointF(0, -20));
