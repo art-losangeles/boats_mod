@@ -24,8 +24,8 @@ class TrackModel : public QObject {
         TrackModel(SituationModel* situation = 0, QObject *parent = 0);
         ~TrackModel();
 
-        BoatModel * addBoat(BoatModel *boat);
-        void deleteBoat(BoatModel *boat);
+        BoatModel * addBoat(BoatModel *boat, int order = 0);
+        int deleteBoat(BoatModel *boat);
 
         void displayBoats();
         void hideBoats();

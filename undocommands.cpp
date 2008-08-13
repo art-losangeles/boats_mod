@@ -93,9 +93,9 @@ DeleteBoatUndoCommand::~DeleteBoatUndoCommand() {
 }
 
 void DeleteBoatUndoCommand::redo() {
-    m_track->deleteBoat(m_boat);
+    m_order = m_track->deleteBoat(m_boat);
 }
 
 void DeleteBoatUndoCommand::undo() {
-    m_track->addBoat(m_boat);
+    m_track->addBoat(m_boat, m_order);
 }

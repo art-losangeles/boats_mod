@@ -64,5 +64,6 @@ class DeleteBoatUndoCommand : public QUndoCommand {
     private:
         TrackModel *m_track;
         BoatModel *m_boat;
+        int m_order;
 };
 #endif

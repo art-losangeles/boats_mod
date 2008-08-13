@@ -21,20 +21,25 @@
 #include "model/trackmodel.h"
 #include "model/boatmodel.h"
 
-BoatGraphicsItem::BoatGraphicsItem(BoatModel *boat)
-        : m_boat(boat),
+BoatGraphicsItem::BoatGraphicsItem(BoatModel *boat, QGraphicsItem *parent)
+        : QGraphicsItem(parent),
+        m_boat(boat),
         m_angle(boat->heading()),
         m_color(boat->track()->color()),
-        m_selected(false) {
+        m_selected(false),
+        m_order(boat->order()) {
     setFlag(QGraphicsItem::ItemIsMovable);
     setFlag(QGraphicsItem::ItemIsSelectable);
 
     setPos(boat->position());
+    setZValue(m_order);
 
-    connect(boat, SIGNAL(headingChanged(int)),
-            this, SLOT(setHeading(int)));
+    connect(boat, SIGNAL(headingChanged(qreal)),
+            this, SLOT(setHeading(qreal)));
     connect(boat, SIGNAL(positionChanged(QPointF)),
             this, SLOT(setPosition(QPointF)));
+    connect(boat, SIGNAL(orderChanged(int)),
+            this, SLOT(setOrder(int)));
     connect(boat->track()->situation(), SIGNAL(boatRemoved(BoatModel*)),
             this, SLOT(deleteItem(BoatModel*)));
 }
@@ -42,7 +47,7 @@ BoatGraphicsItem::BoatGraphicsItem(BoatModel *boat)
 
 BoatGraphicsItem::~BoatGraphicsItem() {}
 
-void BoatGraphicsItem::setHeading(int value) {
+void BoatGraphicsItem::setHeading(qreal value) {
     if (m_angle != value) {
         m_angle = value;
         update();
@@ -52,6 +57,13 @@ void BoatGraphicsItem::setHeading(int value) {
 void BoatGraphicsItem::setPosition(QPointF position) {
     if (pos() != position) {
         setPos(position);
+        update();
+    }
+}
+
+void BoatGraphicsItem::setOrder(int value) {
+    if (m_order != value) {
+        m_order = value;
         update();
     }
 }

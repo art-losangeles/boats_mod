@@ -12,12 +12,14 @@
 #include <iostream>
 
 #include "model/boatmodel.h"
+#include "model/trackmodel.h"
 
 BoatModel::BoatModel(TrackModel* track, QObject *parent)
         : QObject(parent),
         m_track(track),
         m_position(),
-        m_heading(0) {
+        m_heading(0),
+        m_order(track->size()) {
     std::cout << "new Boat " << this << std::endl;
 }
 
@@ -41,5 +43,15 @@ void BoatModel::setPosition(const QPointF& theValue, bool update) {
         m_position = theValue;
         if (update)
             emit positionChanged(m_position);
+    }
+}
+
+void BoatModel::setOrder(const int theValue, bool update) {
+    if (theValue != m_order) {
+        std::cout << "Boat " << this
+        << " order " << theValue << std::endl;
+        m_order = theValue;
+        if (update)
+            emit orderChanged(m_order);
     }
 }

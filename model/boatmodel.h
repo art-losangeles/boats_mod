@@ -26,18 +26,22 @@ class BoatModel : public QObject {
         TrackModel* track() const { return m_track; }
         QPointF position() const { return m_position; }
         qreal heading() const { return m_heading; }
+        int order() const { return m_order; }
 
         void setPosition(const QPointF& theValue, bool update = false);
         void setHeading(const qreal& theValue, bool update = false);
+        void setOrder(const int theValue, bool update = false);
 
     signals:
-        void headingChanged(int heading);
+        void headingChanged(qreal heading);
         void positionChanged(QPointF position);
+        void orderChanged(int order);
 
     private:
         TrackModel *m_track;
         QPointF m_position;
         qreal  m_heading;
+        int m_order;
 
 };
 

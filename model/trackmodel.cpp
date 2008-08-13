@@ -37,17 +37,28 @@ TrackModel::~TrackModel() {
     std::cout << "end track " << this << std::endl;
 }
 
-BoatModel * TrackModel::addBoat(BoatModel *boat) {
-    m_boats.push_back(boat);
-    std::cout << "Adding Boat " << m_boats.size() << std::endl;
+BoatModel * TrackModel::addBoat(BoatModel *boat, int order) {
+    if (order == 0) {
+        order = m_boats.size();
+    }
+    m_boats.insert(order, boat);
+    std::cout << "Adding Boat " << order << std::endl;
+    for (int i=order+1; i<m_boats.size(); i++) {
+        m_boats[i]->setOrder(i, true);
+    }
     m_situation->addingBoat(boat);
     return boat;
 }
 
-void TrackModel::deleteBoat(BoatModel *boat) {
-    std::cout << "Removing Boat " << m_boats.indexOf(boat)+1 << std::endl;
+int TrackModel::deleteBoat(BoatModel *boat) {
+    int order = m_boats.indexOf(boat);
     m_boats.removeOne(boat);
+    std::cout << "Removing Boat " << order+1 << std::endl;
+    for (int i=order; i<m_boats.size(); i++) {
+        m_boats[i]->setOrder(i, true);
+    }
     m_situation->removingBoat(boat);
+    return order;
 }
 
 void TrackModel::displayBoats() {

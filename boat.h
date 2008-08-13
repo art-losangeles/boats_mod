@@ -21,7 +21,7 @@ class BoatModel;
 class BoatGraphicsItem : public QObject, public QGraphicsItem {
         Q_OBJECT
     public:
-        BoatGraphicsItem(BoatModel *boat = NULL);
+        BoatGraphicsItem(BoatModel *boat = 0, QGraphicsItem *parent = 0);
         ~BoatGraphicsItem();
 
         BoatModel* boat() const { return m_boat; }
@@ -32,8 +32,9 @@ class BoatGraphicsItem : public QObject, public QGraphicsItem {
                    QWidget *widget);
 
     public slots:
-        void setHeading(int value);
+        void setHeading(qreal value);
         void setPosition(QPointF position);
+        void setOrder(int value);
         void deleteItem(BoatModel *boat);
 
     private:
@@ -41,6 +42,7 @@ class BoatGraphicsItem : public QObject, public QGraphicsItem {
         qreal m_angle;
         QColor m_color;
         bool m_selected;
+        int m_order;
 };
 
 #endif
