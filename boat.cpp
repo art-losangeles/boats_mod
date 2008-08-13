@@ -77,15 +77,15 @@ void BoatGraphicsItem::deleteItem(BoatModel *boat) {
 }
 
 QRectF BoatGraphicsItem::boundingRect() const {
-    return QRectF(-20, -20, 40, 40);
+    return QRectF(-60, -60, 120, 120);
 }
 
 QPainterPath BoatGraphicsItem::shape() const {
 
-    QPainterPath path(QPointF(0, -20));
-    path.cubicTo(8, 0, 7, 5, 4, 20);
-    path.lineTo(-4, 20);
-    path.cubicTo(-7, 5, -8, 0, 0, -20);
+    QPainterPath path(QPointF(0, -60));
+    path.cubicTo(24, 0, 21, 15, 12, 60);
+    path.lineTo(-12, 60);
+    path.cubicTo(-21, 15, -24, 0, 0, -60);
     return path;
 }
 
@@ -101,10 +101,10 @@ void BoatGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *
     painter->rotate(m_angle);
 
     //painter->setBrush(Qt::NoBrush);
-    QPainterPath path(QPointF(0, -20));
-    path.cubicTo(8, 0, 7, 5, 4, 20);
-    path.lineTo(-4, 20);
-    path.cubicTo(-7, 5, -8, 0, 0, -20);
+    QPainterPath path(QPointF(0, -60));
+    path.cubicTo(24, 0, 21, 15, 12, 60);
+    path.lineTo(-12, 60);
+    path.cubicTo(-21, 15, -24, 0, 0, -60);
     painter->drawPath(path);
 
     //previous try
