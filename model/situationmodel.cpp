@@ -17,7 +17,8 @@
 #include "model/boatmodel.h"
 
 SituationModel::SituationModel(QObject *parent)
-        : QObject(parent) {
+        : QObject(parent),
+        m_undoStack(new QUndoStack(this)) {
     std::cout << "new situation " << this << std::endl;
 }
 

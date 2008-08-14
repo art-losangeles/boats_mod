@@ -35,8 +35,7 @@ MainWindow::MainWindow(QWidget *parent)
         scene(new SituationScene(situation)),
         view(new QGraphicsView(scene)),
         menubar(new QMenuBar(this)),
-        toolbar(new TrackWidget(this)),
-        undoStack(new QUndoStack(this)) {
+        toolbar(new TrackWidget(this)) {
 
     // Actions
     createActions();
@@ -82,8 +81,8 @@ void MainWindow::createActions() {
     undoAction->setShortcut(tr("Ctrl+Z"));
     undoAction->setEnabled(false);
     connect(undoAction, SIGNAL(triggered()),
-            undoStack, SLOT(undo()));
-    connect(undoStack, SIGNAL(canUndoChanged(bool)),
+            situation->undoStack(), SLOT(undo()));
+    connect(situation->undoStack(), SIGNAL(canUndoChanged(bool)),
             undoAction, SLOT(setEnabled(bool)));
 
     redoAction = new QAction(tr("&Redo"), this);
@@ -92,8 +91,8 @@ void MainWindow::createActions() {
     redoAction->setShortcuts(redoShortcuts);
     redoAction->setEnabled(false);
     connect(redoAction, SIGNAL(triggered()),
-            undoStack, SLOT(redo()));
-    connect(undoStack, SIGNAL(canRedoChanged(bool)),
+            situation->undoStack(), SLOT(redo()));
+    connect(situation->undoStack(), SIGNAL(canRedoChanged(bool)),
             redoAction, SLOT(setEnabled(bool)));
 }
 
@@ -133,7 +132,7 @@ void MainWindow::closeEvent(QCloseEvent *event) {
 }
 
 void MainWindow::addTrack() {
-    undoStack->push(new AddTrackUndoCommand(situation));
+    situation->undoStack()->push(new AddTrackUndoCommand(situation));
 }
 
 void MainWindow::deleteTrack() {
@@ -141,7 +140,7 @@ void MainWindow::deleteTrack() {
     if (!scene->selectedItems().isEmpty()) {
         BoatModel *boat = static_cast<BoatGraphicsItem*>(scene->selectedItems()[0])->boat();
         TrackModel * track = boat->track();
-        undoStack->push(new DeleteTrackUndoCommand(situation, track));
+        situation->undoStack()->push(new DeleteTrackUndoCommand(situation, track));
     }
 }
 
@@ -150,7 +149,7 @@ void MainWindow::addBoat() {
     if (!scene->selectedItems().isEmpty()) {
         BoatModel *boat = static_cast<BoatGraphicsItem*>(scene->selectedItems()[0])->boat();
         TrackModel * track = boat->track();
-        undoStack->push(new AddBoatUndoCommand(track));
+        situation->undoStack()->push(new AddBoatUndoCommand(track));
     }
 }
 
@@ -159,6 +158,6 @@ void MainWindow::deleteBoat() {
         return;
     foreach(BoatModel *boat, scene->selectedModels()) {
         TrackModel* track = boat->track();
-        undoStack->push(new DeleteBoatUndoCommand(track, boat));
+        situation->undoStack()->push(new DeleteBoatUndoCommand(track, boat));
     }
 }

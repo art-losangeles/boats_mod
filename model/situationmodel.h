@@ -13,6 +13,7 @@
 #define SITUATIONMODEL_H
 
 #include <QObject>
+#include <QUndoStack>
 
 class TrackModel;
 class BoatModel;
@@ -23,6 +24,7 @@ class SituationModel : public QObject {
         SituationModel(QObject *parent = 0);
         ~SituationModel();
 
+        QUndoStack * undoStack() const { return m_undoStack;};
         int size() const { return m_tracks.size();};
         void addingBoat(BoatModel *boat) {emit boatAdded(boat);};
         void removingBoat(BoatModel *boat) {emit boatRemoved(boat);};
@@ -38,7 +40,7 @@ class SituationModel : public QObject {
         void deleteTrack(TrackModel *track);
 
     private:
-
+        QUndoStack *m_undoStack;
         QList<TrackModel*> m_tracks;
 };
 

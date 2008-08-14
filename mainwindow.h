@@ -14,7 +14,6 @@
 
 #include <QMainWindow>
 #include <QGraphicsView>
-#include <QUndoStack>
 
 #include "model/trackmodel.h"
 
@@ -53,8 +52,6 @@ class MainWindow : public QMainWindow {
         QAction *changeHeadingAction;
         QAction *undoAction;
         QAction *redoAction;
-
-        QUndoStack *undoStack;
 
         QMenu *trackMenu;
         QMenu *historyMenu;
