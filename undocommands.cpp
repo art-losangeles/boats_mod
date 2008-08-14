@@ -80,6 +80,41 @@ void AddBoatUndoCommand::undo() {
     m_track->deleteBoat(m_boat);
 }
 
+// Move Boat
+MoveBoatUndoCommand::MoveBoatUndoCommand(QList<BoatModel*> &boatList, const QPointF &deltaPosition, QUndoCommand *parent)
+        : QUndoCommand(parent),
+        m_boatList(boatList),
+        m_deltaPosition(deltaPosition) {
+    std::cout << "new moveboatundocommand" << std::endl;
+}
+
+MoveBoatUndoCommand::~MoveBoatUndoCommand() {
+    std::cout << "end moveboatundocommand" << std::endl;
+}
+
+
+
+void MoveBoatUndoCommand::undo() {
+    foreach(BoatModel* boat, m_boatList) {
+        boat->setPosition(boat->position() - m_deltaPosition, true);
+    }
+}
+
+void MoveBoatUndoCommand::redo() {
+    foreach(BoatModel* boat, m_boatList) {
+        boat->setPosition(boat->position() + m_deltaPosition, true);
+    }
+}
+
+bool MoveBoatUndoCommand::mergeWith(const QUndoCommand *command) {
+    const MoveBoatUndoCommand *moveCommand = static_cast<const MoveBoatUndoCommand*>(command);
+    if (m_boatList != moveCommand->m_boatList)
+        return false;
+
+    m_deltaPosition += moveCommand->m_deltaPosition;
+    return true;
+}
+
 // Delete Boat
 DeleteBoatUndoCommand::DeleteBoatUndoCommand(TrackModel* track, BoatModel* boat, QUndoCommand *parent)
         : QUndoCommand(parent),

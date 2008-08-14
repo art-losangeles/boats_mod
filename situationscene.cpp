@@ -15,6 +15,8 @@
 
 #include "situationscene.h"
 
+#include "undocommands.h"
+
 #include "model/situationmodel.h"
 #include "model/trackmodel.h"
 #include "model/boatmodel.h"
@@ -82,8 +84,7 @@ void SituationScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
         std::cout << "Mouse released with " << m_movingModels.size() << " items selected" << std::endl;
         if (!m_movingModels.isEmpty() && event->scenePos() != m_fromPosition) {
             std::cout << "Detected move for " << m_movingModels.size() << " items" << std::endl;
-            foreach(BoatModel* boat, selectedModels())
-                boat->setPosition(boat->position()+(event->scenePos()-m_fromPosition));
+            m_situation->undoStack()->push(new MoveBoatUndoCommand(m_movingModels,(event->scenePos()-m_fromPosition)));
         }
         m_movingModels.clear();
     }
