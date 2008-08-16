@@ -37,6 +37,9 @@ class BoatGraphicsItem : public QObject, public QGraphicsItem {
         void setOrder(int value);
         void deleteItem(BoatModel *boat);
 
+    protected:
+        void mousePressEvent(QGraphicsSceneMouseEvent *event);
+
     private:
         BoatModel *m_boat;
         qreal m_angle;

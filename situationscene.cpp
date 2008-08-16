@@ -10,6 +10,7 @@
 //
 //
 #include <iostream>
+#include <math.h>
 
 #include <QGraphicsSceneMouseEvent>
 
@@ -68,31 +69,49 @@ void SituationScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
     // propagate mouse event first for selected items
     QGraphicsScene::mousePressEvent(event);
 
-    if (event->button() == Qt::LeftButton) {
-        if (!selectedItems().isEmpty() && m_movingModels.isEmpty()) {
-            m_movingModels = m_selectedModels;
-            m_fromPosition = event->scenePos();
-            std::cout << "Mouse pressed with " << m_movingModels.size()
-            << " items selected" << std::endl;
-        }
+    m_fromPosition = event->scenePos();
+    if (!selectedItems().isEmpty() && m_movingModels.isEmpty()) {
+        m_movingModels = m_selectedModels;
+    }
+    std::cout << "Mouse pressed with " << m_movingModels.size()
+    << " items selected" << std::endl;
+}
+
+void SituationScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
+    QGraphicsScene::mouseMoveEvent(event);
+    if (event->buttons() == Qt::RightButton) {
+        mouseHeadingEvent(event);
     }
 }
 
 void SituationScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     QGraphicsScene::mouseReleaseEvent(event);
     if (event->button() == Qt::LeftButton) {
-        std::cout << "Mouse released with " << m_movingModels.size() << " items selected" << std::endl;
+        std::cout << "Left Mouse released with " << m_movingModels.size() << " items selected" << std::endl;
         if (!m_movingModels.isEmpty() && event->scenePos() != m_fromPosition) {
             std::cout << "Detected move for " << m_movingModels.size() << " items" << std::endl;
             m_situation->undoStack()->push(new MoveBoatUndoCommand(m_movingModels,(event->scenePos()-m_fromPosition)));
         }
-        m_movingModels.clear();
     }
+    if (event->button() == Qt::RightButton) {
+        std::cout << "Right-Mouse released " << std::endl;
+        mouseHeadingEvent(event);
+    }
+    m_movingModels.clear();
 }
 // itemselected should connect trackwidget with item
 //    headingbox->connect(headingbox,SIGNAL(valueChanged(int)),
 //        boat,SLOT(setHeading(int)));
 
+void SituationScene::mouseHeadingEvent(QGraphicsSceneMouseEvent *event) {
+    if (!m_movingModels.isEmpty()) {
+        QPointF point = event->scenePos() - m_modelPressed->position();
+        double theta = atan2 (point.x(), -point.y()) * 180 / 3.1415926;
+        foreach(BoatModel* boat, m_movingModels) {
+            boat->setHeading(theta, true);
+        }
+    }
+}
 
 void SituationScene::setSelectedModels() {
     m_selectedModels.clear();

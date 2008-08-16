@@ -17,6 +17,7 @@
 
 #include "boat.h"
 
+#include "situationscene.h"
 #include "model/situationmodel.h"
 #include "model/trackmodel.h"
 #include "model/boatmodel.h"
@@ -30,6 +31,8 @@ BoatGraphicsItem::BoatGraphicsItem(BoatModel *boat, QGraphicsItem *parent)
         m_order(boat->order()) {
     setFlag(QGraphicsItem::ItemIsMovable);
     setFlag(QGraphicsItem::ItemIsSelectable);
+
+    setBoundingRegionGranularity(1);
 
     setPos(boat->position());
     setZValue(m_order);
@@ -49,6 +52,7 @@ BoatGraphicsItem::~BoatGraphicsItem() {}
 
 void BoatGraphicsItem::setHeading(qreal value) {
     if (m_angle != value) {
+        prepareGeometryChange();
         m_angle = value;
         update();
     }
@@ -76,16 +80,25 @@ void BoatGraphicsItem::deleteItem(BoatModel *boat) {
     }
 }
 
+void BoatGraphicsItem::mousePressEvent(QGraphicsSceneMouseEvent *event) {
+    // propagate mouse event first for selected items
+    QGraphicsItem::mousePressEvent(event);
+
+    static_cast<SituationScene*>(scene())->setModelPressed(m_boat);
+    bool multiSelect = (event->modifiers() & Qt::ControlModifier) != 0;
+    if (!multiSelect) {
+        scene()->clearSelection();
+    }
+    setSelected(true);
+}
+
 QRectF BoatGraphicsItem::boundingRect() const {
     return QRectF(-60, -60, 120, 120);
 }
 
 QPainterPath BoatGraphicsItem::shape() const {
-
-    QPainterPath path(QPointF(0, -60));
-    path.cubicTo(24, 0, 21, 15, 12, 60);
-    path.lineTo(-12, 60);
-    path.cubicTo(-21, 15, -24, 0, 0, -60);
+    QPainterPath path;
+    path.addRegion(boundingRegion(QTransform()));
     return path;
 }
 
@@ -105,9 +118,9 @@ void BoatGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *
     path.cubicTo(24, 0, 21, 15, 12, 60);
     path.lineTo(-12, 60);
     path.cubicTo(-21, 15, -24, 0, 0, -60);
+    path.addText(-5,25,painter->font(),QString::number(m_order));
     painter->drawPath(path);
 
-    painter->drawText(-10,25,20,20,Qt::AlignCenter,QString::number(m_order));
     //previous try
     //painter->setPen(Qt::blue);
     //QPainterPath oldpath(QPointF(0, -20));

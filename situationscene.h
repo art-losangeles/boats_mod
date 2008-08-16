@@ -34,6 +34,7 @@ class SituationScene : public QGraphicsScene {
         ~SituationScene() {}
 
         void setState(const SceneState& theValue) { m_state = theValue; }
+        void setModelPressed(BoatModel *theValue) {m_modelPressed = theValue; }
         SceneState state() const { return m_state; }
         QList< BoatModel * > selectedModels() const { return m_selectedModels; }
 
@@ -49,12 +50,16 @@ class SituationScene : public QGraphicsScene {
 
     protected:
         void mousePressEvent(QGraphicsSceneMouseEvent *event);
+        void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
         void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 
     private:
+        void mouseHeadingEvent(QGraphicsSceneMouseEvent *event);
+
         SituationModel *m_situation;
         QList<BoatModel*> m_selectedModels;
         QList<BoatModel*> m_movingModels;
+        BoatModel* m_modelPressed;
         QPointF m_fromPosition;
         SceneState m_state;
 };
