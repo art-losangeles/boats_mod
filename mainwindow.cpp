@@ -11,11 +11,7 @@
 //
 #include <iostream>
 
-#include <QStatusBar>
-#include <QAction>
-#include <QMenuBar>
-#include <QSettings>
-#include <QCloseEvent>
+#include <QtGui>
 
 #include "mainwindow.h"
 
@@ -24,6 +20,7 @@
 #include "model/boatmodel.h"
 
 #include "undocommands.h"
+#include "xmlsituationwriter.h"
 
 #include "boat.h"
 #include "situationscene.h"
@@ -57,6 +54,11 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow() {}
 
 void MainWindow::createActions() {
+    saveFileAction = new QAction(tr("&Save File"), this);
+    saveFileAction->setShortcut(tr("Ctrl+S"));
+    connect(saveFileAction, SIGNAL(triggered()),
+            this, SLOT(saveFile()));
+
     addTrackAction = new QAction(tr("Create &Track"), this);
     addTrackAction->setShortcut(tr("Ctrl+Ins"));
     connect(addTrackAction, SIGNAL(triggered()),
@@ -97,6 +99,9 @@ void MainWindow::createActions() {
 }
 
 void MainWindow::createMenus() {
+    fileMenu = menubar->addMenu(tr("&File"));
+    fileMenu->addAction(saveFileAction);
+
     trackMenu = menubar->addMenu(tr("&Track"));
     trackMenu->addAction(addTrackAction);
     trackMenu->addAction(deleteTrackAction);
@@ -129,6 +134,29 @@ void MainWindow::readSettings() {
 void MainWindow::closeEvent(QCloseEvent *event) {
     writeSettings();
     event->accept();
+}
+
+void MainWindow::saveFile()
+{
+    QString fileName =
+            QFileDialog::getSaveFileName(this, tr("Save Situation"),
+                                         QDir::currentPath(),
+                                         tr("Situation Files (*.xboat *.xml)"));
+    if (fileName.isEmpty())
+        return;
+
+    QFile file(fileName);
+    if (!file.open(QFile::WriteOnly | QFile::Text)) {
+        QMessageBox::warning(this, tr("Save Situation"),
+                             tr("Cannot write file %1:\n%2.")
+                             .arg(fileName)
+                             .arg(file.errorString()));
+        return;
+    }
+
+    XmlSituationWriter writer(situation);
+    writer.writeFile(&file);
+        //statusBar()->showMessage(tr("File saved"), 2000);
 }
 
 void MainWindow::addTrack() {

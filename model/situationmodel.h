@@ -20,6 +20,7 @@ class BoatModel;
 
 class SituationModel : public QObject {
         Q_OBJECT
+    friend class XmlSituationWriter;
     public:
         SituationModel(QObject *parent = 0);
         ~SituationModel();
@@ -39,9 +40,12 @@ class SituationModel : public QObject {
         void addTrack(TrackModel *track);
         void deleteTrack(TrackModel *track);
 
+    protected:
+        QList<TrackModel*> m_tracks;
+
     private:
         QUndoStack *m_undoStack;
-        QList<TrackModel*> m_tracks;
+
 };
 
 #endif
