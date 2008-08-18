@@ -20,6 +20,7 @@ class SituationModel;
 
 class TrackModel : public QObject {
         Q_OBJECT
+    friend class TrackGraphicsItem;
     public:
         TrackModel(SituationModel* situation = 0, QObject *parent = 0);
         ~TrackModel();
@@ -34,9 +35,16 @@ class TrackModel : public QObject {
         QColor color() const { return m_color;};
         int size() const { return m_boats.size();};
 
+        void changingTrack(TrackModel *track) {emit trackChanged(this);};
+
+    signals:
+        void trackChanged(TrackModel *track);
+
+    protected:
+        QList<BoatModel*> m_boats;
+
     private:
         SituationModel *m_situation;
-        QList<BoatModel*> m_boats;
         QColor m_color;
 };
 

@@ -47,6 +47,7 @@ BoatModel * TrackModel::addBoat(BoatModel *boat, int order) {
         m_boats[i]->setOrder(i, true);
     }
     m_situation->addingBoat(boat);
+    emit changingTrack(this);
     return boat;
 }
 
@@ -58,6 +59,7 @@ int TrackModel::deleteBoat(BoatModel *boat) {
         m_boats[i]->setOrder(i, true);
     }
     m_situation->removingBoat(boat);
+    emit changingTrack(this);
     return order;
 }
 

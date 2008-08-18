@@ -32,6 +32,7 @@ void BoatModel::setHeading(const qreal& theValue, bool update) {
         m_heading = theValue;
         if (update)
             emit headingChanged(m_heading);
+            m_track->changingTrack(m_track);
     }
 }
 
@@ -41,8 +42,10 @@ void BoatModel::setPosition(const QPointF& theValue, bool update) {
         << " position " << theValue.x()
         << ", " << theValue.y() << std::endl;
         m_position = theValue;
-        if (update)
+        if (update) {
             emit positionChanged(m_position);
+            m_track->changingTrack(m_track);
+        }
     }
 }
 

@@ -23,6 +23,7 @@
 #include "model/boatmodel.h"
 
 #include "boat.h"
+#include "track.h"
 
 SituationScene::SituationScene(SituationModel *situation)
         : QGraphicsScene(situation),
@@ -44,7 +45,9 @@ SituationScene::SituationScene(SituationModel *situation)
 }
 
 void SituationScene::addTrack(TrackModel *track) {
-    std::cout << "Treating addTrack " << std::endl;
+    std::cout << "adding track graphics for model " << track << std::endl;
+    TrackGraphicsItem *trackItem = new TrackGraphicsItem(track);
+    addItem(trackItem);
 }
 
 void SituationScene::deleteTrack(TrackModel *track) {
@@ -106,7 +109,7 @@ void SituationScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
 void SituationScene::mouseHeadingEvent(QGraphicsSceneMouseEvent *event) {
     if (!m_movingModels.isEmpty()) {
         QPointF point = event->scenePos() - m_modelPressed->position();
-        double theta = atan2 (point.x(), -point.y()) * 180 / 3.1415926;
+        double theta = atan2 (point.x(), -point.y()) * 180 / M_PI;
         foreach(BoatModel* boat, m_movingModels) {
             boat->setHeading(theta, true);
         }
