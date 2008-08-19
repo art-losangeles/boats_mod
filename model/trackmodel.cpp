@@ -37,6 +37,15 @@ TrackModel::~TrackModel() {
     std::cout << "end track " << this << std::endl;
 }
 
+void TrackModel::setColor(const QColor& theValue, bool update) {
+    if (theValue != m_color) {
+        m_color = theValue;
+        if (update)
+            emit colorChanged(m_color);
+    }
+}
+
+
 BoatModel * TrackModel::addBoat(BoatModel *boat, int order) {
     if (order == 0) {
         order = m_boats.size();

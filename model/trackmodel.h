@@ -36,6 +36,8 @@ class TrackModel : public QObject {
         QColor color() const { return m_color;};
         int size() const { return m_boats.size();};
 
+        void setColor(const QColor& theValue, bool update = false);
+
         void changingTrack(TrackModel *track) {emit trackChanged(this);};
 
     signals:

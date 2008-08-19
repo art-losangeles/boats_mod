@@ -43,6 +43,8 @@ BoatGraphicsItem::BoatGraphicsItem(BoatModel *boat, QGraphicsItem *parent)
             this, SLOT(setPosition(QPointF)));
     connect(boat, SIGNAL(orderChanged(int)),
             this, SLOT(setOrder(int)));
+    connect(boat->track(), SIGNAL(colorChanged(QColor)),
+            this, SLOT(setColor(QColor)));
     connect(boat->track()->situation(), SIGNAL(boatRemoved(BoatModel*)),
             this, SLOT(deleteItem(BoatModel*)));
 }
@@ -68,6 +70,13 @@ void BoatGraphicsItem::setPosition(QPointF position) {
 void BoatGraphicsItem::setOrder(int value) {
     if (m_order != value) {
         m_order = value;
+        update();
+    }
+}
+
+void BoatGraphicsItem::setColor(QColor value) {
+    if (m_color != value) {
+        m_color = value;
         update();
     }
 }

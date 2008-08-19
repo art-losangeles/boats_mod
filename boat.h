@@ -35,6 +35,7 @@ class BoatGraphicsItem : public QObject, public QGraphicsItem {
         void setHeading(qreal value);
         void setPosition(QPointF position);
         void setOrder(int value);
+        void setColor(QColor value);
         void deleteItem(BoatModel *boat);
 
     protected:
