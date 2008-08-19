@@ -42,6 +42,11 @@ void TrackGraphicsItem::setTrack() {
 
         prepareGeometryChange();
 
+        if (m_track->m_boats.size() < 2) {
+            setPath(path);
+            update();
+            return;
+        }
         QPointF pos0(m_track->m_boats[0]->position());
         qreal heading0 = m_track->m_boats[0]->heading()  * M_PI /180;
 
