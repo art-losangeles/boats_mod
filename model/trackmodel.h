@@ -20,6 +20,7 @@ class SituationModel;
 
 class TrackModel : public QObject {
         Q_OBJECT
+    friend class XmlSituationReader;
     friend class XmlSituationWriter;
     friend class TrackGraphicsItem;
     public:
@@ -41,6 +42,7 @@ class TrackModel : public QObject {
         void changingTrack(TrackModel *track) {emit trackChanged(this);};
 
     signals:
+        void colorChanged(QColor color);
         void trackChanged(TrackModel *track);
 
     protected:

@@ -20,6 +20,7 @@
 #include "model/boatmodel.h"
 
 #include "undocommands.h"
+#include "xmlsituationreader.h"
 #include "xmlsituationwriter.h"
 
 #include "boat.h"
@@ -54,6 +55,11 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow() {}
 
 void MainWindow::createActions() {
+    openFileAction = new QAction(tr("&Open File"), this);
+    openFileAction->setShortcut(tr("Ctrl+O"));
+    connect(openFileAction, SIGNAL(triggered()),
+            this, SLOT(openFile()));
+
     saveFileAction = new QAction(tr("&Save File"), this);
     saveFileAction->setShortcut(tr("Ctrl+S"));
     connect(saveFileAction, SIGNAL(triggered()),
@@ -100,6 +106,7 @@ void MainWindow::createActions() {
 
 void MainWindow::createMenus() {
     fileMenu = menubar->addMenu(tr("&File"));
+    fileMenu->addAction(openFileAction);
     fileMenu->addAction(saveFileAction);
 
     trackMenu = menubar->addMenu(tr("&Track"));
@@ -135,6 +142,40 @@ void MainWindow::closeEvent(QCloseEvent *event) {
     writeSettings();
     event->accept();
 }
+
+void MainWindow::openFile()
+{
+    QString fileName =
+             QFileDialog::getOpenFileName(this, tr("Open Situation File"),
+                                          QDir::currentPath(),
+                                          tr("xmlsituation Files (*.xboat *.xml)"));
+    if (fileName.isEmpty())
+        return;
+
+//    delete situation;
+
+    QFile file(fileName);
+    if (!file.open(QFile::ReadOnly | QFile::Text)) {
+        QMessageBox::warning(this, tr("Open Situation File"),
+                             tr("Cannot read file %1:\n%2.")
+                             .arg(fileName)
+                             .arg(file.errorString()));
+        return;
+    }
+
+    XmlSituationReader reader(situation);
+    if (!reader.read(&file)) {
+        QMessageBox::warning(this, tr("Open Situation file"),
+                             tr("Parse error in file %1 at line %2, column %3:\n%4")
+                             .arg(fileName)
+                             .arg(reader.lineNumber())
+                             .arg(reader.columnNumber())
+                             .arg(reader.errorString()));
+//    } else {
+//        statusBar()->showMessage(tr("File loaded"), 2000);
+    }
+}
+
 
 void MainWindow::saveFile()
 {

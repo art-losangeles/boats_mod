@@ -20,6 +20,7 @@ class BoatModel;
 
 class SituationModel : public QObject {
         Q_OBJECT
+    friend class XmlSituationReader;
     friend class XmlSituationWriter;
     public:
         SituationModel(QObject *parent = 0);

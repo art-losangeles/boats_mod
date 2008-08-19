@@ -25,6 +25,7 @@ class MainWindow : public QMainWindow {
         MainWindow(QWidget *parent = 0);
         ~MainWindow();
     public slots:
+        void openFile();
         void saveFile();
         void addTrack();
         void deleteTrack();
@@ -44,6 +45,7 @@ class MainWindow : public QMainWindow {
         QMenuBar *menubar;
         TrackWidget *toolbar;
 
+        QAction *openFileAction;
         QAction *saveFileAction;
 
         QAction *addTrackAction;
