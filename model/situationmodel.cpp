@@ -30,10 +30,6 @@ void SituationModel::addTrack(TrackModel *track) {
     m_tracks.push_back(track);
     std::cout << "Adding Track " << m_tracks.size() << std::endl;
     track->displayBoats();
-    if (track->size() == 0) {
-        BoatModel *boat = new BoatModel(track, track);
-        track->addBoat(boat);
-    }
     emit trackAdded(track);
 }
 

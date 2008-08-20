@@ -26,6 +26,9 @@ class AddTrackUndoCommand : public QUndoCommand {
         ~AddTrackUndoCommand();
         void undo();
         void redo();
+
+        TrackModel *track() {return m_track; }
+
     private:
         SituationModel *m_situation;
         TrackModel *m_track;
@@ -50,6 +53,9 @@ class AddBoatUndoCommand : public QUndoCommand {
         ~AddBoatUndoCommand();
         void undo();
         void redo();
+
+        BoatModel *boat() {return m_boat; }
+
     private:
         TrackModel *m_track;
         BoatModel *m_boat;

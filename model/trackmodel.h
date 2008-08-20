@@ -39,7 +39,7 @@ class TrackModel : public QObject {
 
         void setColor(const QColor& theValue, bool update = false);
 
-        void changingTrack(TrackModel *track) {emit trackChanged(this);};
+        void changingTrack(TrackModel *track) {emit trackChanged(track);};
 
     signals:
         void colorChanged(QColor color);

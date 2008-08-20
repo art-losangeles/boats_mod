@@ -71,10 +71,9 @@ void XmlSituationReader::readSituation() {
 }
 
 void XmlSituationReader::readTrack(SituationModel *situation) {
-    situation->undoStack()->push(new AddTrackUndoCommand(situation));
-    TrackModel *track = situation->m_tracks.last();
-    // TODO: find better trick with default created boat in TrackModel
-    track->deleteBoat(track->m_boats.last());
+    AddTrackUndoCommand *command = new AddTrackUndoCommand(situation);
+    situation->undoStack()->push(command);
+    TrackModel *track = command->track();
     while (!atEnd()) {
         readNext();
         if (isEndElement())
@@ -91,8 +90,9 @@ void XmlSituationReader::readTrack(SituationModel *situation) {
 }
 
 void XmlSituationReader::readBoat(SituationModel *situation, TrackModel *track) {
-    situation->undoStack()->push(new AddBoatUndoCommand(track));
-    BoatModel *boat = track->m_boats.last();
+    AddBoatUndoCommand *command = new AddBoatUndoCommand(track);
+    situation->undoStack()->push(command);
+    BoatModel *boat = command->boat();
     QPointF pos;
     while (!atEnd()) {
         readNext();

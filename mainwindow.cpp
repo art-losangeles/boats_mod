@@ -201,7 +201,11 @@ void MainWindow::saveFile()
 }
 
 void MainWindow::addTrack() {
-    situation->undoStack()->push(new AddTrackUndoCommand(situation));
+    AddTrackUndoCommand *command = new AddTrackUndoCommand(situation);
+    TrackModel *track = command->track();
+    situation->undoStack()->push(command);
+    BoatModel *boat = new BoatModel(track, track);
+    track->addBoat(boat);
 }
 
 void MainWindow::deleteTrack() {
