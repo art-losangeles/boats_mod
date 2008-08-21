@@ -98,6 +98,16 @@ void SituationScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
                 mouseHeadingEvent(event);
             }
             break;
+        case CREATE_TRACK:
+            if (event->button() == Qt::LeftButton) {
+                mouseCreateTrackEvent(event);
+            }
+            break;
+        case CREATE_BOAT:
+            if (event->button() == Qt::LeftButton) {
+                mouseCreateBoatEvent(event);
+            }
+            break;
         default:
             break;
     }
@@ -120,6 +130,25 @@ void SituationScene::mouseHeadingEvent(QGraphicsSceneMouseEvent *event) {
         foreach(BoatModel* boat, m_movingModels) {
             boat->setHeading(theta, true);
         }
+    }
+}
+
+void SituationScene::mouseCreateTrackEvent(QGraphicsSceneMouseEvent *event) {
+    QPointF point = event->scenePos();
+    AddTrackUndoCommand *command = new AddTrackUndoCommand(m_situation);
+    TrackModel *track = command->track();
+    m_situation->undoStack()->push(command);
+    BoatModel *boat = new BoatModel(track, track);
+    boat->setPosition(point);
+    track->addBoat(boat);
+    m_trackCreated = track;
+    m_state = CREATE_BOAT;
+}
+
+void SituationScene::mouseCreateBoatEvent(QGraphicsSceneMouseEvent *event) {
+    QPointF point = event->scenePos();
+    if (m_trackCreated) {
+        m_situation->undoStack()->push(new AddBoatUndoCommand(m_trackCreated, point));
     }
 }
 

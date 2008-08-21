@@ -56,11 +56,14 @@ class SituationScene : public QGraphicsScene {
     private:
         void mouseMoveBoatEvent(QGraphicsSceneMouseEvent *event);
         void mouseHeadingEvent(QGraphicsSceneMouseEvent *event);
+        void mouseCreateTrackEvent(QGraphicsSceneMouseEvent *event);
+        void mouseCreateBoatEvent(QGraphicsSceneMouseEvent *event);
 
         SituationModel *m_situation;
         QList<BoatModel*> m_selectedModels;
         QList<BoatModel*> m_movingModels;
         BoatModel* m_modelPressed;
+        TrackModel *m_trackCreated;
         QPointF m_fromPosition;
         SceneState m_state;
 };
