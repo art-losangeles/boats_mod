@@ -54,6 +54,7 @@ class SituationScene : public QGraphicsScene {
         void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 
     private:
+        void mouseMoveBoatEvent(QGraphicsSceneMouseEvent *event);
         void mouseHeadingEvent(QGraphicsSceneMouseEvent *event);
 
         SituationModel *m_situation;

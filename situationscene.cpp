@@ -89,22 +89,29 @@ void SituationScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
 
 void SituationScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     QGraphicsScene::mouseReleaseEvent(event);
-    if (event->button() == Qt::LeftButton) {
-        std::cout << "Left Mouse released with " << m_movingModels.size() << " items selected" << std::endl;
-        if (!m_movingModels.isEmpty() && event->scenePos() != m_fromPosition) {
-            std::cout << "Detected move for " << m_movingModels.size() << " items" << std::endl;
-            m_situation->undoStack()->push(new MoveBoatUndoCommand(m_movingModels,(event->scenePos()-m_fromPosition)));
-        }
-    }
-    if (event->button() == Qt::RightButton) {
-        std::cout << "Right-Mouse released " << std::endl;
-        mouseHeadingEvent(event);
+    switch (m_state) {
+        case NO_STATE:
+            if (event->button() == Qt::LeftButton) {
+                mouseMoveBoatEvent(event);
+            }
+            if (event->button() == Qt::RightButton) {
+                mouseHeadingEvent(event);
+            }
+            break;
+        default:
+            break;
     }
     m_movingModels.clear();
 }
 // itemselected should connect trackwidget with item
 //    headingbox->connect(headingbox,SIGNAL(valueChanged(int)),
 //        boat,SLOT(setHeading(int)));
+
+void SituationScene::mouseMoveBoatEvent(QGraphicsSceneMouseEvent *event) {
+    if (!m_movingModels.isEmpty() && event->scenePos() != m_fromPosition) {
+        m_situation->undoStack()->push(new MoveBoatUndoCommand(m_movingModels,(event->scenePos()-m_fromPosition)));
+    }
+}
 
 void SituationScene::mouseHeadingEvent(QGraphicsSceneMouseEvent *event) {
     if (!m_movingModels.isEmpty()) {
