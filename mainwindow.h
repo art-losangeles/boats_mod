@@ -44,6 +44,7 @@ class MainWindow : public QMainWindow {
         QGraphicsView *view;
         QMenuBar *menubar;
         TrackWidget *toolbar;
+        QStatusBar *statusbar;
 
         QAction *openFileAction;
         QAction *saveFileAction;

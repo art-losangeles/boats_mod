@@ -33,7 +33,8 @@ MainWindow::MainWindow(QWidget *parent)
         scene(new SituationScene(situation)),
         view(new QGraphicsView(scene)),
         menubar(new QMenuBar(this)),
-        toolbar(new TrackWidget(this)) {
+        toolbar(new TrackWidget(this)),
+        statusbar(new QStatusBar(this)) {
 
     // Actions
     createActions();
@@ -46,7 +47,7 @@ MainWindow::MainWindow(QWidget *parent)
     createMenus();
     setMenuBar(menubar);
     addToolBar(toolbar);
-    setStatusBar(new QStatusBar);
+    setStatusBar(statusbar);
 
 
     readSettings();
@@ -171,8 +172,8 @@ void MainWindow::openFile()
                              .arg(reader.lineNumber())
                              .arg(reader.columnNumber())
                              .arg(reader.errorString()));
-//    } else {
-//        statusBar()->showMessage(tr("File loaded"), 2000);
+    } else {
+        statusbar->showMessage(tr("File loaded"), 2000);
     }
 }
 
@@ -197,7 +198,7 @@ void MainWindow::saveFile()
 
     XmlSituationWriter writer(situation);
     writer.writeFile(&file);
-        //statusBar()->showMessage(tr("File saved"), 2000);
+    statusbar->showMessage(tr("File saved"), 2000);
 }
 
 void MainWindow::addTrack() {
