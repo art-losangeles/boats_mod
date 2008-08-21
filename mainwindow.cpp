@@ -202,11 +202,8 @@ void MainWindow::saveFile()
 }
 
 void MainWindow::addTrack() {
-    AddTrackUndoCommand *command = new AddTrackUndoCommand(situation);
-    TrackModel *track = command->track();
-    situation->undoStack()->push(command);
-    BoatModel *boat = new BoatModel(track, track);
-    track->addBoat(boat);
+    scene->setState(CREATE_TRACK);
+    statusbar->showMessage(tr("CREATE_TRACK"));
 }
 
 void MainWindow::deleteTrack() {
@@ -219,11 +216,12 @@ void MainWindow::deleteTrack() {
 }
 
 void MainWindow::addBoat() {
-    // TODO trick to add to first selected track
-    if (!scene->selectedItems().isEmpty()) {
-        BoatModel *boat = static_cast<BoatGraphicsItem*>(scene->selectedItems()[0])->boat();
-        TrackModel * track = boat->track();
-        situation->undoStack()->push(new AddBoatUndoCommand(track));
+    if (scene->state() == CREATE_BOAT) {
+        scene->setState(NO_STATE);
+        statusbar->clearMessage();
+    } else {
+        scene->setState(CREATE_BOAT);
+        statusbar->showMessage(tr("CREATE_BOAT"));
     }
 }
 

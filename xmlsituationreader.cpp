@@ -90,10 +90,8 @@ void XmlSituationReader::readTrack(SituationModel *situation) {
 }
 
 void XmlSituationReader::readBoat(SituationModel *situation, TrackModel *track) {
-    AddBoatUndoCommand *command = new AddBoatUndoCommand(track);
-    situation->undoStack()->push(command);
-    BoatModel *boat = command->boat();
     QPointF pos;
+    qreal heading;
     while (!atEnd()) {
         readNext();
         if (isEndElement())
@@ -104,10 +102,13 @@ void XmlSituationReader::readBoat(SituationModel *situation, TrackModel *track) 
             else if (name() == "y")
                 pos.setY(readElementText().toFloat());
             else if (name() == "heading")
-                boat->setHeading(readElementText().toFloat(), true);
+                heading = readElementText().toFloat();
             else
                 readUnknownElement();
         }
     }
-    boat->setPosition(pos, true);
+    AddBoatUndoCommand *command = new AddBoatUndoCommand(track, pos);
+    situation->undoStack()->push(command);
+    BoatModel *boat = command->boat();
+    boat->setHeading(heading, true);
 }
