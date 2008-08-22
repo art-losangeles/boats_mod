@@ -22,6 +22,7 @@ class TrackModel : public QObject {
         Q_OBJECT
     friend class XmlSituationReader;
     friend class XmlSituationWriter;
+    friend class SituationScene;
     friend class TrackGraphicsItem;
     public:
         TrackModel(SituationModel* situation = 0, QObject *parent = 0);

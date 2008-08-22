@@ -59,12 +59,13 @@ void DeleteTrackUndoCommand::undo() {
 }
 
 // Add Boat
-AddBoatUndoCommand::AddBoatUndoCommand(TrackModel* track, QPointF& position, QUndoCommand *parent)
+AddBoatUndoCommand::AddBoatUndoCommand(TrackModel* track, QPointF& position, qreal heading, QUndoCommand *parent)
         : QUndoCommand(parent),
         m_track(track) {
     std::cout << "new addboatundocommand" << std::endl;
     m_boat = new BoatModel(track);
     m_boat->setPosition(position);
+    m_boat->setHeading(heading);
 }
 
 AddBoatUndoCommand::~AddBoatUndoCommand() {

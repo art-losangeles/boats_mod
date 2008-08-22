@@ -49,7 +49,7 @@ class DeleteTrackUndoCommand : public QUndoCommand {
 class AddBoatUndoCommand : public QUndoCommand {
 
     public:
-        AddBoatUndoCommand(TrackModel* track, QPointF& position, QUndoCommand *parent = 0);
+        AddBoatUndoCommand(TrackModel* track, QPointF& position, qreal heading, QUndoCommand *parent = 0);
         ~AddBoatUndoCommand();
         void undo();
         void redo();

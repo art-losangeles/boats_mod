@@ -107,8 +107,7 @@ void XmlSituationReader::readBoat(SituationModel *situation, TrackModel *track) 
                 readUnknownElement();
         }
     }
-    AddBoatUndoCommand *command = new AddBoatUndoCommand(track, pos);
+    AddBoatUndoCommand *command = new AddBoatUndoCommand(track, pos, heading);
     situation->undoStack()->push(command);
     BoatModel *boat = command->boat();
-    boat->setHeading(heading, true);
 }

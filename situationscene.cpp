@@ -148,7 +148,13 @@ void SituationScene::mouseCreateTrackEvent(QGraphicsSceneMouseEvent *event) {
 void SituationScene::mouseCreateBoatEvent(QGraphicsSceneMouseEvent *event) {
     QPointF point = event->scenePos();
     if (m_trackCreated) {
-        m_situation->undoStack()->push(new AddBoatUndoCommand(m_trackCreated, point));
+        BoatModel* lastBoat = m_trackCreated->m_boats.last();
+        qreal theta0 = lastBoat->heading() * M_PI /180;
+        QPointF point2 = point - (lastBoat->position() + QPointF(60*sin(theta0),-60*cos(theta0)));
+        qreal heading = atan2 (point2.x(), -point2.y()) * 180 / M_PI;
+        AddBoatUndoCommand *command = new AddBoatUndoCommand(m_trackCreated, point, heading);
+        BoatModel *boat = command->boat();
+        m_situation->undoStack()->push(command);
     }
 }
 
