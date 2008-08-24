@@ -40,6 +40,8 @@ class BoatGraphicsItem : public QObject, public QGraphicsItem {
 
     protected:
         void mousePressEvent(QGraphicsSceneMouseEvent *event);
+        void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
+        void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 
     private:
         BoatModel *m_boat;

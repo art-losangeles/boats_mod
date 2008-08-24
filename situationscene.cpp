@@ -82,8 +82,18 @@ void SituationScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
 
 void SituationScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
     QGraphicsScene::mouseMoveEvent(event);
-    if (event->buttons() == Qt::RightButton) {
-        mouseHeadingEvent(event);
+
+    switch (m_state) {
+        case NO_STATE:
+            if (event->buttons() == Qt::LeftButton) {
+                mouseMoveBoatEvent(event);
+            }
+            if (event->buttons() == Qt::RightButton) {
+                mouseHeadingEvent(event);
+            }
+        break;
+        default:
+            break;
     }
 }
 
@@ -120,6 +130,7 @@ void SituationScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
 void SituationScene::mouseMoveBoatEvent(QGraphicsSceneMouseEvent *event) {
     if (!m_movingModels.isEmpty() && event->scenePos() != m_fromPosition) {
         m_situation->undoStack()->push(new MoveBoatUndoCommand(m_movingModels,(event->scenePos()-m_fromPosition)));
+        m_fromPosition = event->scenePos();
     }
 }
 

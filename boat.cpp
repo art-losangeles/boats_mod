@@ -90,15 +90,18 @@ void BoatGraphicsItem::deleteItem(BoatModel *boat) {
 }
 
 void BoatGraphicsItem::mousePressEvent(QGraphicsSceneMouseEvent *event) {
-    // propagate mouse event first for selected items
-    QGraphicsItem::mousePressEvent(event);
-
     static_cast<SituationScene*>(scene())->setModelPressed(m_boat);
     bool multiSelect = (event->modifiers() & Qt::ControlModifier) != 0;
     if (!multiSelect) {
         scene()->clearSelection();
     }
     setSelected(true);
+}
+
+void BoatGraphicsItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
+}
+
+void BoatGraphicsItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
 }
 
 QRectF BoatGraphicsItem::boundingRect() const {
