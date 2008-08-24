@@ -203,6 +203,7 @@ void MainWindow::saveFile()
 
 void MainWindow::addTrack() {
     scene->setState(CREATE_TRACK);
+    view->setCursor(Qt::CrossCursor);
     statusbar->showMessage(tr("CREATE_TRACK"));
 }
 
@@ -218,9 +219,11 @@ void MainWindow::deleteTrack() {
 void MainWindow::addBoat() {
     if (scene->state() == CREATE_BOAT) {
         scene->setState(NO_STATE);
+        view->unsetCursor();
         statusbar->clearMessage();
     } else {
         scene->setState(CREATE_BOAT);
+        view->setCursor(Qt::CrossCursor);
         statusbar->showMessage(tr("CREATE_BOAT"));
     }
 }
