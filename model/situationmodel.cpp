@@ -18,12 +18,21 @@
 
 SituationModel::SituationModel(QObject *parent)
         : QObject(parent),
-        m_undoStack(new QUndoStack(this)) {
+        m_undoStack(new QUndoStack(this)),
+        m_laylineAngle(40) {
     std::cout << "new situation " << this << std::endl;
 }
 
 SituationModel::~SituationModel() {
     std::cout << "end situation " << this << std::endl;
+}
+
+void SituationModel::setLaylineAngle(const qreal theValue) {
+    if (theValue != m_laylineAngle) {
+        std::cout << "Situation " << this
+        << " Layline Angle " << theValue << std::endl;
+        m_laylineAngle = theValue;
+    }
 }
 
 void SituationModel::addTrack(TrackModel *track) {

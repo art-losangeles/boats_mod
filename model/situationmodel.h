@@ -28,6 +28,8 @@ class SituationModel : public QObject {
 
         QUndoStack * undoStack() const { return m_undoStack;};
         int size() const { return m_tracks.size();};
+        qreal laylineAngle() const { return m_laylineAngle; };
+        void setLaylineAngle(const qreal);
         void addingBoat(BoatModel *boat) {emit boatAdded(boat);};
         void removingBoat(BoatModel *boat) {emit boatRemoved(boat);};
 
@@ -46,6 +48,7 @@ class SituationModel : public QObject {
 
     private:
         QUndoStack *m_undoStack;
+        qreal m_laylineAngle;
 
 };
 

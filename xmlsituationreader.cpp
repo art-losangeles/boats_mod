@@ -62,6 +62,8 @@ void XmlSituationReader::readSituation() {
         if (isEndElement())
             break;
         if (isStartElement()) {
+            if (name() == "layline")
+                m_situation->setLaylineAngle(readElementText().toFloat());
             if (name() == "track")
                 readTrack(m_situation);
             else
