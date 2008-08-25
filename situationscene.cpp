@@ -52,7 +52,7 @@ void SituationScene::addTrack(TrackModel *track) {
 }
 
 void SituationScene::deleteTrack(TrackModel *track) {
-    std::cout << "Treating deleteTrack " << std::endl;
+    std::cout << "Treating deleteTrack " << track << std::endl;
 }
 
 void SituationScene::addBoatItem(BoatModel *boat) {

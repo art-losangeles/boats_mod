@@ -99,9 +99,11 @@ void BoatGraphicsItem::mousePressEvent(QGraphicsSceneMouseEvent *event) {
 }
 
 void BoatGraphicsItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
+    Q_UNUSED(event);
 }
 
 void BoatGraphicsItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
+    Q_UNUSED(event);
 }
 
 QRectF BoatGraphicsItem::boundingRect() const {
@@ -117,6 +119,8 @@ QPainterPath BoatGraphicsItem::shape() const {
 void BoatGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 
                              QWidget *widget) {
+    Q_UNUSED(option);
+    Q_UNUSED(widget);
     if (isSelected())
         painter->setPen(Qt::red);
     else
