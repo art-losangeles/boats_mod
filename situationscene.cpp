@@ -142,7 +142,21 @@ void SituationScene::mouseMoveBoatEvent(QGraphicsSceneMouseEvent *event) {
 void SituationScene::mouseHeadingEvent(QGraphicsSceneMouseEvent *event) {
     if (!m_movingModels.isEmpty()) {
         QPointF point = event->scenePos() - m_modelPressed->position();
-        double theta = atan2 (point.x(), -point.y()) * 180 / M_PI;
+        double theta = fmod((atan2 (point.x(), -point.y()) * 180 / M_PI) + 360.0, 360.0);
+        qreal snap = m_situation->laylineAngle();
+        if (fabs(theta)<=5) {
+            theta = 0;
+        } else if (fabs(theta-snap)<=5) {
+            theta = snap;
+        } else if (fabs(theta-(180-snap)) <=5) {
+            theta = 180-snap;
+        } else if (fabs(theta-180)<=5) {
+            theta = 180;
+        } else if (fabs(theta-(180+snap)) <=5) {
+            theta = 180+snap;
+        } else if (fabs(theta-(360-snap)) <=5) {
+            theta = 360-snap;
+        }
         foreach(BoatModel* boat, m_movingModels) {
             boat->setHeading(theta, true);
         }
