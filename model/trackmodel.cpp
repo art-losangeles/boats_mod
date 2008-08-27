@@ -45,6 +45,12 @@ void TrackModel::setColor(const QColor& theValue, bool update) {
     }
 }
 
+void TrackModel::appendDiscardedXml(const QString& theValue) {
+    if (!m_discardedXml.contains(theValue)) {
+        m_discardedXml.append(theValue);
+    }
+}
+
 
 BoatModel * TrackModel::addBoat(BoatModel *boat, int order) {
     if (order == 0) {

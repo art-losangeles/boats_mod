@@ -12,8 +12,7 @@
 #ifndef TRACKMODEL_H
 #define TRACKMODEL_H
 
-#include <QObject>
-#include <QColor>
+#include <QtGui>
 
 class BoatModel;
 class SituationModel;
@@ -39,6 +38,8 @@ class TrackModel : public QObject {
         int size() const { return m_boats.size();};
 
         void setColor(const QColor& theValue, bool update = false);
+        QStringList discardedXml() const { return m_discardedXml; };
+        void appendDiscardedXml(const QString& theValue);
 
         void changingTrack(TrackModel *track) {emit trackChanged(track);};
 
@@ -52,6 +53,7 @@ class TrackModel : public QObject {
     private:
         SituationModel *m_situation;
         QColor m_color;
+        QStringList m_discardedXml;
 };
 
 #endif

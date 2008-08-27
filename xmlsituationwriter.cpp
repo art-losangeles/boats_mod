@@ -43,6 +43,8 @@ bool XmlSituationWriter::writeFile(QIODevice *device) {
 void XmlSituationWriter::writeTrack(TrackModel *track) {
     writeStartElement("track");
     writeTextElement("color",track->color().name());
+    foreach(QString discarded, track->discardedXml())
+        writeUnknownElement(discarded);
     foreach (BoatModel *boat, track->m_boats)
         writeBoat(boat);
     writeEndElement();

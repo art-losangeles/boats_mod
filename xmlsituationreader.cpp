@@ -90,7 +90,7 @@ void XmlSituationReader::readTrack(SituationModel *situation) {
             else if (name() == "boat")
                 readBoat(situation, track);
             else
-                readUnknownElement();
+                track->appendDiscardedXml(readUnknownElement());
         }
     }
 }
