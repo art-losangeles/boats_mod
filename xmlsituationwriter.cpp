@@ -55,6 +55,8 @@ void XmlSituationWriter::writeBoat(BoatModel *boat) {
     writeTextElement("x",QString::number(boat->position().x()));
     writeTextElement("y",QString::number(boat->position().y()));
     writeTextElement("heading",QString::number(boat->heading()));
+    foreach(QString discarded, boat->discardedXml())
+        writeUnknownElement(discarded);
     writeEndElement();
 }
 

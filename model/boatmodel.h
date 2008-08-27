@@ -12,8 +12,7 @@
 #ifndef BOATMODEL_H
 #define BOATMODEL_H
 
-#include <QObject>
-#include <QPointF>
+#include <QtGui>
 
 class TrackModel;
 
@@ -27,6 +26,8 @@ class BoatModel : public QObject {
         QPointF position() const { return m_position; }
         qreal heading() const { return m_heading; }
         int order() const { return m_order; }
+        QStringList discardedXml() const { return m_discardedXml; };
+        void appendDiscardedXml(const QString& theValue);
 
         void setPosition(const QPointF& theValue, bool update = false);
         void setHeading(const qreal& theValue, bool update = false);
@@ -42,7 +43,7 @@ class BoatModel : public QObject {
         QPointF m_position;
         qreal  m_heading;
         int m_order;
-
+        QStringList m_discardedXml;
 };
 
 #endif

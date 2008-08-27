@@ -58,3 +58,9 @@ void BoatModel::setOrder(const int theValue, bool update) {
             emit orderChanged(m_order);
     }
 }
+
+void BoatModel::appendDiscardedXml(const QString& theValue) {
+    if (!m_discardedXml.contains(theValue)) {
+        m_discardedXml.append(theValue);
+    }
+}
