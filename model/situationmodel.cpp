@@ -37,6 +37,12 @@ void SituationModel::setLaylineAngle(const qreal theValue, bool update) {
     }
 }
 
+void SituationModel::appendDiscardedXml(const QString& theValue) {
+    if (!m_discardedXml.contains(theValue)) {
+        m_discardedXml.append(theValue);
+    }
+}
+
 void SituationModel::addTrack(TrackModel *track) {
     m_tracks.push_back(track);
     std::cout << "Adding Track " << m_tracks.size() << std::endl;

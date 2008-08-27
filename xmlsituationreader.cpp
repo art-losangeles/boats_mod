@@ -71,7 +71,7 @@ void XmlSituationReader::readSituation() {
             else if (name() == "track")
                 readTrack(m_situation);
             else
-                readUnknownElement();
+                m_situation->appendDiscardedXml(readUnknownElement());
         }
     }
 }

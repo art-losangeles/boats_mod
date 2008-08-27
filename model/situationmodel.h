@@ -12,8 +12,7 @@
 #ifndef SITUATIONMODEL_H
 #define SITUATIONMODEL_H
 
-#include <QObject>
-#include <QUndoStack>
+#include <QtGui>
 
 class TrackModel;
 class BoatModel;
@@ -30,6 +29,8 @@ class SituationModel : public QObject {
         int size() const { return m_tracks.size();};
         qreal laylineAngle() const { return m_laylineAngle; };
         void setLaylineAngle(const qreal, bool update = false);
+        QStringList discardedXml() const { return m_discardedXml; };
+        void appendDiscardedXml(const QString& theValue);
         void addingBoat(BoatModel *boat) {emit boatAdded(boat);};
         void removingBoat(BoatModel *boat) {emit boatRemoved(boat);};
 
@@ -50,6 +51,7 @@ class SituationModel : public QObject {
     private:
         QUndoStack *m_undoStack;
         qreal m_laylineAngle;
+        QStringList m_discardedXml;
 
 };
 

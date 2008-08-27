@@ -31,6 +31,8 @@ bool XmlSituationWriter::writeFile(QIODevice *device) {
     writeStartElement("xmlsituation");
     writeAttribute("version", "1.0");
     writeTextElement("layline",QString::number(m_situation->laylineAngle()));
+    foreach(QString discarded, m_situation->discardedXml())
+        writeUnknownElement(discarded);
     foreach (TrackModel *track, m_situation->m_tracks)
         writeTrack(track);
 
