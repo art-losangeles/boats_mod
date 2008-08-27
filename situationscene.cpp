@@ -12,7 +12,7 @@
 #include <iostream>
 #include <math.h>
 
-#include <QGraphicsSceneMouseEvent>
+#include <QtGui>
 
 #include "situationscene.h"
 
@@ -43,6 +43,12 @@ SituationScene::SituationScene(SituationModel *situation)
     // react to model boat add/remove
     connect(situation, SIGNAL(boatAdded(BoatModel*)),
             this, SLOT(addBoatItem(BoatModel*)));
+
+    // react to layline angle
+    connect(situation, SIGNAL(laylineChanged(const qreal)),
+            this, SLOT(setLaylines(const qreal)));
+
+    setLaylines(situation->laylineAngle());
 }
 
 void SituationScene::addTrack(TrackModel *track) {
@@ -197,4 +203,23 @@ void SituationScene::setSelectedModels() {
         }
     }
     std::cout << "SelectedModels update " << m_selectedModels.size() << std::endl;
+}
+
+
+void SituationScene::setLaylines(const qreal angle) {
+    std::cout << "creating layline Background for " << angle << std::endl;
+    qreal theta = angle * M_PI /180;
+    qreal x = 120*sin(theta);
+    qreal y = 120*cos(theta);
+
+    QPixmap pixmap(x,y);
+    pixmap.fill(Qt::transparent);
+    QPainter painter(&pixmap);
+    painter.setPen(Qt::DashLine);
+    painter.drawLine(0,0,x,y);
+    painter.drawLine(0,y,x,0);
+
+    QBrush brush;
+    brush.setTexture(pixmap);
+    setBackgroundBrush(brush);
 }

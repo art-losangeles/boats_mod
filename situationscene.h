@@ -47,6 +47,7 @@ class SituationScene : public QGraphicsScene {
         void deleteTrack(TrackModel *track);
         void addBoatItem(BoatModel *boat);
         void deleteBoatItem();
+        void setLaylines(const qreal angle);
 
     protected:
         void mousePressEvent(QGraphicsSceneMouseEvent *event);

@@ -27,11 +27,13 @@ SituationModel::~SituationModel() {
     std::cout << "end situation " << this << std::endl;
 }
 
-void SituationModel::setLaylineAngle(const qreal theValue) {
+void SituationModel::setLaylineAngle(const qreal theValue, bool update) {
     if (theValue != m_laylineAngle) {
         std::cout << "Situation " << this
         << " Layline Angle " << theValue << std::endl;
         m_laylineAngle = theValue;
+        if (update)
+            emit laylineChanged(m_laylineAngle);
     }
 }
 
