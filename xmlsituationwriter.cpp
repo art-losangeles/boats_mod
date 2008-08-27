@@ -53,3 +53,17 @@ void XmlSituationWriter::writeBoat(BoatModel *boat) {
     writeTextElement("heading",QString::number(boat->heading()));
     writeEndElement();
 }
+
+void XmlSituationWriter::writeUnknownElement(const QString &discarded) {
+    if (!discarded.isEmpty()) {
+        QXmlStreamReader reader(discarded);
+        while (!reader.atEnd()) {
+            reader.readNext();
+            if (reader.isStartElement()
+                || reader.isEndElement()
+                || reader.isCharacters()) {
+                writeCurrentToken(reader);
+            }
+        }
+    }
+}

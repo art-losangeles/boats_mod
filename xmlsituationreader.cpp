@@ -45,9 +45,13 @@ QString XmlSituationReader::readUnknownElement() {
     QString elem;
     elem.append("<").append(name()).append(">");
     while (!atEnd()) {
-        elem += readElementText();
+        readNext();
+        if (isCharacters())
+            elem.append(text());
+        else if (isStartElement())
+            elem.append(readUnknownElement());
 
-        if (isEndElement()) {
+        else if (isEndElement()) {
             elem.append("</").append(name()).append(">");
             break;
         }

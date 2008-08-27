@@ -28,6 +28,7 @@ class XmlSituationWriter : public QXmlStreamWriter {
     private:
         void writeTrack(TrackModel *track);
         void writeBoat(BoatModel *boat);
+        void writeUnknownElement(const QString &discarded);
 
         SituationModel *m_situation;
 };
