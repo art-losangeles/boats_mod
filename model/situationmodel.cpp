@@ -58,3 +58,16 @@ void SituationModel::deleteTrack(TrackModel *track) {
     m_tracks.removeOne(track);
     emit trackRemoved(track);
 }
+
+void SituationModel::addMark(MarkModel *mark) {
+    m_marks.push_back(mark);
+    std::cout << "Adding Mark " << m_marks.size() << std::endl;
+    emit markAdded(mark);
+}
+
+void SituationModel::deleteMark(MarkModel *mark) {
+    int index = m_marks.indexOf(mark);
+    std::cout << "Removing Mark " << index << std::endl;
+    m_marks.removeOne(mark);
+    emit markRemoved(mark);
+}

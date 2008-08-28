@@ -1,6 +1,7 @@
 HEADERS =   boat.h \
 	model/boatmodel.h \
 	model/trackmodel.h \
+	model/markmodel.h \
 	track.h \
 	trackwidget.h \
 	model/situationmodel.h \
@@ -14,6 +15,7 @@ SOURCES =   boat.cpp \
 	main.cpp \
 	model/boatmodel.cpp \
 	model/trackmodel.cpp \
+	model/markmodel.cpp \
 	track.cpp \
 	trackwidget.cpp \
 	model/situationmodel.cpp \
