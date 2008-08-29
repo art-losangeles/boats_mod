@@ -18,7 +18,8 @@ MarkModel::MarkModel(SituationModel* situation, QObject *parent)
         : QObject(parent),
         m_situation(situation),
         m_position(),
-        m_order(situation->markSize()) {
+        m_order(situation->markSize()),
+        m_color(Qt::gray) {
     std::cout << "new Mark " << this << std::endl;
 }
 
@@ -45,6 +46,14 @@ void MarkModel::setOrder(const int theValue, bool update) {
         m_order = theValue;
         if (update)
             emit orderChanged(m_order);
+    }
+}
+
+void MarkModel::setColor(const QColor& theValue, bool update) {
+    if (theValue != m_color) {
+        m_color = theValue;
+        if (update)
+            emit colorChanged(m_color);
     }
 }
 
