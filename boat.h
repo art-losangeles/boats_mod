@@ -30,6 +30,7 @@ class BoatGraphicsItem : public QObject, public QGraphicsItem {
         QPainterPath shape() const;
         void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
                    QWidget *widget);
+        int type() const;
 
     public slots:
         void setHeading(qreal value);

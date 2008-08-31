@@ -99,3 +99,7 @@ void MarkGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *
     painter->drawEllipse(point,10,10);
     painter->drawText(QRectF(-10,-10,20,20),Qt::AlignCenter,QString::number(m_order));
 }
+
+int MarkGraphicsItem::type() const {
+    return MARK_TYPE;
+}

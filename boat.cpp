@@ -146,3 +146,7 @@ void BoatGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *
     //painter->drawPath(oldpath);
 
 }
+
+int BoatGraphicsItem::type() const {
+    return BOAT_TYPE;
+}

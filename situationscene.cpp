@@ -21,9 +21,11 @@
 #include "model/situationmodel.h"
 #include "model/trackmodel.h"
 #include "model/boatmodel.h"
+#include "model/markmodel.h"
 
 #include "boat.h"
 #include "track.h"
+#include "mark.h"
 
 SituationScene::SituationScene(SituationModel *situation)
         : QGraphicsScene(situation),
@@ -199,7 +201,15 @@ void SituationScene::setSelectedModels() {
     m_selectedModels.clear();
     if (!selectedItems().isEmpty()) {
         foreach(QGraphicsItem *item, selectedItems()) {
-            m_selectedModels << (static_cast<BoatGraphicsItem*>(item))->boat();
+            switch(item->type()) {
+                case BOAT_TYPE:
+                    m_selectedModels << (qgraphicsitem_cast<BoatGraphicsItem*>(item))->boat();
+                    break;
+                case MARK_TYPE:
+                    m_selectedMarkModels << (qgraphicsitem_cast<MarkGraphicsItem*>(item))->mark();
+                    break;
+            }
+
         }
     }
     std::cout << "SelectedModels update " << m_selectedModels.size() << std::endl;

@@ -12,20 +12,23 @@
 #ifndef SITUATIONSCENE_H
 #define SITUATIONSCENE_H
 
-#include <QGraphicsScene>
-#include <QList>
+#include <QtGui>
 
 class SituationModel;
 class TrackModel;
 class BoatModel;
+class MarkModel;
 
 typedef enum {
     NO_STATE,
     CREATE_TRACK,
-    CREATE_BOAT,
-    MOVE_SELECTION,
-    DELETE_SELECTION
+    CREATE_BOAT
 } SceneState;
+
+enum {
+    BOAT_TYPE = QGraphicsItem::UserType + 1,
+    MARK_TYPE
+};
 
 class SituationScene : public QGraphicsScene {
         Q_OBJECT
@@ -37,6 +40,7 @@ class SituationScene : public QGraphicsScene {
         void setModelPressed(BoatModel *theValue) {m_modelPressed = theValue; }
         SceneState state() const { return m_state; }
         QList< BoatModel * > selectedModels() const { return m_selectedModels; }
+        QList< MarkModel * > selectedMarkModels() const { return m_selectedMarkModels; }
 
     signals:
         void itemMoved(QList<BoatModel*> movedItems, const QPointF &movedFromPosition);
@@ -63,6 +67,7 @@ class SituationScene : public QGraphicsScene {
         SituationModel *m_situation;
         QList<BoatModel*> m_selectedModels;
         QList<BoatModel*> m_movingModels;
+        QList<MarkModel*> m_selectedMarkModels;
         BoatModel* m_modelPressed;
         TrackModel *m_trackCreated;
         QPointF m_fromPosition;
