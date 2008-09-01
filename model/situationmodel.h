@@ -48,8 +48,8 @@ class SituationModel : public QObject {
     public slots:
         void addTrack(TrackModel *track);
         void deleteTrack(TrackModel *track);
-        void addMark(MarkModel *mark);
-        void deleteMark(MarkModel *mark);
+        void addMark(MarkModel *mark, int order = 0);
+        int deleteMark(MarkModel *mark);
 
     protected:
         QList<TrackModel*> m_tracks;

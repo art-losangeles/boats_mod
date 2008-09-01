@@ -15,6 +15,7 @@
 #include "model/situationmodel.h"
 #include "model/trackmodel.h"
 #include "model/boatmodel.h"
+#include "model/markmodel.h"
 
 SituationModel::SituationModel(QObject *parent)
         : QObject(parent),
@@ -59,15 +60,22 @@ void SituationModel::deleteTrack(TrackModel *track) {
     emit trackRemoved(track);
 }
 
-void SituationModel::addMark(MarkModel *mark) {
-    m_marks.push_back(mark);
-    std::cout << "Adding Mark " << m_marks.size() << std::endl;
+void SituationModel::addMark(MarkModel *mark, int order) {
+    if (order == 0) {
+        order = m_marks.size();
+    }
+    m_marks.insert(order, mark);
+    std::cout << "Adding Mark " << order << std::endl;
+    for (int i=order+1; i<m_marks.size(); i++) {
+        m_marks[i]->setOrder(i, true);
+    }
     emit markAdded(mark);
 }
 
-void SituationModel::deleteMark(MarkModel *mark) {
+int SituationModel::deleteMark(MarkModel *mark) {
     int index = m_marks.indexOf(mark);
     std::cout << "Removing Mark " << index << std::endl;
     m_marks.removeOne(mark);
     emit markRemoved(mark);
+    return index;
 }
