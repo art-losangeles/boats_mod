@@ -70,9 +70,7 @@ void SituationScene::addBoatItem(BoatModel *boat) {
 }
 
 void SituationScene::deleteBoatItem() {
-    if (selectedItems().isEmpty())
-        return;
-    foreach(BoatModel *boat, selectedModels()) {
+    foreach(BoatModel *boat, m_selectedModels) {
         boat->track()->deleteBoat(boat);
     }
 }
@@ -199,17 +197,14 @@ void SituationScene::mouseCreateBoatEvent(QGraphicsSceneMouseEvent *event) {
 
 void SituationScene::setSelectedModels() {
     m_selectedModels.clear();
-    if (!selectedItems().isEmpty()) {
-        foreach(QGraphicsItem *item, selectedItems()) {
-            switch(item->type()) {
-                case BOAT_TYPE:
-                    m_selectedModels << (qgraphicsitem_cast<BoatGraphicsItem*>(item))->boat();
-                    break;
-                case MARK_TYPE:
-                    m_selectedMarkModels << (qgraphicsitem_cast<MarkGraphicsItem*>(item))->mark();
-                    break;
-            }
-
+    foreach(QGraphicsItem *item, selectedItems()) {
+        switch(item->type()) {
+            case BOAT_TYPE:
+                m_selectedModels << (qgraphicsitem_cast<BoatGraphicsItem*>(item))->boat();
+                break;
+            case MARK_TYPE:
+                m_selectedMarkModels << (qgraphicsitem_cast<MarkGraphicsItem*>(item))->mark();
+                break;
         }
     }
     std::cout << "SelectedModels update " << m_selectedModels.size() << std::endl;

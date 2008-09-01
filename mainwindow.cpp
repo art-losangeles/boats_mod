@@ -210,8 +210,8 @@ void MainWindow::addTrack() {
 
 void MainWindow::deleteTrack() {
     // TODO trick to delete first selected track
-    if (!scene->selectedItems().isEmpty()) {
-        BoatModel *boat = static_cast<BoatGraphicsItem*>(scene->selectedItems()[0])->boat();
+    if (!scene->selectedModels().isEmpty()) {
+        BoatModel *boat = scene->selectedModels()[0];
         TrackModel * track = boat->track();
         situation->undoStack()->push(new DeleteTrackUndoCommand(situation, track));
     }
@@ -230,8 +230,6 @@ void MainWindow::addBoat() {
 }
 
 void MainWindow::deleteBoat() {
-    if (scene->selectedItems().isEmpty())
-        return;
     foreach(BoatModel *boat, scene->selectedModels()) {
         TrackModel* track = boat->track();
         situation->undoStack()->push(new DeleteBoatUndoCommand(track, boat));
