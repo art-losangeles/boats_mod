@@ -197,6 +197,7 @@ void SituationScene::mouseCreateBoatEvent(QGraphicsSceneMouseEvent *event) {
 
 void SituationScene::setSelectedModels() {
     m_selectedModels.clear();
+    m_selectedMarkModels.clear();
     foreach(QGraphicsItem *item, selectedItems()) {
         switch(item->type()) {
             case BOAT_TYPE:
