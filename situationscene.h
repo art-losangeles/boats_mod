@@ -22,7 +22,8 @@ class MarkModel;
 typedef enum {
     NO_STATE,
     CREATE_TRACK,
-    CREATE_BOAT
+    CREATE_BOAT,
+    CREATE_MARK
 } SceneState;
 
 enum {
@@ -51,6 +52,8 @@ class SituationScene : public QGraphicsScene {
         void deleteTrack(TrackModel *track);
         void addBoatItem(BoatModel *boat);
         void deleteBoatItem();
+        void addMarkItem(MarkModel *mark);
+        void deleteMarkItem();
         void setLaylines(const qreal angle);
 
     protected:
@@ -63,6 +66,7 @@ class SituationScene : public QGraphicsScene {
         void mouseHeadingEvent(QGraphicsSceneMouseEvent *event);
         void mouseCreateTrackEvent(QGraphicsSceneMouseEvent *event);
         void mouseCreateBoatEvent(QGraphicsSceneMouseEvent *event);
+        void mouseCreateMarkEvent(QGraphicsSceneMouseEvent *event);
 
         SituationModel *m_situation;
         QList<BoatModel*> m_selectedModels;

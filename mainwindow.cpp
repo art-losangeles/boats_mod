@@ -72,20 +72,25 @@ void MainWindow::createActions() {
     connect(addTrackAction, SIGNAL(triggered()),
             this, SLOT(addTrack()));
 
-    deleteTrackAction = new QAction(tr("Delete Track"), this);
-    deleteTrackAction->setShortcut(tr("Ctrl+Del"));
-    connect(deleteTrackAction, SIGNAL(triggered()),
-            this, SLOT(deleteTrack()));
-
     addBoatAction = new QAction(tr("Create &Boat"), this);
     addBoatAction->setShortcut(tr("Ins"));
     connect(addBoatAction, SIGNAL(triggered()),
             this, SLOT(addBoat()));
 
-    deleteBoatAction = new QAction(tr("&Delete Boats"), this);
-    deleteBoatAction->setShortcut(tr("Del"));
-    connect(deleteBoatAction, SIGNAL(triggered()),
-            this, SLOT(deleteBoat()));
+    addMarkAction = new QAction(tr("Create &Mark"), this);
+    addMarkAction->setShortcut(tr("Alt+Ins"));
+    connect(addMarkAction, SIGNAL(triggered()),
+            this, SLOT(addMark()));
+
+    deleteTrackAction = new QAction(tr("Delete Track"), this);
+    deleteTrackAction->setShortcut(tr("Ctrl+Del"));
+    connect(deleteTrackAction, SIGNAL(triggered()),
+            this, SLOT(deleteTrack()));
+
+    deleteAction = new QAction(tr("&Delete Selection"), this);
+    deleteAction->setShortcut(tr("Del"));
+    connect(deleteAction, SIGNAL(triggered()),
+            this, SLOT(deleteModels()));
 
     undoAction = new QAction(tr("&Undo"), this);
     undoAction->setShortcut(tr("Ctrl+Z"));
@@ -113,9 +118,10 @@ void MainWindow::createMenus() {
 
     trackMenu = menubar->addMenu(tr("&Track"));
     trackMenu->addAction(addTrackAction);
-    trackMenu->addAction(deleteTrackAction);
     trackMenu->addAction(addBoatAction);
-    trackMenu->addAction(deleteBoatAction);
+    trackMenu->addAction(addMarkAction);
+    trackMenu->addAction(deleteTrackAction);
+    trackMenu->addAction(deleteAction);
 
     historyMenu = menubar->addMenu(tr("&History"));
     historyMenu->addAction(undoAction);
@@ -229,9 +235,24 @@ void MainWindow::addBoat() {
     }
 }
 
-void MainWindow::deleteBoat() {
+void MainWindow::deleteModels() {
     foreach(BoatModel *boat, scene->selectedModels()) {
         TrackModel* track = boat->track();
         situation->undoStack()->push(new DeleteBoatUndoCommand(track, boat));
+    }
+    foreach(MarkModel *mark, scene->selectedMarkModels()) {
+        situation->undoStack()->push(new DeleteMarkUndoCommand(situation, mark));
+    }
+}
+
+void MainWindow::addMark() {
+    if (scene->state() == CREATE_MARK) {
+        scene->setState(NO_STATE);
+        view->unsetCursor();
+        statusbar->clearMessage();
+    } else {
+        scene->setState(CREATE_MARK);
+        view->setCursor(Qt::CrossCursor);
+        statusbar->showMessage(tr("CREATE_MARK"));
     }
 }

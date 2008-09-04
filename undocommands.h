@@ -18,6 +18,7 @@
 class SituationModel;
 class TrackModel;
 class BoatModel;
+class MarkModel;
 
 class AddTrackUndoCommand : public QUndoCommand {
 
@@ -88,4 +89,33 @@ class DeleteBoatUndoCommand : public QUndoCommand {
         BoatModel *m_boat;
         int m_order;
 };
+
+class AddMarkUndoCommand : public QUndoCommand {
+
+    public:
+        AddMarkUndoCommand(SituationModel* situation, QPointF& position, QUndoCommand *parent = 0);
+        ~AddMarkUndoCommand();
+        void undo();
+        void redo();
+
+        MarkModel *mark() {return m_mark; }
+
+    private:
+        SituationModel *m_situation;
+        MarkModel *m_mark;
+};
+
+class DeleteMarkUndoCommand : public QUndoCommand {
+
+    public:
+        DeleteMarkUndoCommand(SituationModel* situation, MarkModel* mark, QUndoCommand *parent = 0);
+        ~DeleteMarkUndoCommand();
+        void undo();
+        void redo();
+    private:
+        SituationModel *m_situation;
+        MarkModel *m_mark;
+        int m_order;
+};
+
 #endif

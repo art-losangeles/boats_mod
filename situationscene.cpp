@@ -46,6 +46,10 @@ SituationScene::SituationScene(SituationModel *situation)
     connect(situation, SIGNAL(boatAdded(BoatModel*)),
             this, SLOT(addBoatItem(BoatModel*)));
 
+    // react to model mark add/remove
+    connect(situation, SIGNAL(markAdded(MarkModel*)),
+            this, SLOT(addMarkItem(MarkModel*)));
+
     // react to layline angle
     connect(situation, SIGNAL(laylineChanged(const qreal)),
             this, SLOT(setLaylines(const qreal)));
@@ -72,6 +76,18 @@ void SituationScene::addBoatItem(BoatModel *boat) {
 void SituationScene::deleteBoatItem() {
     foreach(BoatModel *boat, m_selectedModels) {
         boat->track()->deleteBoat(boat);
+    }
+}
+
+void SituationScene::addMarkItem(MarkModel *mark) {
+    std::cout << "adding mark graphics for model " << mark << std::endl;
+    MarkGraphicsItem *markItem = new MarkGraphicsItem(mark);
+    addItem(markItem);
+}
+
+void SituationScene::deleteMarkItem() {
+    foreach(MarkModel *mark, m_selectedMarkModels) {
+        mark->situation()->deleteMark(mark);
     }
 }
 
@@ -127,6 +143,10 @@ void SituationScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
                 } else {
                     mouseCreateBoatEvent(event);
                 }
+            }
+        case CREATE_MARK:
+            if (event->button() == Qt::LeftButton) {
+                mouseCreateMarkEvent(event);
             }
             break;
         default:
@@ -193,6 +213,12 @@ void SituationScene::mouseCreateBoatEvent(QGraphicsSceneMouseEvent *event) {
         AddBoatUndoCommand *command = new AddBoatUndoCommand(m_trackCreated, point, heading);
         m_situation->undoStack()->push(command);
     }
+}
+
+void SituationScene::mouseCreateMarkEvent(QGraphicsSceneMouseEvent *event) {
+    QPointF point = event->scenePos();
+    AddMarkUndoCommand *command = new AddMarkUndoCommand(m_situation, point);
+    m_situation->undoStack()->push(command);
 }
 
 void SituationScene::setSelectedModels() {

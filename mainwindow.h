@@ -28,9 +28,11 @@ class MainWindow : public QMainWindow {
         void openFile();
         void saveFile();
         void addTrack();
-        void deleteTrack();
         void addBoat();
-        void deleteBoat();
+        void addMark();
+        void deleteTrack();
+        void deleteModels();
+
     protected:
         void closeEvent(QCloseEvent *event);
     private:
@@ -50,9 +52,10 @@ class MainWindow : public QMainWindow {
         QAction *saveFileAction;
 
         QAction *addTrackAction;
-        QAction *deleteTrackAction;
         QAction *addBoatAction;
-        QAction *deleteBoatAction;
+        QAction *addMarkAction;
+        QAction *deleteTrackAction;
+        QAction *deleteAction;
 
         QAction *changeHeadingAction;
 

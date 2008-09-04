@@ -12,10 +12,12 @@
 #include "undocommands.h"
 
 #include <iostream>
+#include <cmath>
 
 #include "model/situationmodel.h"
 #include "model/trackmodel.h"
 #include "model/boatmodel.h"
+#include "model/markmodel.h"
 
 // Add Track
 AddTrackUndoCommand::AddTrackUndoCommand(SituationModel* situation, QUndoCommand *parent)
@@ -134,4 +136,46 @@ void DeleteBoatUndoCommand::redo() {
 
 void DeleteBoatUndoCommand::undo() {
     m_track->addBoat(m_boat, m_order);
+}
+
+// Add Mark
+AddMarkUndoCommand::AddMarkUndoCommand(SituationModel* situation, QPointF& position, QUndoCommand *parent)
+        : QUndoCommand(parent),
+        m_situation(situation) {
+    std::cout << "new addmarkundocommand" << std::endl;
+    m_mark = new MarkModel(situation);
+    m_mark->setPosition(position);
+}
+
+AddMarkUndoCommand::~AddMarkUndoCommand() {
+    std::cout << "end addmarkundocommand" << std::endl;
+    delete m_mark;
+}
+
+void AddMarkUndoCommand::redo() {
+    m_situation->addMark(m_mark);
+}
+
+void AddMarkUndoCommand::undo() {
+    m_situation->deleteMark(m_mark);
+}
+
+// Delete Mark
+DeleteMarkUndoCommand::DeleteMarkUndoCommand(SituationModel* situation, MarkModel* mark, QUndoCommand *parent)
+        : QUndoCommand(parent),
+        m_situation(situation),
+        m_mark(mark) {
+    std::cout << "new deletemarkundocommand" << std::endl;
+}
+
+DeleteMarkUndoCommand::~DeleteMarkUndoCommand() {
+    std::cout << "end deletebmarkundocommand" << std::endl;
+}
+
+void DeleteMarkUndoCommand::redo() {
+    m_order = m_situation->deleteMark(m_mark);
+}
+
+void DeleteMarkUndoCommand::undo() {
+    m_situation->addMark(m_mark, m_order);
 }
