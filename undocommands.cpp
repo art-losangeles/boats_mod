@@ -84,11 +84,17 @@ void AddBoatUndoCommand::undo() {
 }
 
 // Move Boat
-MoveBoatUndoCommand::MoveBoatUndoCommand(QList<BoatModel*> &boatList, const QPointF &deltaPosition, QUndoCommand *parent)
+MoveBoatUndoCommand::MoveBoatUndoCommand(QList<BoatModel*> &boatList, const QPointF &deltaPosition, const qreal &heading, QUndoCommand *parent)
         : QUndoCommand(parent),
         m_boatList(boatList),
-        m_deltaPosition(deltaPosition) {
+        m_deltaPosition(deltaPosition),
+        m_heading(heading) {
     std::cout << "new moveboatundocommand" << std::endl;
+    if (heading != 0) {
+        foreach (BoatModel *boat, boatList) {
+            m_headingList << boat->heading();
+        }
+    }
 }
 
 MoveBoatUndoCommand::~MoveBoatUndoCommand() {
@@ -98,14 +104,22 @@ MoveBoatUndoCommand::~MoveBoatUndoCommand() {
 
 
 void MoveBoatUndoCommand::undo() {
-    foreach(BoatModel* boat, m_boatList) {
+    for(int i=0; i< m_boatList.size(); i++) {
+        BoatModel *boat = m_boatList[i];
         boat->setPosition(boat->position() - m_deltaPosition, true);
+        if (!m_headingList.isEmpty()) {
+            boat->setHeading(m_headingList[i], true);
+        }
     }
 }
 
 void MoveBoatUndoCommand::redo() {
-    foreach(BoatModel* boat, m_boatList) {
-        boat->setPosition(boat->position() + m_deltaPosition, true);
+    for(int i=0; i< m_boatList.size(); i++) {
+        BoatModel *boat = m_boatList[i];
+            boat->setPosition(boat->position() + m_deltaPosition, true);
+        if (!m_headingList.isEmpty()) {
+            boat->setHeading(m_heading, true);
+        }
     }
 }
 
@@ -115,6 +129,12 @@ bool MoveBoatUndoCommand::mergeWith(const QUndoCommand *command) {
         return false;
 
     m_deltaPosition += moveCommand->m_deltaPosition;
+    if (!(moveCommand->m_headingList.isEmpty())) {
+        m_heading = moveCommand->m_heading;
+        if (m_headingList.isEmpty()) {
+            m_headingList = moveCommand->m_headingList;
+        }
+    }
     return true;
 }
 

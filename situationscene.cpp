@@ -160,15 +160,15 @@ void SituationScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
 
 void SituationScene::mouseMoveBoatEvent(QGraphicsSceneMouseEvent *event) {
     if (!m_movingModels.isEmpty() && event->scenePos() != m_fromPosition) {
-        m_situation->undoStack()->push(new MoveBoatUndoCommand(m_movingModels,(event->scenePos()-m_fromPosition)));
+        m_situation->undoStack()->push(new MoveBoatUndoCommand(m_movingModels,(event->scenePos()-m_fromPosition), 0));
         m_fromPosition = event->scenePos();
     }
 }
 
 void SituationScene::mouseHeadingEvent(QGraphicsSceneMouseEvent *event) {
-    if (!m_movingModels.isEmpty()) {
+    if (!m_movingModels.isEmpty() && event->scenePos() != m_modelPressed->position()) {
         QPointF point = event->scenePos() - m_modelPressed->position();
-        double theta = fmod((atan2 (point.x(), -point.y()) * 180 / M_PI) + 360.0, 360.0);
+        qreal theta = fmod((atan2 (point.x(), -point.y()) * 180 / M_PI) + 360.0, 360.0);
         qreal snap = m_situation->laylineAngle();
         if (fabs(theta)<=5) {
             theta = 0;
@@ -183,9 +183,7 @@ void SituationScene::mouseHeadingEvent(QGraphicsSceneMouseEvent *event) {
         } else if (fabs(theta-(360-snap)) <=5) {
             theta = 360-snap;
         }
-        foreach(BoatModel* boat, m_movingModels) {
-            boat->setHeading(theta, true);
-        }
+        m_situation->undoStack()->push(new MoveBoatUndoCommand(m_movingModels, QPointF(), theta));
     }
 }
 
