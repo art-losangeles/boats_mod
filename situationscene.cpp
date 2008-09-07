@@ -115,6 +115,11 @@ void SituationScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
                 mouseHeadingEvent(event);
             }
         break;
+        case CREATE_BOAT:
+            if (event->buttons() == Qt::RightButton) {
+                mouseHeadingEvent(event);
+            }
+        break;
         default:
             break;
     }
@@ -144,6 +149,10 @@ void SituationScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
                     mouseCreateBoatEvent(event);
                 }
             }
+            if (event->button() == Qt::RightButton) {
+                mouseHeadingEvent(event);
+            }
+            break;
         case CREATE_MARK:
             if (event->button() == Qt::LeftButton) {
                 mouseCreateMarkEvent(event);
