@@ -137,14 +137,24 @@ void BoatGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *
     path.addText(-5,25,painter->font(),QString::number(m_order));
     painter->drawPath(path);
 
-    //previous try
-    //painter->setPen(Qt::blue);
-    //QPainterPath oldpath(QPointF(0, -20));
-    //oldpath.cubicTo(7, 0, 7, 5, 4, 20);
-    //oldpath.lineTo(-4, 20);
-    //oldpath.cubicTo(-7, 5, -7, 0, 0, -20);
-    //painter->drawPath(oldpath);
-
+    painter->translate(0,-10);
+    QPainterPath sailPath(QPointF(0,0));
+    qreal layline = m_boat->track()->situation()->laylineAngle() -10;
+    if (m_angle< layline || m_angle>360-layline) {
+        sailPath.lineTo(2,10);
+        sailPath.lineTo(-2,20);
+        sailPath.lineTo(2,30);
+        sailPath.lineTo(-2,40);
+        sailPath.lineTo(0,50);
+        painter->rotate(-m_angle);
+    } else if (m_angle<180) {
+        sailPath.cubicTo(5, 10, 5, 40, 0, 50);
+        painter->rotate(-m_angle/1.86 + 6);
+    } else {
+        sailPath.cubicTo(-5, 10, -5, 40, 0, 50);
+        painter->rotate(180-m_angle/1.86 + 6);
+    }
+    painter->strokePath(sailPath,painter->pen());
 }
 
 int BoatGraphicsItem::type() const {
