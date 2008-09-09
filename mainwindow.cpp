@@ -42,6 +42,7 @@ MainWindow::MainWindow(QWidget *parent)
     // View
     view->setRenderHint(QPainter::Antialiasing);
     view->setViewportUpdateMode(QGraphicsView::SmartViewportUpdate);
+    view->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     setCentralWidget(view);
 
     // Bars
