@@ -91,6 +91,38 @@ void SituationScene::deleteMarkItem() {
     }
 }
 
+void SituationScene::keyPressEvent(QKeyEvent *event) {
+    // propagate key event first for focus items
+    QGraphicsScene::keyPressEvent(event);
+
+    if (m_selectedModels.isEmpty()) {
+        return;
+    }
+    if (event->key() == Qt::Key_Plus) {
+        qreal theta = fmod(m_selectedModels[0]->heading() + 5 + 360.0, 360.0);
+        m_situation->undoStack()->push(new MoveBoatUndoCommand(m_selectedModels, QPointF(), theta));
+
+    } else if (event->key() == Qt::Key_Minus) {
+        qreal theta = fmod(m_selectedModels[0]->heading() - 5 + 360.0, 360.0);
+        m_situation->undoStack()->push(new MoveBoatUndoCommand(m_selectedModels, QPointF(), theta));
+
+    } else if (event->key() == Qt::Key_Left) {
+        QPointF pos(-5,0);
+        m_situation->undoStack()->push(new MoveBoatUndoCommand(m_selectedModels, pos, 0));
+
+    } else if (event->key() == Qt::Key_Right) {
+        QPointF pos(5,0);
+        m_situation->undoStack()->push(new MoveBoatUndoCommand(m_selectedModels, pos, 0));
+
+    } else if (event->key() == Qt::Key_Up) {
+        QPointF pos(0,-5);
+        m_situation->undoStack()->push(new MoveBoatUndoCommand(m_selectedModels, pos, 0));
+    } else if (event->key() == Qt::Key_Down) {
+        QPointF pos(0,5);
+        m_situation->undoStack()->push(new MoveBoatUndoCommand(m_selectedModels, pos, 0));
+    }
+}
+
 void SituationScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
     // propagate mouse event first for selected items
     QGraphicsScene::mousePressEvent(event);
@@ -216,7 +248,7 @@ void SituationScene::mouseCreateBoatEvent(QGraphicsSceneMouseEvent *event) {
         // from position of head of last boat to new position
         qreal theta0 = lastBoat->heading() * M_PI /180;
         QPointF point2 = point - (lastBoat->position() + QPointF(60*sin(theta0),-60*cos(theta0)));
-        qreal heading = atan2 (point2.x(), -point2.y()) * 180 / M_PI;
+        qreal heading = fmod(atan2 (point2.x(), -point2.y()) * 180 / M_PI + 360.0, 360.0);
         AddBoatUndoCommand *command = new AddBoatUndoCommand(m_trackCreated, point, heading);
         m_situation->undoStack()->push(command);
     }
