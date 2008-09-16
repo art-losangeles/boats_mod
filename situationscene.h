@@ -71,7 +71,6 @@ class SituationScene : public QGraphicsScene {
 
         SituationModel *m_situation;
         QList<BoatModel*> m_selectedModels;
-        QList<BoatModel*> m_movingModels;
         QList<MarkModel*> m_selectedMarkModels;
         BoatModel* m_modelPressed;
         TrackModel *m_trackCreated;

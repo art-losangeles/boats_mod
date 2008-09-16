@@ -128,10 +128,7 @@ void SituationScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
     QGraphicsScene::mousePressEvent(event);
 
     m_fromPosition = event->scenePos();
-    if (!selectedItems().isEmpty() && m_movingModels.isEmpty()) {
-        m_movingModels = m_selectedModels;
-    }
-    std::cout << "Mouse pressed with " << m_movingModels.size()
+    std::cout << "Mouse pressed with " << m_selectedModels.size()
     << " items selected" << std::endl;
 }
 
@@ -193,21 +190,20 @@ void SituationScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
         default:
             break;
     }
-    m_movingModels.clear();
 }
 // itemselected should connect trackwidget with item
 //    headingbox->connect(headingbox,SIGNAL(valueChanged(int)),
 //        boat,SLOT(setHeading(int)));
 
 void SituationScene::mouseMoveBoatEvent(QGraphicsSceneMouseEvent *event) {
-    if (!m_movingModels.isEmpty() && event->scenePos() != m_fromPosition) {
-        m_situation->undoStack()->push(new MoveBoatUndoCommand(m_movingModels,(event->scenePos()-m_fromPosition), 0));
+    if (!m_selectedModels.isEmpty() && event->scenePos() != m_fromPosition) {
+        m_situation->undoStack()->push(new MoveBoatUndoCommand(m_selectedModels,(event->scenePos()-m_fromPosition), 0));
         m_fromPosition = event->scenePos();
     }
 }
 
 void SituationScene::mouseHeadingEvent(QGraphicsSceneMouseEvent *event) {
-    if (!m_movingModels.isEmpty() && event->scenePos() != m_modelPressed->position()) {
+    if (!m_selectedModels.isEmpty() && event->scenePos() != m_modelPressed->position()) {
         QPointF point = event->scenePos() - m_modelPressed->position();
         qreal theta = fmod((atan2 (point.x(), -point.y()) * 180 / M_PI) + 360.0, 360.0);
         qreal snap = m_situation->laylineAngle();
@@ -224,7 +220,7 @@ void SituationScene::mouseHeadingEvent(QGraphicsSceneMouseEvent *event) {
         } else if (fabs(theta-(360-snap)) <=5) {
             theta = 360-snap;
         }
-        m_situation->undoStack()->push(new MoveBoatUndoCommand(m_movingModels, QPointF(), theta));
+        m_situation->undoStack()->push(new MoveBoatUndoCommand(m_selectedModels, QPointF(), theta));
     }
 }
 
