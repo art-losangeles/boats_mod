@@ -16,6 +16,7 @@
 #include "model/situationmodel.h"
 #include "model/trackmodel.h"
 #include "model/boatmodel.h"
+#include "model/markmodel.h"
 
 #include "undocommands.h"
 
@@ -68,6 +69,8 @@ void XmlSituationReader::readSituation() {
         if (isStartElement()) {
             if (name() == "layline")
                 m_situation->setLaylineAngle(readElementText().toFloat(), true);
+            else if (name() == "mark")
+                readMark(m_situation);
             else if (name() == "track")
                 readTrack(m_situation);
             else
@@ -120,4 +123,29 @@ void XmlSituationReader::readBoat(SituationModel *situation, TrackModel *track) 
     foreach (QString elem, discarded) {
         boat->appendDiscardedXml(elem);
     }
+}
+
+void XmlSituationReader::readMark(SituationModel *situation) {
+    QPointF pos;
+    QColor color;
+    QStringList discarded;
+    while (!atEnd()) {
+        readNext();
+        if (isEndElement())
+            break;
+        if (isStartElement()) {
+            if (name() == "x")
+                pos.setX(readElementText().toFloat());
+            else if (name() == "y")
+                pos.setY(readElementText().toFloat());
+            else if (name() == "color")
+                color.setNamedColor(readElementText());
+            else
+                discarded.append(readUnknownElement());
+        }
+    }
+    AddMarkUndoCommand *command = new AddMarkUndoCommand(situation, pos);
+    situation->undoStack()->push(command);
+    MarkModel *mark = command->mark();
+    mark->setColor(color,true);
 }

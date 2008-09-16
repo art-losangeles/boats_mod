@@ -15,6 +15,7 @@
 #include "model/situationmodel.h"
 #include "model/trackmodel.h"
 #include "model/boatmodel.h"
+#include "model/markmodel.h"
 
 XmlSituationWriter::XmlSituationWriter(SituationModel *situation)
         : m_situation(situation) {
@@ -33,6 +34,8 @@ bool XmlSituationWriter::writeFile(QIODevice *device) {
     writeTextElement("layline",QString::number(m_situation->laylineAngle()));
     foreach(QString discarded, m_situation->discardedXml())
         writeUnknownElement(discarded);
+    foreach (MarkModel *mark, m_situation->m_marks)
+        writeMark(mark);
     foreach (TrackModel *track, m_situation->m_tracks)
         writeTrack(track);
 
@@ -56,6 +59,16 @@ void XmlSituationWriter::writeBoat(BoatModel *boat) {
     writeTextElement("y",QString::number(boat->position().y()));
     writeTextElement("heading",QString::number(boat->heading()));
     foreach(QString discarded, boat->discardedXml())
+        writeUnknownElement(discarded);
+    writeEndElement();
+}
+
+void XmlSituationWriter::writeMark(MarkModel *mark) {
+    writeStartElement("mark");
+    writeTextElement("x",QString::number(mark->position().x()));
+    writeTextElement("y",QString::number(mark->position().y()));
+    writeTextElement("color",mark->color().name());
+    foreach(QString discarded, mark->discardedXml())
         writeUnknownElement(discarded);
     writeEndElement();
 }

@@ -17,6 +17,7 @@
 class SituationModel;
 class TrackModel;
 class BoatModel;
+class MarkModel;
 
 class XmlSituationWriter : public QXmlStreamWriter {
     public:
@@ -28,6 +29,7 @@ class XmlSituationWriter : public QXmlStreamWriter {
     private:
         void writeTrack(TrackModel *track);
         void writeBoat(BoatModel *boat);
+        void writeMark(MarkModel *mark);
         void writeUnknownElement(const QString &discarded);
 
         SituationModel *m_situation;

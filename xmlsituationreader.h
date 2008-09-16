@@ -30,6 +30,7 @@ class XmlSituationReader : public QXmlStreamReader {
         void readSituation();
         void readTrack(SituationModel *situation);
         void readBoat(SituationModel *situation, TrackModel *track);
+        void readMark(SituationModel *situation);
 
         SituationModel *m_situation;
 };
