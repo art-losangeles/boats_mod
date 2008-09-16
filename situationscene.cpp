@@ -100,26 +100,26 @@ void SituationScene::keyPressEvent(QKeyEvent *event) {
     }
     if (event->key() == Qt::Key_Plus) {
         qreal theta = fmod(m_selectedModels[0]->heading() + 5 + 360.0, 360.0);
-        m_situation->undoStack()->push(new MoveBoatUndoCommand(m_selectedModels, QPointF(), theta));
+        m_situation->undoStack()->push(new HeadingBoatUndoCommand(m_selectedModels, theta));
 
     } else if (event->key() == Qt::Key_Minus) {
         qreal theta = fmod(m_selectedModels[0]->heading() - 5 + 360.0, 360.0);
-        m_situation->undoStack()->push(new MoveBoatUndoCommand(m_selectedModels, QPointF(), theta));
+        m_situation->undoStack()->push(new HeadingBoatUndoCommand(m_selectedModels, theta));
 
     } else if (event->key() == Qt::Key_Left) {
         QPointF pos(-5,0);
-        m_situation->undoStack()->push(new MoveBoatUndoCommand(m_selectedModels, pos, 0));
+        m_situation->undoStack()->push(new MoveBoatUndoCommand(m_selectedModels, pos));
 
     } else if (event->key() == Qt::Key_Right) {
         QPointF pos(5,0);
-        m_situation->undoStack()->push(new MoveBoatUndoCommand(m_selectedModels, pos, 0));
+        m_situation->undoStack()->push(new MoveBoatUndoCommand(m_selectedModels, pos));
 
     } else if (event->key() == Qt::Key_Up) {
         QPointF pos(0,-5);
-        m_situation->undoStack()->push(new MoveBoatUndoCommand(m_selectedModels, pos, 0));
+        m_situation->undoStack()->push(new MoveBoatUndoCommand(m_selectedModels, pos));
     } else if (event->key() == Qt::Key_Down) {
         QPointF pos(0,5);
-        m_situation->undoStack()->push(new MoveBoatUndoCommand(m_selectedModels, pos, 0));
+        m_situation->undoStack()->push(new MoveBoatUndoCommand(m_selectedModels, pos));
     }
 }
 
@@ -197,7 +197,7 @@ void SituationScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
 
 void SituationScene::mouseMoveBoatEvent(QGraphicsSceneMouseEvent *event) {
     if (!m_selectedModels.isEmpty() && event->scenePos() != m_fromPosition) {
-        m_situation->undoStack()->push(new MoveBoatUndoCommand(m_selectedModels,(event->scenePos()-m_fromPosition), 0));
+        m_situation->undoStack()->push(new MoveBoatUndoCommand(m_selectedModels,(event->scenePos()-m_fromPosition)));
         m_fromPosition = event->scenePos();
     }
 }
@@ -220,7 +220,7 @@ void SituationScene::mouseHeadingEvent(QGraphicsSceneMouseEvent *event) {
         } else if (fabs(theta-(360-snap)) <=5) {
             theta = 360-snap;
         }
-        m_situation->undoStack()->push(new MoveBoatUndoCommand(m_selectedModels, QPointF(), theta));
+        m_situation->undoStack()->push(new HeadingBoatUndoCommand(m_selectedModels, theta));
     }
 }
 

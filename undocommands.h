@@ -66,7 +66,7 @@ class MoveBoatUndoCommand : public QUndoCommand {
 
     public:
         enum { Id = 1 };
-        MoveBoatUndoCommand(QList<BoatModel*> &boatList, const QPointF &deltaPosition, const qreal &heading, QUndoCommand *parent = 0);
+        MoveBoatUndoCommand(QList<BoatModel*> &boatList, const QPointF &deltaPosition, QUndoCommand *parent = 0);
         ~MoveBoatUndoCommand();
         void undo();
         void redo();
@@ -74,8 +74,22 @@ class MoveBoatUndoCommand : public QUndoCommand {
         int id() const { return Id; }
     private:
         QList<BoatModel*> m_boatList;
-        QList<qreal> m_headingList;
         QPointF m_deltaPosition;
+};
+
+class HeadingBoatUndoCommand : public QUndoCommand {
+
+    public:
+        enum { Id = 2 };
+        HeadingBoatUndoCommand(QList<BoatModel*> &boatList, const qreal &heading, QUndoCommand *parent = 0);
+        ~HeadingBoatUndoCommand();
+        void undo();
+        void redo();
+        bool mergeWith(const QUndoCommand *command);
+        int id() const { return Id; }
+    private:
+        QList<BoatModel*> m_boatList;
+        QList<qreal> m_headingList;
         qreal m_heading;
 };
 
