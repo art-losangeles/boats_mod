@@ -17,6 +17,7 @@
 
 class SituationModel;
 class TrackModel;
+class PositionModel;
 class BoatModel;
 class MarkModel;
 
@@ -47,6 +48,21 @@ class DeleteTrackUndoCommand : public QUndoCommand {
         TrackModel *m_track;
 };
 
+class MoveModelUndoCommand : public QUndoCommand {
+
+    public:
+        enum { Id = 1 };
+        MoveModelUndoCommand(QList<PositionModel*> &modelList, const QPointF &deltaPosition, QUndoCommand *parent = 0);
+        ~MoveModelUndoCommand();
+        void undo();
+        void redo();
+        bool mergeWith(const QUndoCommand *command);
+        int id() const { return Id; }
+    private:
+        QList<PositionModel*> m_modelList;
+        QPointF m_deltaPosition;
+};
+
 class AddBoatUndoCommand : public QUndoCommand {
 
     public:
@@ -60,21 +76,6 @@ class AddBoatUndoCommand : public QUndoCommand {
     private:
         TrackModel *m_track;
         BoatModel *m_boat;
-};
-
-class MoveBoatUndoCommand : public QUndoCommand {
-
-    public:
-        enum { Id = 1 };
-        MoveBoatUndoCommand(QList<BoatModel*> &boatList, const QPointF &deltaPosition, QUndoCommand *parent = 0);
-        ~MoveBoatUndoCommand();
-        void undo();
-        void redo();
-        bool mergeWith(const QUndoCommand *command);
-        int id() const { return Id; }
-    private:
-        QList<BoatModel*> m_boatList;
-        QPointF m_deltaPosition;
 };
 
 class HeadingBoatUndoCommand : public QUndoCommand {

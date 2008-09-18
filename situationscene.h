@@ -16,6 +16,7 @@
 
 class SituationModel;
 class TrackModel;
+class PositionModel;
 class BoatModel;
 class MarkModel;
 
@@ -40,7 +41,7 @@ class SituationScene : public QGraphicsScene {
         void setState(const SceneState& theValue) { m_state = theValue; }
         void setModelPressed(BoatModel *theValue) {m_modelPressed = theValue; }
         SceneState state() const { return m_state; }
-        QList< BoatModel * > selectedModels() const { return m_selectedModels; }
+        QList< BoatModel * > selectedBoatModels() const { return m_selectedBoatModels; }
         QList< MarkModel * > selectedMarkModels() const { return m_selectedMarkModels; }
 
     signals:
@@ -63,14 +64,15 @@ class SituationScene : public QGraphicsScene {
         void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 
     private:
-        void mouseMoveBoatEvent(QGraphicsSceneMouseEvent *event);
+        void mouseMoveModelEvent(QGraphicsSceneMouseEvent *event);
         void mouseHeadingEvent(QGraphicsSceneMouseEvent *event);
         void mouseCreateTrackEvent(QGraphicsSceneMouseEvent *event);
         void mouseCreateBoatEvent(QGraphicsSceneMouseEvent *event);
         void mouseCreateMarkEvent(QGraphicsSceneMouseEvent *event);
 
         SituationModel *m_situation;
-        QList<BoatModel*> m_selectedModels;
+        QList<PositionModel*> m_selectedModels;
+        QList<BoatModel*> m_selectedBoatModels;
         QList<MarkModel*> m_selectedMarkModels;
         BoatModel* m_modelPressed;
         TrackModel *m_trackCreated;

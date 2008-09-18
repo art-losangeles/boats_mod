@@ -60,6 +60,41 @@ void DeleteTrackUndoCommand::undo() {
     m_situation->addTrack(m_track);
 }
 
+// Move Model
+MoveModelUndoCommand::MoveModelUndoCommand(QList<PositionModel*> &modelList, const QPointF &deltaPosition, QUndoCommand *parent)
+        : QUndoCommand(parent),
+        m_modelList(modelList),
+        m_deltaPosition(deltaPosition) {
+    std::cout << "new movemodelundocommand" << std::endl;
+}
+
+MoveModelUndoCommand::~MoveModelUndoCommand() {
+    std::cout << "end movemodelundocommand" << std::endl;
+}
+
+void MoveModelUndoCommand::undo() {
+    for(int i=0; i< m_modelList.size(); i++) {
+        PositionModel *model = m_modelList[i];
+        model->setPosition(model->position() - m_deltaPosition, true);
+    }
+}
+
+void MoveModelUndoCommand::redo() {
+    for(int i=0; i< m_modelList.size(); i++) {
+        PositionModel *model = m_modelList[i];
+        model->setPosition(model->position() + m_deltaPosition, true);
+    }
+}
+
+bool MoveModelUndoCommand::mergeWith(const QUndoCommand *command) {
+    const MoveModelUndoCommand *moveCommand = static_cast<const MoveModelUndoCommand*>(command);
+    if (m_modelList != moveCommand->m_modelList)
+        return false;
+
+    m_deltaPosition += moveCommand->m_deltaPosition;
+    return true;
+}
+
 // Add Boat
 AddBoatUndoCommand::AddBoatUndoCommand(TrackModel* track, QPointF& position, qreal heading, QUndoCommand *parent)
         : QUndoCommand(parent),
@@ -81,41 +116,6 @@ void AddBoatUndoCommand::redo() {
 
 void AddBoatUndoCommand::undo() {
     m_track->deleteBoat(m_boat);
-}
-
-// Move Boat
-MoveBoatUndoCommand::MoveBoatUndoCommand(QList<BoatModel*> &boatList, const QPointF &deltaPosition, QUndoCommand *parent)
-        : QUndoCommand(parent),
-        m_boatList(boatList),
-        m_deltaPosition(deltaPosition) {
-    std::cout << "new moveboatundocommand" << std::endl;
-}
-
-MoveBoatUndoCommand::~MoveBoatUndoCommand() {
-    std::cout << "end moveboatundocommand" << std::endl;
-}
-
-void MoveBoatUndoCommand::undo() {
-    for(int i=0; i< m_boatList.size(); i++) {
-        BoatModel *boat = m_boatList[i];
-        boat->setPosition(boat->position() - m_deltaPosition, true);
-    }
-}
-
-void MoveBoatUndoCommand::redo() {
-    for(int i=0; i< m_boatList.size(); i++) {
-        BoatModel *boat = m_boatList[i];
-        boat->setPosition(boat->position() + m_deltaPosition, true);
-    }
-}
-
-bool MoveBoatUndoCommand::mergeWith(const QUndoCommand *command) {
-    const MoveBoatUndoCommand *moveCommand = static_cast<const MoveBoatUndoCommand*>(command);
-    if (m_boatList != moveCommand->m_boatList)
-        return false;
-
-    m_deltaPosition += moveCommand->m_deltaPosition;
-    return true;
 }
 
 // Heading Boat
