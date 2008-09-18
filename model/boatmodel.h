@@ -14,36 +14,27 @@
 
 #include <QtGui>
 
+#include "model/positionmodel.h"
+
 class TrackModel;
 
-class BoatModel : public QObject {
+class BoatModel : public PositionModel {
         Q_OBJECT
     public:
         BoatModel(TrackModel *track, QObject *parent = 0);
         ~BoatModel();
 
         TrackModel* track() const { return m_track; }
-        QPointF position() const { return m_position; }
         qreal heading() const { return m_heading; }
-        int order() const { return m_order; }
-        QStringList discardedXml() const { return m_discardedXml; };
-        void appendDiscardedXml(const QString& theValue);
-
         void setPosition(const QPointF& theValue, bool update = false);
         void setHeading(const qreal& theValue, bool update = false);
-        void setOrder(const int theValue, bool update = false);
 
     signals:
         void headingChanged(qreal heading);
-        void positionChanged(QPointF position);
-        void orderChanged(int order);
 
     private:
         TrackModel *m_track;
-        QPointF m_position;
         qreal  m_heading;
-        int m_order;
-        QStringList m_discardedXml;
 };
 
 #endif

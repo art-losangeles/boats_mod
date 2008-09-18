@@ -15,38 +15,15 @@
 #include "model/situationmodel.h"
 
 MarkModel::MarkModel(SituationModel* situation, QObject *parent)
-        : QObject(parent),
+        : PositionModel(parent),
         m_situation(situation),
-        m_position(),
-        m_order(situation->markSize()),
         m_color(Qt::gray) {
     std::cout << "new Mark " << this << std::endl;
+    setOrder(situation->markSize());
 }
 
 MarkModel::~MarkModel() {
     std::cout << "delete Mark " << this << std::endl;
-}
-
-void MarkModel::setPosition(const QPointF& theValue, bool update) {
-    if (theValue != m_position) {
-        std::cout << "Mark " << this
-        << " position " << theValue.x()
-        << ", " << theValue.y() << std::endl;
-        m_position = theValue;
-        if (update) {
-            emit positionChanged(m_position);
-        }
-    }
-}
-
-void MarkModel::setOrder(const int theValue, bool update) {
-    if (theValue != m_order) {
-        std::cout << "Mark " << this
-        << " order " << theValue << std::endl;
-        m_order = theValue;
-        if (update)
-            emit orderChanged(m_order);
-    }
 }
 
 void MarkModel::setColor(const QColor& theValue, bool update) {
@@ -54,11 +31,5 @@ void MarkModel::setColor(const QColor& theValue, bool update) {
         m_color = theValue;
         if (update)
             emit colorChanged(m_color);
-    }
-}
-
-void MarkModel::appendDiscardedXml(const QString& theValue) {
-    if (!m_discardedXml.contains(theValue)) {
-        m_discardedXml.append(theValue);
     }
 }
