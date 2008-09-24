@@ -29,9 +29,10 @@ BoatModel::~BoatModel() {
 void BoatModel::setHeading(const qreal& theValue, bool update) {
     if (theValue != m_heading) {
         m_heading = theValue;
-        if (update)
+        if (update) {
             emit headingChanged(m_heading);
             m_track->changingTrack(m_track);
+        }
     }
 }
 

@@ -36,12 +36,13 @@ class TrackModel : public QObject {
         SituationModel* situation() const { return m_situation; }
         QColor color() const { return m_color;};
         int size() const { return m_boats.size();};
+        const QPainterPath path() const { return m_path; };
 
         void setColor(const QColor& theValue, bool update = false);
         QStringList discardedXml() const { return m_discardedXml; };
         void appendDiscardedXml(const QString& theValue);
 
-        void changingTrack(TrackModel *track) {emit trackChanged(track);};
+        void changingTrack(TrackModel *track);
 
     signals:
         void colorChanged(QColor color);
@@ -53,6 +54,7 @@ class TrackModel : public QObject {
     private:
         SituationModel *m_situation;
         QColor m_color;
+        QPainterPath m_path;
         QStringList m_discardedXml;
 };
 

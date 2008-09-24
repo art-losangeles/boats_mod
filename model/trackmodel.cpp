@@ -91,3 +91,31 @@ void TrackModel::hideBoats() {
         m_situation->removingBoat(boat);
     }
 }
+
+void TrackModel::changingTrack(TrackModel *track) {
+    QPainterPath path;
+
+    if (m_boats.size() < 1) {
+        m_path = path;
+        return;
+    }
+
+    QPointF pos0(m_boats[0]->position());
+    qreal heading0 = m_boats[0]->heading()  * M_PI /180;
+
+    path.moveTo(pos0);
+    QListIterator<BoatModel*> boatI(m_boats);
+    boatI.next();
+    while (boatI.hasNext()) {
+        BoatModel *boat = boatI.next();
+        QPointF pos1(boat->position());
+        qreal heading1 = (boat->heading()) * M_PI /180;
+        path.cubicTo(pos0 + QPointF(60*sin(heading0),-60*cos(heading0)),
+                        pos1 - QPointF(60*sin(heading1),-60*cos(heading1)),
+                        pos1);
+        pos0 = pos1;
+        heading0 = heading1;
+    }
+    m_path = path;
+    emit trackChanged(track);
+}
