@@ -28,6 +28,7 @@ class SituationModel : public QObject {
 
         QUndoStack * undoStack() const { return m_undoStack;};
         int size() const { return m_tracks.size();};
+        const QList<TrackModel*> tracks() const { return m_tracks; };
         int markSize() const { return m_marks.size();};
         qreal laylineAngle() const { return m_laylineAngle; };
         void setLaylineAngle(const qreal, bool update = false);

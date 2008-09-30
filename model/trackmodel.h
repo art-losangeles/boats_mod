@@ -36,6 +36,7 @@ class TrackModel : public QObject {
         SituationModel* situation() const { return m_situation; }
         QColor color() const { return m_color;};
         int size() const { return m_boats.size();};
+        const QList<BoatModel*> boats() const { return m_boats; };
         const QPainterPath path() const { return m_path; };
 
         void setColor(const QColor& theValue, bool update = false);
