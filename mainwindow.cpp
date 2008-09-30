@@ -34,7 +34,8 @@ MainWindow::MainWindow(QWidget *parent)
         view(new QGraphicsView(scene)),
         menubar(new QMenuBar(this)),
         toolbar(new TrackWidget(this)),
-        statusbar(new QStatusBar(this)) {
+        statusbar(new QStatusBar(this)),
+        timeline(new QTimeLine(1000,this)) {
 
     // Actions
     createActions();
@@ -44,6 +45,10 @@ MainWindow::MainWindow(QWidget *parent)
     view->setViewportUpdateMode(QGraphicsView::SmartViewportUpdate);
     view->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     setCentralWidget(view);
+
+    // Timeline
+    timeline->setCurveShape(QTimeLine::LinearCurve);
+    timeline->setLoopCount(0);
 
     // Bars
     createMenus();
@@ -93,6 +98,11 @@ void MainWindow::createActions() {
     connect(deleteAction, SIGNAL(triggered()),
             this, SLOT(deleteModels()));
 
+    animateAction = new QAction(tr("&Animate"), this);
+    animateAction->setShortcut(tr("Ctrl+A"));
+    connect(animateAction, SIGNAL(triggered()),
+            this, SLOT(animate()));
+
     undoAction = new QAction(tr("&Undo"), this);
     undoAction->setShortcut(tr("Ctrl+Z"));
     undoAction->setEnabled(false);
@@ -123,6 +133,7 @@ void MainWindow::createMenus() {
     trackMenu->addAction(addMarkAction);
     trackMenu->addAction(deleteTrackAction);
     trackMenu->addAction(deleteAction);
+    trackMenu->addAction(animateAction);
 
     historyMenu = menubar->addMenu(tr("&History"));
     historyMenu->addAction(undoAction);
@@ -255,5 +266,17 @@ void MainWindow::addMark() {
         scene->setState(CREATE_MARK);
         view->setCursor(Qt::CrossCursor);
         statusbar->showMessage(tr("CREATE_MARK"));
+    }
+}
+
+void MainWindow::animate() {
+    if(scene->state() != ANIMATE) {
+        scene->setState(ANIMATE);
+        scene->setAnimation(timeline);
+        timeline->start();
+    } else {
+        scene->setState(NO_STATE);
+        scene->unSetAnimation();
+        timeline->stop();
     }
 }

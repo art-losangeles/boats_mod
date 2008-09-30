@@ -26,6 +26,7 @@
 #include "boat.h"
 #include "track.h"
 #include "mark.h"
+#include "boatanimation.h"
 
 SituationScene::SituationScene(SituationModel *situation)
         : QGraphicsScene(situation),
@@ -88,6 +89,35 @@ void SituationScene::addMarkItem(MarkModel *mark) {
 void SituationScene::deleteMarkItem() {
     foreach(MarkModel *mark, m_selectedMarkModels) {
         mark->situation()->deleteMark(mark);
+    }
+}
+
+void SituationScene::setAnimation(QTimeLine *timer) {
+    std::cout << "preparing for Animation" << std::endl;
+    int maxSize = 0;
+    foreach (TrackModel *track, m_situation->tracks()) {
+        if (track->boats().size() > maxSize)
+            maxSize = track->boats().size() - 1;
+    }
+    timer->setDuration(2000 * maxSize);
+
+    foreach (TrackModel *track, m_situation->tracks()) {
+        BoatGraphicsItem *boatItem = new BoatGraphicsItem(track->boats()[0]);
+        addItem(boatItem);
+
+        BoatAnimation *animation = new BoatAnimation(track, boatItem, maxSize);
+        animation->setTimeLine(timer);
+        m_animationItems.push_back(animation);
+    }
+}
+
+void SituationScene::unSetAnimation() {
+    std::cout << "ending Animation" << std::endl;
+    foreach(BoatAnimation *animation, m_animationItems) {
+        removeItem(animation->boat());
+        m_animationItems.removeOne(animation);
+        delete animation->boat();
+        delete animation;
     }
 }
 

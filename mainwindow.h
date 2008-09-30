@@ -12,8 +12,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QMainWindow>
-#include <QGraphicsView>
+#include <QtGui>
 
 class SituationModel;
 class SituationScene;
@@ -32,6 +31,7 @@ class MainWindow : public QMainWindow {
         void addMark();
         void deleteTrack();
         void deleteModels();
+        void animate();
 
     protected:
         void closeEvent(QCloseEvent *event);
@@ -47,6 +47,7 @@ class MainWindow : public QMainWindow {
         QMenuBar *menubar;
         TrackWidget *toolbar;
         QStatusBar *statusbar;
+        QTimeLine *timeline;
 
         QAction *openFileAction;
         QAction *saveFileAction;
@@ -57,7 +58,7 @@ class MainWindow : public QMainWindow {
         QAction *deleteTrackAction;
         QAction *deleteAction;
 
-        QAction *changeHeadingAction;
+        QAction *animateAction;
 
         QAction *undoAction;
         QAction *redoAction;

@@ -19,12 +19,14 @@ class TrackModel;
 class PositionModel;
 class BoatModel;
 class MarkModel;
+class BoatAnimation;
 
 typedef enum {
     NO_STATE,
     CREATE_TRACK,
     CREATE_BOAT,
-    CREATE_MARK
+    CREATE_MARK,
+    ANIMATE
 } SceneState;
 
 enum {
@@ -56,6 +58,8 @@ class SituationScene : public QGraphicsScene {
         void addMarkItem(MarkModel *mark);
         void deleteMarkItem();
         void setLaylines(const qreal angle);
+        void setAnimation(QTimeLine *timer);
+        void unSetAnimation();
 
     protected:
         void keyPressEvent(QKeyEvent *event);
@@ -74,6 +78,7 @@ class SituationScene : public QGraphicsScene {
         QList<PositionModel*> m_selectedModels;
         QList<BoatModel*> m_selectedBoatModels;
         QList<MarkModel*> m_selectedMarkModels;
+        QList<BoatAnimation*> m_animationItems;
         BoatModel* m_modelPressed;
         TrackModel *m_trackCreated;
         QPointF m_fromPosition;

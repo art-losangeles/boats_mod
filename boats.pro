@@ -1,30 +1,34 @@
-HEADERS =   boat.h \
-	model/positionmodel.h \
+HEADERS = \
 	model/boatmodel.h \
-	model/trackmodel.h \
 	model/markmodel.h \
+	model/positionmodel.h \
+	model/situationmodel.h \
+	model/trackmodel.h \
+	boat.h \
+	boatanimation.h \
+	mainwindow.h \
 	mark.h \
+	situationscene.h \
 	track.h \
 	trackwidget.h \
-	model/situationmodel.h \
-	situationscene.h \
-	mainwindow.h \
 	undocommands.h \
 	xmlsituationreader.h \
 	xmlsituationwriter.h
 
-SOURCES =   boat.cpp \
-	main.cpp \
-	model/positionmodel.cpp \
+SOURCES = \
 	model/boatmodel.cpp \
-	model/trackmodel.cpp \
 	model/markmodel.cpp \
+	model/positionmodel.cpp \
+	model/situationmodel.cpp \
+	model/trackmodel.cpp \
+	boat.cpp \
+	boatanimation.cpp \
+	main.cpp \
+	mainwindow.cpp \
 	mark.cpp \
+	situationscene.cpp \
 	track.cpp \
 	trackwidget.cpp \
-	model/situationmodel.cpp \
-	situationscene.cpp \
-	mainwindow.cpp \
 	undocommands.cpp \
 	xmlsituationreader.cpp \
 	xmlsituationwriter.cpp
