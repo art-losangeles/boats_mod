@@ -21,7 +21,7 @@ class BoatModel;
 class BoatGraphicsItem : public QObject, public QGraphicsItem {
         Q_OBJECT
     public:
-        BoatGraphicsItem(BoatModel *boat = 0, QGraphicsItem *parent = 0);
+        BoatGraphicsItem(BoatModel *boat, QGraphicsItem *parent = 0);
         ~BoatGraphicsItem();
 
         BoatModel* boat() const { return m_boat; }
