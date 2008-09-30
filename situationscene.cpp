@@ -126,6 +126,8 @@ void SituationScene::keyPressEvent(QKeyEvent *event) {
 void SituationScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
     // propagate mouse event first for selected items
     QGraphicsScene::mousePressEvent(event);
+    if (!m_selectedBoatModels.isEmpty())
+        m_trackCreated = m_selectedBoatModels[0]->track();
 
     m_fromPosition = event->scenePos();
     std::cout << "Mouse pressed with " << m_selectedModels.size()
