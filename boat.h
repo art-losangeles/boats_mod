@@ -31,6 +31,7 @@ class BoatGraphicsItem : public QObject, public QGraphicsItem {
         void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
                    QWidget *widget);
         int type() const;
+        void setSailAngle();
 
     public slots:
         void setHeading(qreal value);
@@ -47,6 +48,7 @@ class BoatGraphicsItem : public QObject, public QGraphicsItem {
     private:
         BoatModel *m_boat;
         qreal m_angle;
+        qreal m_sailAngle;
         QColor m_color;
         bool m_selected;
         int m_order;

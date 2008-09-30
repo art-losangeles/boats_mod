@@ -34,6 +34,7 @@ BoatGraphicsItem::BoatGraphicsItem(BoatModel *boat, QGraphicsItem *parent)
 
     setBoundingRegionGranularity(1);
 
+    setSailAngle();
     setPos(boat->position());
     setZValue(m_order);
 
@@ -56,7 +57,19 @@ void BoatGraphicsItem::setHeading(qreal value) {
     if (m_angle != value) {
         prepareGeometryChange();
         m_angle = value;
+        setSailAngle();
         update();
+    }
+}
+
+void BoatGraphicsItem::setSailAngle() {
+    qreal layline = m_boat->track()->situation()->laylineAngle() -10;
+    if (m_angle< layline || m_angle>360-layline) {
+        m_sailAngle = -m_angle;
+    } else if (m_angle<180) {
+        m_sailAngle = -m_angle/1.86 + 6;
+    } else {
+        m_sailAngle = 180-m_angle/1.86 + 6;
     }
 }
 
@@ -146,14 +159,12 @@ void BoatGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *
         sailPath.lineTo(2,30);
         sailPath.lineTo(-2,40);
         sailPath.lineTo(0,50);
-        painter->rotate(-m_angle);
     } else if (m_angle<180) {
         sailPath.cubicTo(5, 10, 5, 40, 0, 50);
-        painter->rotate(-m_angle/1.86 + 6);
     } else {
         sailPath.cubicTo(-5, 10, -5, 40, 0, 50);
-        painter->rotate(180-m_angle/1.86 + 6);
     }
+    painter->rotate(m_sailAngle);
     painter->strokePath(sailPath,painter->pen());
 }
 
