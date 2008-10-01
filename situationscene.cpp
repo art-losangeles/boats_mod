@@ -271,7 +271,7 @@ void SituationScene::mouseCreateTrackEvent(QGraphicsSceneMouseEvent *event) {
 void SituationScene::mouseCreateBoatEvent(QGraphicsSceneMouseEvent *event) {
     QPointF point = event->scenePos();
     if (m_trackCreated) {
-        BoatModel* lastBoat = m_trackCreated->boats().last();
+        const BoatModel* lastBoat = m_trackCreated->boats().last();
         // calculate new heading:
         // from position of head of last boat to new position
         qreal theta0 = lastBoat->heading() * M_PI /180;
