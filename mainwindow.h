@@ -14,8 +14,9 @@
 
 #include <QtGui>
 
+#include "situationscene.h"
+
 class SituationModel;
-class SituationScene;
 class TrackWidget;
 
 class MainWindow : public QMainWindow {
@@ -24,6 +25,7 @@ class MainWindow : public QMainWindow {
         MainWindow(QWidget *parent = 0);
         ~MainWindow();
     public slots:
+        void changeState(SceneState newState);
         void openFile();
         void saveFile();
         void addTrack();

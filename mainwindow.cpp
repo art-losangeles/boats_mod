@@ -40,6 +40,10 @@ MainWindow::MainWindow(QWidget *parent)
     // Actions
     createActions();
 
+    // Scene
+    connect(scene, SIGNAL(stateChanged(SceneState)),
+            this, SLOT(changeState(SceneState)));
+
     // View
     view->setRenderHint(QPainter::Antialiasing);
     view->setViewportUpdateMode(QGraphicsView::SmartViewportUpdate);
@@ -75,16 +79,19 @@ void MainWindow::createActions() {
 
     addTrackAction = new QAction(tr("Create &Track"), this);
     addTrackAction->setShortcut(tr("Ctrl+Ins"));
+    addTrackAction->setCheckable(true);
     connect(addTrackAction, SIGNAL(triggered()),
             this, SLOT(addTrack()));
 
     addBoatAction = new QAction(tr("Create &Boat"), this);
     addBoatAction->setShortcut(tr("Ins"));
+    addBoatAction->setCheckable(true);
     connect(addBoatAction, SIGNAL(triggered()),
             this, SLOT(addBoat()));
 
     addMarkAction = new QAction(tr("Create &Mark"), this);
     addMarkAction->setShortcut(tr("Alt+Ins"));
+    addMarkAction->setCheckable(true);
     connect(addMarkAction, SIGNAL(triggered()),
             this, SLOT(addMark()));
 
@@ -120,6 +127,38 @@ void MainWindow::createActions() {
             situation->undoStack(), SLOT(redo()));
     connect(situation->undoStack(), SIGNAL(canRedoChanged(bool)),
             redoAction, SLOT(setEnabled(bool)));
+}
+
+void MainWindow::changeState(SceneState newState) {
+    switch(newState) {
+        case CREATE_TRACK:
+            view->setCursor(Qt::CrossCursor);
+            statusbar->showMessage(tr("CREATE_TRACK"));
+            addTrackAction->setChecked(true);
+            addBoatAction->setChecked(false);
+            addMarkAction->setChecked(false);
+            break;
+        case CREATE_BOAT:
+            view->setCursor(Qt::CrossCursor);
+            statusbar->showMessage(tr("CREATE_BOAT"));
+            addTrackAction->setChecked(false);
+            addBoatAction->setChecked(true);
+            addMarkAction->setChecked(false);
+            break;
+        case CREATE_MARK:
+            view->setCursor(Qt::CrossCursor);
+            statusbar->showMessage(tr("CREATE_MARK"));
+            addTrackAction->setChecked(false);
+            addBoatAction->setChecked(false);
+            addMarkAction->setChecked(true);
+            break;
+        default:
+            view->unsetCursor();
+            statusbar->clearMessage();
+            addTrackAction->setChecked(false);
+            addBoatAction->setChecked(false);
+            addMarkAction->setChecked(false);
+    }
 }
 
 void MainWindow::createMenus() {
@@ -222,8 +261,6 @@ void MainWindow::saveFile()
 
 void MainWindow::addTrack() {
     scene->setState(CREATE_TRACK);
-    view->setCursor(Qt::CrossCursor);
-    statusbar->showMessage(tr("CREATE_TRACK"));
 }
 
 void MainWindow::deleteTrack() {
@@ -238,12 +275,8 @@ void MainWindow::deleteTrack() {
 void MainWindow::addBoat() {
     if (scene->state() == CREATE_BOAT) {
         scene->setState(NO_STATE);
-        view->unsetCursor();
-        statusbar->clearMessage();
     } else {
         scene->setState(CREATE_BOAT);
-        view->setCursor(Qt::CrossCursor);
-        statusbar->showMessage(tr("CREATE_BOAT"));
     }
 }
 
@@ -260,12 +293,8 @@ void MainWindow::deleteModels() {
 void MainWindow::addMark() {
     if (scene->state() == CREATE_MARK) {
         scene->setState(NO_STATE);
-        view->unsetCursor();
-        statusbar->clearMessage();
     } else {
         scene->setState(CREATE_MARK);
-        view->setCursor(Qt::CrossCursor);
-        statusbar->showMessage(tr("CREATE_MARK"));
     }
 }
 

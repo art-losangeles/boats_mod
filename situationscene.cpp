@@ -265,7 +265,7 @@ void SituationScene::mouseCreateTrackEvent(QGraphicsSceneMouseEvent *event) {
     boat->setPosition(point);
     track->addBoat(boat);
     m_trackCreated = track;
-    m_state = CREATE_BOAT;
+    setState(CREATE_BOAT);
 }
 
 void SituationScene::mouseCreateBoatEvent(QGraphicsSceneMouseEvent *event) {

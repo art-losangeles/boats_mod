@@ -40,7 +40,7 @@ class SituationScene : public QGraphicsScene {
         SituationScene(SituationModel* situation);
         ~SituationScene() {}
 
-        void setState(const SceneState& theValue) { m_state = theValue; }
+        void setState(const SceneState& theValue) { m_state = theValue; emit stateChanged(m_state); }
         void setModelPressed(BoatModel *theValue) {m_modelPressed = theValue; }
         SceneState state() const { return m_state; }
         QList< BoatModel * > selectedBoatModels() const { return m_selectedBoatModels; }
@@ -48,6 +48,7 @@ class SituationScene : public QGraphicsScene {
 
     signals:
         void itemMoved(QList<BoatModel*> movedItems, const QPointF &movedFromPosition);
+        void stateChanged(SceneState newState);
 
     public slots:
         void setSelectedModels();
