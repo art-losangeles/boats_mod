@@ -123,8 +123,10 @@ void BoatAnimation::afterAnimationStep(qreal step) {
         m_boats.push_back(boat);
         m_track->deleteBoat(boat);
     }
-    for (int i = m_track->size()-1; i < index; i++) {
-        m_track->addBoat(m_boats.last());
-        m_boats.pop_back();
+    if (!m_boats.isEmpty()) {
+        for (int i = m_track->size()-1; i < index; i++) {
+            m_track->addBoat(m_boats.last());
+            m_boats.pop_back();
+        }
     }
 }
