@@ -19,10 +19,6 @@ class SituationModel;
 
 class TrackModel : public QObject {
         Q_OBJECT
-    friend class XmlSituationReader;
-    friend class XmlSituationWriter;
-    friend class SituationScene;
-    friend class TrackGraphicsItem;
     public:
         TrackModel(SituationModel* situation = 0, QObject *parent = 0);
         ~TrackModel();
@@ -49,12 +45,10 @@ class TrackModel : public QObject {
         void colorChanged(QColor color);
         void trackChanged(TrackModel *track);
 
-    protected:
-        QList<BoatModel*> m_boats;
-
     private:
         SituationModel *m_situation;
         QColor m_color;
+        QList<BoatModel*> m_boats;
         QPainterPath m_path;
         QStringList m_discardedXml;
 };

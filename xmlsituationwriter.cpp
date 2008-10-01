@@ -34,9 +34,9 @@ bool XmlSituationWriter::writeFile(QIODevice *device) {
     writeTextElement("layline",QString::number(m_situation->laylineAngle()));
     foreach(QString discarded, m_situation->discardedXml())
         writeUnknownElement(discarded);
-    foreach (MarkModel *mark, m_situation->m_marks)
+    foreach (MarkModel *mark, m_situation->marks())
         writeMark(mark);
-    foreach (TrackModel *track, m_situation->m_tracks)
+    foreach (TrackModel *track, m_situation->tracks())
         writeTrack(track);
 
     writeEndDocument();
@@ -48,7 +48,7 @@ void XmlSituationWriter::writeTrack(TrackModel *track) {
     writeTextElement("color",track->color().name());
     foreach(QString discarded, track->discardedXml())
         writeUnknownElement(discarded);
-    foreach (BoatModel *boat, track->m_boats)
+    foreach (BoatModel *boat, track->boats())
         writeBoat(boat);
     writeEndElement();
 }

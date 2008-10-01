@@ -20,8 +20,6 @@ class MarkModel;
 
 class SituationModel : public QObject {
         Q_OBJECT
-    friend class XmlSituationReader;
-    friend class XmlSituationWriter;
     public:
         SituationModel(QObject *parent = 0);
         ~SituationModel();
@@ -30,6 +28,7 @@ class SituationModel : public QObject {
         int size() const { return m_tracks.size();};
         const QList<TrackModel*> tracks() const { return m_tracks; };
         int markSize() const { return m_marks.size();};
+        const QList<MarkModel*> marks() const { return m_marks; };
         qreal laylineAngle() const { return m_laylineAngle; };
         void setLaylineAngle(const qreal, bool update = false);
         QStringList discardedXml() const { return m_discardedXml; };
@@ -52,12 +51,10 @@ class SituationModel : public QObject {
         void addMark(MarkModel *mark, int order = 0);
         int deleteMark(MarkModel *mark);
 
-    protected:
-        QList<TrackModel*> m_tracks;
-
     private:
         QUndoStack *m_undoStack;
         qreal m_laylineAngle;
+        QList<TrackModel*> m_tracks;
         QList<MarkModel*> m_marks;
         QStringList m_discardedXml;
 
