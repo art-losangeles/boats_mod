@@ -166,12 +166,14 @@ void MainWindow::createMenus() {
     fileMenu->addAction(openFileAction);
     fileMenu->addAction(saveFileAction);
 
-    trackMenu = menubar->addMenu(tr("&Track"));
+    trackMenu = menubar->addMenu(tr("&Edit"));
     trackMenu->addAction(addTrackAction);
+    trackMenu->addAction(deleteTrackAction);
+    trackMenu->addSeparator();
     trackMenu->addAction(addBoatAction);
     trackMenu->addAction(addMarkAction);
-    trackMenu->addAction(deleteTrackAction);
     trackMenu->addAction(deleteAction);
+    trackMenu->addSeparator();
     trackMenu->addAction(animateAction);
 
     historyMenu = menubar->addMenu(tr("&History"));
