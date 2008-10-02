@@ -260,7 +260,11 @@ void MainWindow::saveFile()
 }
 
 void MainWindow::addTrack() {
-    scene->setState(CREATE_TRACK);
+    if(scene->state() == CREATE_TRACK) {
+        scene->setState(NO_STATE);
+    } else {
+        scene->setState(CREATE_TRACK);
+    }
 }
 
 void MainWindow::deleteTrack() {
