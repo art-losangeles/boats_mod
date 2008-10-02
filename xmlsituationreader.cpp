@@ -90,6 +90,8 @@ void XmlSituationReader::readTrack(SituationModel *situation) {
         if (isStartElement()) {
             if (name() == "color")
                 track->setColor(QColor(readElementText()));
+            else if (name() == "series")
+                readSeries(track, readElementText());
             else if (name() == "boat")
                 readBoat(situation, track);
             else
@@ -98,6 +100,14 @@ void XmlSituationReader::readTrack(SituationModel *situation) {
     }
 }
 
+void XmlSituationReader::readSeries(TrackModel *track, const QString series) {
+    int i;
+    for (i=0; series!=track->seriesNames()[i] && i < track->seriesNames().size(); i++) {
+    }
+    if (i != UNKNOWN) {
+        track->setSeries((Series)i, true);
+    }
+}
 void XmlSituationReader::readBoat(SituationModel *situation, TrackModel *track) {
     QPointF pos;
     qreal heading;

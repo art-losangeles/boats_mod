@@ -17,6 +17,13 @@
 class BoatModel;
 class SituationModel;
 
+typedef enum {
+    KEELBOAT,
+    OPTIMIST,
+    UNKNOWN
+} Series;
+
+
 class TrackModel : public QObject {
         Q_OBJECT
     public:
@@ -31,11 +38,14 @@ class TrackModel : public QObject {
 
         SituationModel* situation() const { return m_situation; }
         QColor color() const { return m_color;};
+        void setColor(const QColor& theValue, bool update = false);
+        Series series() const { return m_series;};
+        void setSeries(const Series theValue, bool update = false);
+        QList<QString> seriesNames() {return m_seriesNames; }
         int size() const { return m_boats.size();};
         const QList<BoatModel*> boats() const { return m_boats; };
         const QPainterPath path() const { return m_path; };
 
-        void setColor(const QColor& theValue, bool update = false);
         QStringList discardedXml() const { return m_discardedXml; };
         void appendDiscardedXml(const QString& theValue);
 
@@ -43,11 +53,14 @@ class TrackModel : public QObject {
 
     signals:
         void colorChanged(QColor color);
+        void seriesChanged(Series series);
         void trackChanged(TrackModel *track);
 
     private:
         SituationModel *m_situation;
         QColor m_color;
+        Series m_series;
+        QList<QString> m_seriesNames;
         QList<BoatModel*> m_boats;
         QPainterPath m_path;
         QStringList m_discardedXml;

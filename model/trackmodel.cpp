@@ -18,10 +18,11 @@
 TrackModel::TrackModel(SituationModel *situation, QObject *parent)
         : QObject(parent),
         m_situation(situation),
-        m_color() {
+        m_color(),
+        m_series(KEELBOAT) {
     static int track_id = 0;
     std::cout << "new track " << this << std::endl;
-
+    m_seriesNames << "keelboat" << "optimist";
     switch (track_id % 6) {
         case 0: m_color = QColor(Qt::yellow); break;
         case 1: m_color = QColor(Qt::blue); break;
@@ -42,6 +43,14 @@ void TrackModel::setColor(const QColor& theValue, bool update) {
         m_color = theValue;
         if (update)
             emit colorChanged(m_color);
+    }
+}
+
+void TrackModel::setSeries(const Series theValue, bool update) {
+    if (theValue != m_series) {
+        m_series = theValue;
+        if (update)
+            emit seriesChanged(m_series);
     }
 }
 
