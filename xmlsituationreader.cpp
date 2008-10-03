@@ -110,7 +110,7 @@ void XmlSituationReader::readSeries(TrackModel *track, const QString series) {
 }
 void XmlSituationReader::readBoat(SituationModel *situation, TrackModel *track) {
     QPointF pos;
-    qreal heading;
+    qreal heading = 0;
     QStringList discarded;
     while (!atEnd()) {
         readNext();

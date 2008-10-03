@@ -117,7 +117,7 @@ void BoatAnimation::afterAnimationStep(qreal step) {
     m_boat->setPosition(posAt(step));
     m_boat->setHeading(headingAt(step));
 
-    int index = step * m_maxSize;
+    int index = (int)(step * m_maxSize);
     for (int i=m_track->size()-1; i > index; i--) {
         BoatModel *boat = m_track->boats()[i];
         m_boats.push_back(boat);

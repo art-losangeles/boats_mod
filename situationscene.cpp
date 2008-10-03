@@ -315,8 +315,8 @@ void SituationScene::setSelectedModels() {
 void SituationScene::setLaylines(const qreal angle) {
     std::cout << "creating layline Background for " << angle << std::endl;
     qreal theta = angle * M_PI /180;
-    qreal x = 120*sin(theta);
-    qreal y = 120*cos(theta);
+    int x = lround(120*sin(theta));
+    int y = lround(120*cos(theta));
 
     QPixmap pixmap(x,y);
     pixmap.fill(Qt::transparent);
