@@ -1,0 +1,15 @@
+# kdevelop
+*kdev*
+
+# qt
+.moc
+
+#products
+Makefile
+Doxyfile
+tags
+.obj
+
+# project
+boats
+*xboat

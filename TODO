@@ -1,0 +1,29 @@
+Necessary:
+- widget and menus
+- case description with rule & comments
+- configurable traces
+
+Wishlist:
+- track line to mouse position
+- insert between boats
+- contextual menus
+- overlap line
+- tabs for multiple situations
+
+Done:
+- set heading
+- track line between boats
+- save to file
+- read from file
+- input state
+- insert boats & tracks with position through mouse
+- background grid
+- keep nonused xml tags
+- marks
+- undocommand for heading
+- sail
+- keyboard move for boats
+- save mark to file
+- movemark undo
+- animation
+- multiple boat series
