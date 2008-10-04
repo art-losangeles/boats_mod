@@ -20,8 +20,10 @@
 SituationModel::SituationModel(QObject *parent)
         : QObject(parent),
         m_undoStack(new QUndoStack(this)),
-        m_laylineAngle(40) {
+        m_laylineAngle(40),
+        m_situationSeries(KEELBOAT) {
     std::cout << "new situation " << this << std::endl;
+    m_seriesNames << "keelboat" << "optimist";
 }
 
 SituationModel::~SituationModel() {
@@ -35,6 +37,17 @@ void SituationModel::setLaylineAngle(const qreal theValue, bool update) {
         m_laylineAngle = theValue;
         if (update)
             emit laylineChanged(m_laylineAngle);
+    }
+}
+
+void SituationModel::setSeries(const int theValue) {
+    if (theValue != m_situationSeries) {
+        std::cout << "Situation " << this
+        << " Series " << m_seriesNames[theValue].toStdString() << std::endl;
+        m_situationSeries = (Series) theValue;
+        foreach(TrackModel *track, m_tracks) {
+            track->setSeries(m_situationSeries, true);
+        }
     }
 }
 

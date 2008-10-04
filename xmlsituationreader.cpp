@@ -102,7 +102,7 @@ void XmlSituationReader::readTrack(SituationModel *situation) {
 
 void XmlSituationReader::readSeries(TrackModel *track, const QString series) {
     int i;
-    for (i=0; series!=track->seriesNames()[i] && i < track->seriesNames().size(); i++) {
+    for (i=0; series!=m_situation->seriesNames()[i] && i < m_situation->seriesNames().size(); i++) {
     }
     if (i != UNKNOWN) {
         track->setSeries((Series)i, true);

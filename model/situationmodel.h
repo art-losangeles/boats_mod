@@ -18,6 +18,12 @@ class TrackModel;
 class BoatModel;
 class MarkModel;
 
+typedef enum {
+    KEELBOAT,
+    OPTIMIST,
+    UNKNOWN
+} Series;
+
 class SituationModel : public QObject {
         Q_OBJECT
     public:
@@ -25,6 +31,8 @@ class SituationModel : public QObject {
         ~SituationModel();
 
         QUndoStack * undoStack() const { return m_undoStack;};
+        QList<QString> seriesNames() {return m_seriesNames; };
+        Series situationSeries() const { return m_situationSeries; };
         int size() const { return m_tracks.size();};
         const QList<TrackModel*> tracks() const { return m_tracks; };
         int markSize() const { return m_marks.size();};
@@ -46,6 +54,7 @@ class SituationModel : public QObject {
         void markRemoved(MarkModel *mark);
 
     public slots:
+        void setSeries(const int theValue);
         void addTrack(TrackModel *track);
         void deleteTrack(TrackModel *track);
         void addMark(MarkModel *mark, int order = 0);
@@ -53,7 +62,9 @@ class SituationModel : public QObject {
 
     private:
         QUndoStack *m_undoStack;
+        QList<QString> m_seriesNames;
         qreal m_laylineAngle;
+        Series m_situationSeries;
         QList<TrackModel*> m_tracks;
         QList<MarkModel*> m_marks;
         QStringList m_discardedXml;
