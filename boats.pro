@@ -10,7 +10,6 @@ HEADERS = \
 	mark.h \
 	situationscene.h \
 	track.h \
-	trackwidget.h \
 	undocommands.h \
 	xmlsituationreader.h \
 	xmlsituationwriter.h
@@ -28,12 +27,13 @@ SOURCES = \
 	mark.cpp \
 	situationscene.cpp \
 	track.cpp \
-	trackwidget.cpp \
 	undocommands.cpp \
 	xmlsituationreader.cpp \
 	xmlsituationwriter.cpp
 
-CONFIG = qt debug warn_on
+RESOURCES = boats.qrc
+
+CONFIG = qt resources debug warn_on
 
 MOC_DIR = .moc/
 

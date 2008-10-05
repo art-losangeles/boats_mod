@@ -25,7 +25,6 @@
 
 #include "boat.h"
 #include "situationscene.h"
-#include "trackwidget.h"
 
 MainWindow::MainWindow(QWidget *parent)
         : QMainWindow(parent),
@@ -33,7 +32,7 @@ MainWindow::MainWindow(QWidget *parent)
         scene(new SituationScene(situation)),
         view(new QGraphicsView(scene)),
         menubar(new QMenuBar(this)),
-        toolbar(new TrackWidget(this)),
+        toolbar(new QToolBar(this)),
         statusbar(new QStatusBar(this)),
         timeline(new QTimeLine(1000,this)) {
 
@@ -67,29 +66,29 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow() {}
 
 void MainWindow::createActions() {
-    openFileAction = new QAction(tr("&Open File"), this);
+    openFileAction = new QAction(QIcon(":/images/fileopen.png"), tr("&Open File"), this);
     openFileAction->setShortcut(tr("Ctrl+O"));
     connect(openFileAction, SIGNAL(triggered()),
             this, SLOT(openFile()));
 
-    saveFileAction = new QAction(tr("&Save File"), this);
+    saveFileAction = new QAction(QIcon(":/images/filesave.png"), tr("&Save File"), this);
     saveFileAction->setShortcut(tr("Ctrl+S"));
     connect(saveFileAction, SIGNAL(triggered()),
             this, SLOT(saveFile()));
 
-    addTrackAction = new QAction(tr("Create &Track"), this);
+    addTrackAction = new QAction(QIcon(":/images/addtrack.png"), tr("Create &Track"), this);
     addTrackAction->setShortcut(tr("Ctrl+Ins"));
     addTrackAction->setCheckable(true);
     connect(addTrackAction, SIGNAL(triggered()),
             this, SLOT(addTrack()));
 
-    addBoatAction = new QAction(tr("Create &Boat"), this);
+    addBoatAction = new QAction(QIcon(":/images/addboat.png"), tr("Create &Boat"), this);
     addBoatAction->setShortcut(tr("Ins"));
     addBoatAction->setCheckable(true);
     connect(addBoatAction, SIGNAL(triggered()),
             this, SLOT(addBoat()));
 
-    addMarkAction = new QAction(tr("Create &Mark"), this);
+    addMarkAction = new QAction(QIcon(":/images/addmark.png"), tr("Create &Mark"), this);
     addMarkAction->setShortcut(tr("Alt+Ins"));
     addMarkAction->setCheckable(true);
     connect(addMarkAction, SIGNAL(triggered()),
@@ -110,7 +109,7 @@ void MainWindow::createActions() {
     connect(animateAction, SIGNAL(triggered()),
             this, SLOT(animate()));
 
-    undoAction = new QAction(tr("&Undo"), this);
+    undoAction = new QAction(QIcon(":/images/undo.png"), tr("&Undo"), this);
     undoAction->setShortcut(tr("Ctrl+Z"));
     undoAction->setEnabled(false);
     connect(undoAction, SIGNAL(triggered()),
@@ -118,7 +117,7 @@ void MainWindow::createActions() {
     connect(situation->undoStack(), SIGNAL(canUndoChanged(bool)),
             undoAction, SLOT(setEnabled(bool)));
 
-    redoAction = new QAction(tr("&Redo"), this);
+    redoAction = new QAction(QIcon(":/images/redo.png"), tr("&Redo"), this);
     QList<QKeySequence> redoShortcuts;
     redoShortcuts << tr("Ctrl+Y") << tr("Shift+Ctrl+Z");
     redoAction->setShortcuts(redoShortcuts);
@@ -186,6 +185,16 @@ void MainWindow::createMenus() {
     historyMenu = menubar->addMenu(tr("&History"));
     historyMenu->addAction(undoAction);
     historyMenu->addAction(redoAction);
+
+    toolbar->addAction(openFileAction);
+    toolbar->addAction(saveFileAction);
+    toolbar->addSeparator();
+    toolbar->addAction(undoAction);
+    toolbar->addAction(redoAction);
+    toolbar->addSeparator();
+    toolbar->addAction(addTrackAction);
+    toolbar->addAction(addBoatAction);
+    toolbar->addAction(addMarkAction);
 }
 
 void MainWindow::writeSettings() {

@@ -49,7 +49,7 @@ class MainWindow : public QMainWindow {
         SituationScene *scene;
         QGraphicsView *view;
         QMenuBar *menubar;
-        TrackWidget *toolbar;
+        QToolBar *toolbar;
         QStatusBar *statusbar;
         QTimeLine *timeline;
 
