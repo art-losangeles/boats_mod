@@ -63,6 +63,7 @@ class SituationModel : public QObject {
         void markRemoved(MarkModel *mark);
 
     public slots:
+        void setLaylineAngle(const int theValue) { setLaylineAngle(theValue,true);}
         void setSeries(const int theValue);
         void addTrack(TrackModel *track);
         void deleteTrack(TrackModel *track);

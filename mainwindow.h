@@ -41,6 +41,7 @@ class MainWindow : public QMainWindow {
     private:
         void createActions();
         void createMenus();
+        void createDocks();
         void writeSettings();
         void readSettings();
         void setCurrentFile(const QString &fileName);
@@ -50,6 +51,7 @@ class MainWindow : public QMainWindow {
         QGraphicsView *view;
         QMenuBar *menubar;
         QToolBar *toolbar;
+        QDockWidget *situationDock;
         QStatusBar *statusbar;
         QTimeLine *timeline;
 

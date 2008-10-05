@@ -33,6 +33,7 @@ MainWindow::MainWindow(QWidget *parent)
         view(new QGraphicsView(scene)),
         menubar(new QMenuBar(this)),
         toolbar(new QToolBar(this)),
+        situationDock(new QDockWidget(this)),
         statusbar(new QStatusBar(this)),
         timeline(new QTimeLine(1000,this)) {
 
@@ -58,6 +59,10 @@ MainWindow::MainWindow(QWidget *parent)
     setMenuBar(menubar);
     addToolBar(toolbar);
     setStatusBar(statusbar);
+
+    // Docks
+    createDocks();
+    addDockWidget(Qt::LeftDockWidgetArea, situationDock);
 
     readSettings();
     setCurrentFile("");
@@ -195,6 +200,29 @@ void MainWindow::createMenus() {
     toolbar->addAction(addTrackAction);
     toolbar->addAction(addBoatAction);
     toolbar->addAction(addMarkAction);
+}
+
+void MainWindow::createDocks() {
+    QGroupBox *scenarioGroup = new QGroupBox(tr("Scenario"),situationDock);
+    QFormLayout *situationForm = new QFormLayout(scenarioGroup);
+
+    QSpinBox *laylineSpin = new QSpinBox(scenarioGroup);
+    laylineSpin->setRange(0, 359);
+    laylineSpin->setWrapping(true);
+    laylineSpin->setValue(situation->laylineAngle());
+    connect (laylineSpin, SIGNAL(valueChanged(int)),
+            situation, SLOT(setLaylineAngle(int)));
+    situationForm->addRow(new QLabel(tr("Laylines"),scenarioGroup),laylineSpin);
+
+    QComboBox *seriesCombo = new QComboBox(scenarioGroup);
+    seriesCombo->addItems(situation->seriesNames());
+    seriesCombo->setCurrentIndex(situation->situationSeries());
+    connect (seriesCombo, SIGNAL(currentIndexChanged(int)),
+            situation, SLOT(setSeries(int)));
+    situationForm->addRow(new QLabel(tr("Series"),scenarioGroup),seriesCombo);
+
+    situationDock->setWidget(scenarioGroup);
+    situationDock->setFeatures(QDockWidget::NoDockWidgetFeatures);
 }
 
 void MainWindow::writeSettings() {
