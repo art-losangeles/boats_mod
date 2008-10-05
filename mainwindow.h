@@ -26,6 +26,7 @@ class MainWindow : public QMainWindow {
         ~MainWindow();
     public slots:
         void changeState(SceneState newState);
+        void cleanState(bool state);
         void openFile();
         void saveFile();
         void addTrack();
@@ -42,6 +43,7 @@ class MainWindow : public QMainWindow {
         void createMenus();
         void writeSettings();
         void readSettings();
+        void setCurrentFile(const QString &fileName);
 
         SituationModel *situation;
         SituationScene *scene;

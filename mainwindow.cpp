@@ -60,8 +60,8 @@ MainWindow::MainWindow(QWidget *parent)
     addToolBar(toolbar);
     setStatusBar(statusbar);
 
-
     readSettings();
+    setCurrentFile("");
 }
 
 MainWindow::~MainWindow() {}
@@ -127,6 +127,8 @@ void MainWindow::createActions() {
             situation->undoStack(), SLOT(redo()));
     connect(situation->undoStack(), SIGNAL(canRedoChanged(bool)),
             redoAction, SLOT(setEnabled(bool)));
+    connect(situation->undoStack(), SIGNAL(cleanChanged(bool)),
+            this, SLOT(cleanState(bool)));
 }
 
 void MainWindow::changeState(SceneState newState) {
@@ -159,6 +161,11 @@ void MainWindow::changeState(SceneState newState) {
             addBoatAction->setChecked(false);
             addMarkAction->setChecked(false);
     }
+}
+
+void MainWindow::cleanState(bool state) {
+    saveFileAction->setEnabled(!state);
+    setWindowModified(!state);
 }
 
 void MainWindow::createMenus() {
@@ -233,6 +240,7 @@ void MainWindow::openFile()
                              .arg(reader.columnNumber())
                              .arg(reader.errorString()));
     } else {
+        setCurrentFile(fileName);
         statusbar->showMessage(tr("File loaded"), 2000);
     }
 }
@@ -258,8 +266,19 @@ void MainWindow::saveFile()
 
     XmlSituationWriter writer(situation);
     writer.writeFile(&file);
+    setCurrentFile(fileName);
     statusbar->showMessage(tr("File saved"), 2000);
 }
+
+void MainWindow::setCurrentFile(const QString &fileName)
+ {
+    situation->setFileName(fileName);
+    situation->undoStack()->setClean();
+
+    QString shownName = QFileInfo(fileName).fileName();
+    setWindowTitle(tr("%1 - %2 [*]").arg(tr("Boats Scenario")).arg(shownName));
+ }
+
 
 void MainWindow::addTrack() {
     if(scene->state() == CREATE_TRACK) {

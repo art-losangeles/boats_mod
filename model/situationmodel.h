@@ -32,15 +32,24 @@ class SituationModel : public QObject {
 
         QUndoStack * undoStack() const { return m_undoStack;};
         QList<QString> seriesNames() {return m_seriesNames; };
+
         Series situationSeries() const { return m_situationSeries; };
+
         int size() const { return m_tracks.size();};
         const QList<TrackModel*> tracks() const { return m_tracks; };
+
         int markSize() const { return m_marks.size();};
         const QList<MarkModel*> marks() const { return m_marks; };
+
         qreal laylineAngle() const { return m_laylineAngle; };
         void setLaylineAngle(const qreal, bool update = false);
+
         QStringList discardedXml() const { return m_discardedXml; };
         void appendDiscardedXml(const QString& theValue);
+
+        QString fileName() const { return m_fileName; };
+        void setFileName(const QString theValue) {m_fileName = theValue; };
+
         void addingBoat(BoatModel *boat) {emit boatAdded(boat);};
         void removingBoat(BoatModel *boat) {emit boatRemoved(boat);};
 
@@ -63,6 +72,7 @@ class SituationModel : public QObject {
     private:
         QUndoStack *m_undoStack;
         QList<QString> m_seriesNames;
+        QString m_fileName;
         qreal m_laylineAngle;
         Series m_situationSeries;
         QList<TrackModel*> m_tracks;
