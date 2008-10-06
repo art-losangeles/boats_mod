@@ -1,6 +1,9 @@
 # kdevelop
 *kdev*
 
+# windows
+*.dll
+
 # qt
 .moc
 qrc_*
@@ -14,4 +17,5 @@ tags
 
 # project
 boats
+boats.exe
 *xboat
