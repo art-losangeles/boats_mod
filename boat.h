@@ -16,7 +16,7 @@
 #include <QObject>
 #include <QColor>
 
-#include "model/trackmodel.h"
+#include "model/situationmodel.h"
 
 class BoatModel;
 
