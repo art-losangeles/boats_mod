@@ -27,8 +27,10 @@ class MainWindow : public QMainWindow {
     public slots:
         void changeState(SceneState newState);
         void cleanState(bool state);
+        void newFile();
         void openFile();
-        void saveFile();
+        bool saveFile();
+        bool saveAs();
         void addTrack();
         void addBoat();
         void addMark();
@@ -44,6 +46,8 @@ class MainWindow : public QMainWindow {
         void createDocks();
         void writeSettings();
         void readSettings();
+        bool maybeSave();
+        bool saveFile(QString &fileName);
         void setCurrentFile(const QString &fileName);
 
         SituationModel *situation;
@@ -55,8 +59,11 @@ class MainWindow : public QMainWindow {
         QStatusBar *statusbar;
         QTimeLine *timeline;
 
+        QAction *newFileAction;
         QAction *openFileAction;
         QAction *saveFileAction;
+        QAction *saveAsAction;
+        QAction *exitAction;
 
         QAction *addTrackAction;
         QAction *addBoatAction;

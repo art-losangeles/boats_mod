@@ -71,6 +71,11 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow() {}
 
 void MainWindow::createActions() {
+    newFileAction = new QAction(QIcon(":/images/filenew.png"), tr("&New File"), this);
+    newFileAction->setShortcut(tr("Ctrl+N"));
+    connect(newFileAction, SIGNAL(triggered()),
+            this, SLOT(newFile()));
+
     openFileAction = new QAction(QIcon(":/images/fileopen.png"), tr("&Open File"), this);
     openFileAction->setShortcut(tr("Ctrl+O"));
     connect(openFileAction, SIGNAL(triggered()),
@@ -78,8 +83,21 @@ void MainWindow::createActions() {
 
     saveFileAction = new QAction(QIcon(":/images/filesave.png"), tr("&Save File"), this);
     saveFileAction->setShortcut(tr("Ctrl+S"));
+    saveFileAction->setEnabled(false);
     connect(saveFileAction, SIGNAL(triggered()),
             this, SLOT(saveFile()));
+
+    saveAsAction = new QAction(QIcon(":/images/filesaveas.png"), tr("Save &As..."), this);
+    saveAsAction->setShortcut(tr("Ctrl+Shift+S"));
+    saveAsAction->setEnabled(false);
+    connect(saveAsAction, SIGNAL(triggered()),
+            this, SLOT(saveAs()));
+
+    exitAction = new QAction(tr("E&xit"), this);
+    exitAction->setShortcut(tr("Ctrl+Q"));
+    exitAction->setStatusTip(tr("Exit the application"));
+    connect(exitAction, SIGNAL(triggered()),
+        this, SLOT(close()));
 
     addTrackAction = new QAction(QIcon(":/images/addtrack.png"), tr("Create &Track"), this);
     addTrackAction->setShortcut(tr("Ctrl+Ins"));
@@ -168,14 +186,22 @@ void MainWindow::changeState(SceneState newState) {
 }
 
 void MainWindow::cleanState(bool state) {
-    saveFileAction->setEnabled(!state);
+    if (situation->fileName().isEmpty())
+        saveFileAction->setEnabled(false);
+    else
+        saveFileAction->setEnabled(!state);
+    saveAsAction->setEnabled(!state);
     setWindowModified(!state);
 }
 
 void MainWindow::createMenus() {
     fileMenu = menubar->addMenu(tr("&File"));
+    fileMenu->addAction(newFileAction);
     fileMenu->addAction(openFileAction);
     fileMenu->addAction(saveFileAction);
+    fileMenu->addAction(saveAsAction);
+    fileMenu->addSeparator();
+    fileMenu->addAction(exitAction);
 
     trackMenu = menubar->addMenu(tr("&Edit"));
     trackMenu->addAction(addTrackAction);
@@ -191,8 +217,10 @@ void MainWindow::createMenus() {
     historyMenu->addAction(undoAction);
     historyMenu->addAction(redoAction);
 
+    toolbar->addAction(newFileAction);
     toolbar->addAction(openFileAction);
     toolbar->addAction(saveFileAction);
+    toolbar->addAction(saveAsAction);
     toolbar->addSeparator();
     toolbar->addAction(undoAction);
     toolbar->addAction(redoAction);
@@ -243,13 +271,40 @@ void MainWindow::readSettings() {
     settings.endGroup();
 }
 
-void MainWindow::closeEvent(QCloseEvent *event) {
-    writeSettings();
-    event->accept();
+bool MainWindow::maybeSave() {
+    if (!situation->undoStack()->isClean()) {
+        QMessageBox::StandardButton ret;
+        ret = QMessageBox::warning(this, tr("Application"),
+                    tr("The document has been modified.\n"
+                        "Do you want to save your changes?"),
+                    QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+        if (ret == QMessageBox::Save) {
+            return saveAs();
+        } else if (ret == QMessageBox::Cancel) {
+            return false;
+        }
+    }
+    return true;
 }
 
-void MainWindow::openFile()
-{
+void MainWindow::closeEvent(QCloseEvent *event) {
+    if (maybeSave()) {
+        writeSettings();
+        event->accept();
+    } else
+        event->ignore();
+}
+
+void MainWindow::newFile() {
+    if (maybeSave()) {
+        situation->undoStack()->setIndex(0);
+        situation->undoStack()->clear();
+        setCurrentFile("");
+        scene->setState(NO_STATE);
+    }
+}
+
+void MainWindow::openFile() {
     QString fileName =
              QFileDialog::getOpenFileName(this, tr("Open Situation File"),
                                           QDir::currentPath(),
@@ -282,39 +337,49 @@ void MainWindow::openFile()
     }
 }
 
-
-void MainWindow::saveFile()
-{
-    QString fileName =
-            QFileDialog::getSaveFileName(this, tr("Save Situation"),
-                                         QDir::currentPath(),
-                                         tr("Situation Files (*.xboat *.xml)"));
-    if (fileName.isEmpty())
-        return;
-
+bool MainWindow::saveFile(QString &fileName) {
     QFile file(fileName);
     if (!file.open(QFile::WriteOnly | QFile::Text)) {
         QMessageBox::warning(this, tr("Save Situation"),
-                             tr("Cannot write file %1:\n%2.")
-                             .arg(fileName)
-                             .arg(file.errorString()));
-        return;
+                            tr("Cannot write file %1:\n%2.")
+                            .arg(fileName)
+                            .arg(file.errorString()));
+        return false;
     }
-
     XmlSituationWriter writer(situation);
     writer.writeFile(&file);
     setCurrentFile(fileName);
     statusbar->showMessage(tr("File saved"), 2000);
+    return true;
 }
 
-void MainWindow::setCurrentFile(const QString &fileName)
- {
+bool MainWindow::saveFile() {
+    QString fileName = situation->fileName();
+    if (fileName.isEmpty()) {
+        return saveAs();
+    }
+    return saveFile(fileName);
+}
+
+bool MainWindow::saveAs() {
+    QString defaultFile = QDateTime::currentDateTime().toString("yyMMdd") + ".xboat";
+    QString fileName =
+            QFileDialog::getSaveFileName(this, tr("Save Situation"),
+                                         defaultFile,
+                                         tr("Situation Files (*.xboat *.xml)"));
+    if (fileName.isEmpty()) {
+        return false;
+    }
+    return saveFile(fileName);
+}
+
+void MainWindow::setCurrentFile(const QString &fileName) {
     situation->setFileName(fileName);
     situation->undoStack()->setClean();
 
     QString shownName = QFileInfo(fileName).fileName();
     setWindowTitle(tr("%1 - %2 [*]").arg(tr("Boats Scenario")).arg(shownName));
- }
+}
 
 
 void MainWindow::addTrack() {

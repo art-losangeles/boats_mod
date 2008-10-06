@@ -1,5 +1,5 @@
 Necessary:
-- widget and menus
+- undocommand for layline and boat series
 - case description with rule & comments
 - configurable traces
 
@@ -27,3 +27,5 @@ Done:
 - movemark undo
 - animation
 - multiple boat series
+- widget and menus
+- new and save as
