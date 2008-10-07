@@ -19,7 +19,8 @@ typedef enum {
 } Series;
 
 typedef enum {
-	MODEL
+	MODEL,
+	VIEW
 } DebugTraces;
 
 #endif

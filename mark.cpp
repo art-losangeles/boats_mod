@@ -16,9 +16,12 @@
 
 #include "mark.h"
 
+#include "commontypes.h"
 #include "situationscene.h"
 #include "model/situationmodel.h"
 #include "model/markmodel.h"
+
+extern int debugLevel;
 
 MarkGraphicsItem::MarkGraphicsItem(MarkModel *mark, QGraphicsItem *parent)
         : QGraphicsItem(parent),
@@ -68,7 +71,7 @@ void MarkGraphicsItem::setColor(QColor value) {
 
 void MarkGraphicsItem::deleteItem(MarkModel *mark) {
     if (mark == m_mark) {
-        std::cout << "deleting markGraphics for model" << m_mark << std::endl;
+        if (debugLevel & 1 << VIEW) std::cout << "deleting markGraphics for model" << m_mark << std::endl;
         scene()->removeItem(this);
         delete this;
     }

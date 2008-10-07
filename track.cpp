@@ -18,9 +18,12 @@
 
 #include "track.h"
 
+#include "commontypes.h"
 #include "model/situationmodel.h"
 #include "model/trackmodel.h"
 #include "model/boatmodel.h"
+
+extern int debugLevel;
 
 TrackGraphicsItem::TrackGraphicsItem(TrackModel *track, QGraphicsItem *parent)
         : QGraphicsPathItem(parent),
@@ -47,7 +50,7 @@ void TrackGraphicsItem::setTrack() {
 
 void TrackGraphicsItem::deleteItem(TrackModel *track) {
     if (track == m_track) {
-        std::cout << "deleting trackGraphics for model" << m_track << std::endl;
+        if (debugLevel & 1 << VIEW) std::cout << "deleting trackGraphics for model" << m_track << std::endl;
         scene()->removeItem(this);
         delete this;
     }

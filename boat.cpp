@@ -23,6 +23,8 @@
 #include "model/trackmodel.h"
 #include "model/boatmodel.h"
 
+extern int debugLevel;
+
 BoatGraphicsItem::BoatGraphicsItem(BoatModel *boat, QGraphicsItem *parent)
         : QGraphicsItem(parent),
         m_boat(boat),
@@ -108,7 +110,7 @@ void BoatGraphicsItem::setSeries(Series value) {
 
 void BoatGraphicsItem::deleteItem(BoatModel *boat) {
     if (boat == m_boat) {
-        std::cout << "deleting boatGraphics for model" << m_boat << std::endl;
+        if (debugLevel & 1 << VIEW) std::cout << "deleting boatGraphics for model" << m_boat << std::endl;
         scene()->removeItem(this);
         delete this;
     }

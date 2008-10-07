@@ -16,6 +16,7 @@
 
 #include "situationscene.h"
 
+#include "commontypes.h"
 #include "undocommands.h"
 
 #include "model/situationmodel.h"
@@ -27,6 +28,8 @@
 #include "track.h"
 #include "mark.h"
 #include "boatanimation.h"
+
+extern int debugLevel;
 
 SituationScene::SituationScene(SituationModel *situation)
         : QGraphicsScene(situation),
@@ -59,17 +62,17 @@ SituationScene::SituationScene(SituationModel *situation)
 }
 
 void SituationScene::addTrack(TrackModel *track) {
-    std::cout << "adding track graphics for model " << track << std::endl;
+    if (debugLevel & 1 << VIEW) std::cout << "adding track graphics for model " << track << std::endl;
     TrackGraphicsItem *trackItem = new TrackGraphicsItem(track);
     addItem(trackItem);
 }
 
 void SituationScene::deleteTrack(TrackModel *track) {
-    std::cout << "Treating deleteTrack " << track << std::endl;
+    if (debugLevel & 1 << VIEW) std::cout << "Treating deleteTrack " << track << std::endl;
 }
 
 void SituationScene::addBoatItem(BoatModel *boat) {
-    std::cout << "adding boat graphics for model " << boat << std::endl;
+    if (debugLevel & 1 << VIEW) std::cout << "adding boat graphics for model " << boat << std::endl;
     BoatGraphicsItem *boatItem = new BoatGraphicsItem(boat);
     addItem(boatItem);
 }
@@ -81,7 +84,7 @@ void SituationScene::deleteBoatItem() {
 }
 
 void SituationScene::addMarkItem(MarkModel *mark) {
-    std::cout << "adding mark graphics for model " << mark << std::endl;
+    if (debugLevel & 1 << VIEW) std::cout << "adding mark graphics for model " << mark << std::endl;
     MarkGraphicsItem *markItem = new MarkGraphicsItem(mark);
     addItem(markItem);
 }
@@ -93,7 +96,7 @@ void SituationScene::deleteMarkItem() {
 }
 
 void SituationScene::setAnimation(QTimeLine *timer) {
-    std::cout << "preparing for Animation" << std::endl;
+    if (debugLevel & 1 << VIEW) std::cout << "preparing for Animation" << std::endl;
     int maxSize = 0;
     foreach (TrackModel *track, m_situation->tracks()) {
         if (track->boats().size() > maxSize)
@@ -112,7 +115,7 @@ void SituationScene::setAnimation(QTimeLine *timer) {
 }
 
 void SituationScene::unSetAnimation() {
-    std::cout << "ending Animation" << std::endl;
+    if (debugLevel & 1 << VIEW) std::cout << "ending Animation" << std::endl;
     foreach(BoatAnimation *animation, m_animationItems) {
         removeItem(animation->boat());
         m_animationItems.removeOne(animation);
@@ -160,7 +163,7 @@ void SituationScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
         m_trackCreated = m_selectedBoatModels[0]->track();
 
     m_fromPosition = event->scenePos();
-    std::cout << "Mouse pressed with " << m_selectedModels.size()
+    if (debugLevel & 1 << VIEW) std::cout << "Mouse pressed with " << m_selectedModels.size()
     << " items selected" << std::endl;
 }
 
@@ -308,12 +311,12 @@ void SituationScene::setSelectedModels() {
                 break;
         }
     }
-    std::cout << "SelectedModels update " << m_selectedModels.size() << std::endl;
+    if (debugLevel & 1 << VIEW) std::cout << "SelectedModels update " << m_selectedModels.size() << std::endl;
 }
 
 
 void SituationScene::setLaylines(const qreal angle) {
-    std::cout << "creating layline Background for " << angle << std::endl;
+    if (debugLevel & 1 << VIEW) std::cout << "creating layline Background for " << angle << std::endl;
     qreal theta = angle * M_PI /180;
     int x = lround(120*sin(theta));
     int y = lround(120*cos(theta));
