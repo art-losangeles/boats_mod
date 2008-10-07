@@ -36,10 +36,12 @@ AddTrackUndoCommand::~AddTrackUndoCommand() {
 }
 
 void AddTrackUndoCommand::redo() {
+    if (debugLevel & 1 << COMMAND) std::cout << "redo addtrackundocommand" << std::endl;
     m_situation->addTrack(m_track);
 }
 
 void AddTrackUndoCommand::undo() {
+    if (debugLevel & 1 << COMMAND) std::cout << "undo addtrackundocommand" << std::endl;
     m_situation->deleteTrack(m_track);
 }
 
@@ -56,10 +58,12 @@ DeleteTrackUndoCommand::~DeleteTrackUndoCommand() {
 }
 
 void DeleteTrackUndoCommand::redo() {
+    if (debugLevel & 1 << COMMAND) std::cout << "redo removetrackundocommand" << std::endl;
     m_situation->deleteTrack(m_track);
 }
 
 void DeleteTrackUndoCommand::undo() {
+    if (debugLevel & 1 << COMMAND) std::cout << "undo removetrackundocommand" << std::endl;
     m_situation->addTrack(m_track);
 }
 
@@ -76,6 +80,7 @@ MoveModelUndoCommand::~MoveModelUndoCommand() {
 }
 
 void MoveModelUndoCommand::undo() {
+    if (debugLevel & 1 << COMMAND) std::cout << "undo movemodelundocommand" << std::endl;
     for(int i=0; i< m_modelList.size(); i++) {
         PositionModel *model = m_modelList[i];
         model->setPosition(model->position() - m_deltaPosition, true);
@@ -83,6 +88,7 @@ void MoveModelUndoCommand::undo() {
 }
 
 void MoveModelUndoCommand::redo() {
+    if (debugLevel & 1 << COMMAND) std::cout << "redo movemodelundocommand" << std::endl;
     for(int i=0; i< m_modelList.size(); i++) {
         PositionModel *model = m_modelList[i];
         model->setPosition(model->position() + m_deltaPosition, true);
@@ -114,10 +120,12 @@ AddBoatUndoCommand::~AddBoatUndoCommand() {
 }
 
 void AddBoatUndoCommand::redo() {
+    if (debugLevel & 1 << COMMAND) std::cout << "redo addboatundocommand" << std::endl;
     m_track->addBoat(m_boat);
 }
 
 void AddBoatUndoCommand::undo() {
+    if (debugLevel & 1 << COMMAND) std::cout << "undo addboatundocommand" << std::endl;
     m_track->deleteBoat(m_boat);
 }
 
@@ -137,6 +145,7 @@ HeadingBoatUndoCommand::~HeadingBoatUndoCommand() {
 }
 
 void HeadingBoatUndoCommand::undo() {
+    if (debugLevel & 1 << COMMAND) std::cout << "undo headingboatundocommand" << std::endl;
     for(int i=0; i< m_boatList.size(); i++) {
         BoatModel *boat = m_boatList[i];
         boat->setHeading(m_headingList[i], true);
@@ -144,6 +153,7 @@ void HeadingBoatUndoCommand::undo() {
 }
 
 void HeadingBoatUndoCommand::redo() {
+    if (debugLevel & 1 << COMMAND) std::cout << "redo headingboatundocommand" << std::endl;
     for(int i=0; i< m_boatList.size(); i++) {
         BoatModel *boat = m_boatList[i];
         boat->setHeading(m_heading, true);
@@ -172,10 +182,12 @@ DeleteBoatUndoCommand::~DeleteBoatUndoCommand() {
 }
 
 void DeleteBoatUndoCommand::redo() {
+    if (debugLevel & 1 << COMMAND) std::cout << "redo deletebboatundocommand" << std::endl;
     m_order = m_track->deleteBoat(m_boat);
 }
 
 void DeleteBoatUndoCommand::undo() {
+    if (debugLevel & 1 << COMMAND) std::cout << "undo deletebboatundocommand" << std::endl;
     m_track->addBoat(m_boat, m_order);
 }
 
@@ -194,10 +206,12 @@ AddMarkUndoCommand::~AddMarkUndoCommand() {
 }
 
 void AddMarkUndoCommand::redo() {
+    if (debugLevel & 1 << COMMAND) std::cout << "redo addmarkundocommand" << std::endl;
     m_situation->addMark(m_mark);
 }
 
 void AddMarkUndoCommand::undo() {
+    if (debugLevel & 1 << COMMAND) std::cout << "undo addmarkundocommand" << std::endl;
     m_situation->deleteMark(m_mark);
 }
 
@@ -214,9 +228,11 @@ DeleteMarkUndoCommand::~DeleteMarkUndoCommand() {
 }
 
 void DeleteMarkUndoCommand::redo() {
+    if (debugLevel & 1 << COMMAND) std::cout << "redo deletebmarkundocommand" << std::endl;
     m_order = m_situation->deleteMark(m_mark);
 }
 
 void DeleteMarkUndoCommand::undo() {
+    if (debugLevel & 1 << COMMAND) std::cout << "undo deletebmarkundocommand" << std::endl;
     m_situation->addMark(m_mark, m_order);
 }

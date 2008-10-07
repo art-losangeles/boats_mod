@@ -1,7 +1,7 @@
 Necessary:
 - undocommand for layline and boat series
+- optimise mousemove without undo commands
 - case description with rule & comments
-- configurable traces
 
 Wishlist:
 - track line to mouse position
@@ -29,3 +29,4 @@ Done:
 - multiple boat series
 - widget and menus
 - new and save as
+- configurable traces
