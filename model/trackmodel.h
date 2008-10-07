@@ -14,8 +14,9 @@
 
 #include <QtGui>
 
-#include "model/situationmodel.h"
+#include "commontypes.h"
 
+class SituationModel;
 class BoatModel;
 
 class TrackModel : public QObject {

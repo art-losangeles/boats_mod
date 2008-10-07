@@ -11,8 +11,10 @@
 //
 #include <iostream>
 
-#include "model/situationmodel.h"
 #include "model/trackmodel.h"
+
+#include "commontypes.h"
+#include "model/situationmodel.h"
 #include "model/boatmodel.h"
 
 TrackModel::TrackModel(SituationModel *situation, QObject *parent)

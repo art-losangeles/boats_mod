@@ -17,6 +17,7 @@
 
 #include "boat.h"
 
+#include "commontypes.h"
 #include "situationscene.h"
 #include "model/situationmodel.h"
 #include "model/trackmodel.h"

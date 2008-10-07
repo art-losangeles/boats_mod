@@ -16,7 +16,7 @@
 #include <QObject>
 #include <QColor>
 
-#include "model/situationmodel.h"
+#include "commontypes.h"
 
 class BoatModel;
 

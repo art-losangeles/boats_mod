@@ -13,6 +13,7 @@
 
 #include "xmlsituationreader.h"
 
+#include "commontypes.h"
 #include "model/situationmodel.h"
 #include "model/trackmodel.h"
 #include "model/boatmodel.h"

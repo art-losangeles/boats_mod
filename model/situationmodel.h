@@ -14,15 +14,11 @@
 
 #include <QtGui>
 
+#include "commontypes.h"
+
 class TrackModel;
 class BoatModel;
 class MarkModel;
-
-typedef enum {
-    KEELBOAT,
-    OPTIMIST,
-    UNKNOWN
-} Series;
 
 class SituationModel : public QObject {
         Q_OBJECT

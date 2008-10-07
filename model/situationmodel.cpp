@@ -13,6 +13,8 @@
 #include <iostream>
 
 #include "model/situationmodel.h"
+
+#include "commontypes.h"
 #include "model/trackmodel.h"
 #include "model/boatmodel.h"
 #include "model/markmodel.h"
