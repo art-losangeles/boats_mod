@@ -18,4 +18,8 @@ typedef enum {
     UNKNOWN
 } Series;
 
+typedef enum {
+	MODEL
+} DebugTraces;
+
 #endif

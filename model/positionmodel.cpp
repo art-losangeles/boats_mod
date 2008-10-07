@@ -12,20 +12,23 @@
 #include <iostream>
 
 #include "model/positionmodel.h"
+#include "commontypes.h"
+
+extern int debugLevel;
 
 PositionModel::PositionModel(QObject *parent)
         : QObject(parent),
         m_position() {
-    std::cout << "new Position " << this << std::endl;
+    if (debugLevel & 1 << MODEL) std::cout << "new Position " << this << std::endl;
 }
 
 PositionModel::~PositionModel() {
-    std::cout << "delete Position " << this << std::endl;
+    if (debugLevel & 1 << MODEL) std::cout << "delete Position " << this << std::endl;
 }
 
 void PositionModel::setPosition(const QPointF& theValue, bool update) {
     if (theValue != m_position) {
-        std::cout << "Position " << this
+        if (debugLevel & 1 << MODEL) std::cout << "Position " << this
         << " position " << theValue.x()
         << ", " << theValue.y() << std::endl;
         m_position = theValue;
@@ -37,7 +40,7 @@ void PositionModel::setPosition(const QPointF& theValue, bool update) {
 
 void PositionModel::setOrder(const int theValue, bool update) {
     if (theValue != m_order) {
-        std::cout << "Position " << this
+        if (debugLevel & 1 << MODEL) std::cout << "Position " << this
         << " order " << theValue << std::endl;
         m_order = theValue;
         if (update)

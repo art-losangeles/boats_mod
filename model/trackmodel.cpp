@@ -17,13 +17,15 @@
 #include "model/situationmodel.h"
 #include "model/boatmodel.h"
 
+extern int debugLevel;
+
 TrackModel::TrackModel(SituationModel *situation, QObject *parent)
         : QObject(parent),
         m_situation(situation),
         m_color(),
         m_series(situation->situationSeries()) {
     static int track_id = 0;
-    std::cout << "new track " << this << std::endl;
+    if (debugLevel & 1 << MODEL) std::cout << "new track " << this << std::endl;
     switch (track_id % 6) {
         case 0: m_color = QColor(Qt::yellow); break;
         case 1: m_color = QColor(Qt::blue); break;
@@ -36,7 +38,7 @@ TrackModel::TrackModel(SituationModel *situation, QObject *parent)
 }
 
 TrackModel::~TrackModel() {
-    std::cout << "end track " << this << std::endl;
+    if (debugLevel & 1 << MODEL) std::cout << "end track " << this << std::endl;
 }
 
 void TrackModel::setColor(const QColor& theValue, bool update) {
@@ -67,7 +69,7 @@ BoatModel * TrackModel::addBoat(BoatModel *boat, int order) {
         order = m_boats.size();
     }
     m_boats.insert(order, boat);
-    std::cout << "Adding Boat " << order << std::endl;
+    if (debugLevel & 1 << MODEL) std::cout << "Adding Boat " << order << std::endl;
     for (int i=order+1; i<m_boats.size(); i++) {
         m_boats[i]->setOrder(i, true);
     }
@@ -79,7 +81,7 @@ BoatModel * TrackModel::addBoat(BoatModel *boat, int order) {
 int TrackModel::deleteBoat(BoatModel *boat) {
     int order = m_boats.indexOf(boat);
     m_boats.removeOne(boat);
-    std::cout << "Removing Boat " << order+1 << std::endl;
+    if (debugLevel & 1 << MODEL) std::cout << "Removing Boat " << order+1 << std::endl;
     for (int i=order; i<m_boats.size(); i++) {
         m_boats[i]->setOrder(i, true);
     }
@@ -89,14 +91,14 @@ int TrackModel::deleteBoat(BoatModel *boat) {
 }
 
 void TrackModel::displayBoats() {
-    std::cout << "Displaying boats" << std::endl;
+    if (debugLevel & 1 << MODEL) std::cout << "Displaying boats" << std::endl;
     foreach (BoatModel* boat, m_boats) {
         m_situation->addingBoat(boat);
     }
 }
 
 void TrackModel::hideBoats() {
-    std::cout << "Hiding boats" << std::endl;
+    if (debugLevel & 1 << MODEL) std::cout << "Hiding boats" << std::endl;
     foreach (BoatModel* boat, m_boats) {
         m_situation->removingBoat(boat);
     }

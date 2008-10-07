@@ -12,18 +12,22 @@
 #include <iostream>
 
 #include "model/boatmodel.h"
+
+#include "commontypes.h"
 #include "model/trackmodel.h"
+
+extern int debugLevel;
 
 BoatModel::BoatModel(TrackModel* track, QObject *parent)
         : PositionModel(parent),
         m_track(track),
         m_heading(0) {
-    std::cout << "new Boat " << this << std::endl;
+    if (debugLevel & 1 << MODEL) std::cout << "new Boat " << this << std::endl;
     setOrder(track->size());
 }
 
 BoatModel::~BoatModel() {
-    std::cout << "delete Boat " << this << std::endl;
+    if (debugLevel & 1 << MODEL) std::cout << "delete Boat " << this << std::endl;
 }
 
 void BoatModel::setHeading(const qreal& theValue, bool update) {

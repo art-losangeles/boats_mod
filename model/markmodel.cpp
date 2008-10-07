@@ -12,18 +12,22 @@
 #include <iostream>
 
 #include "model/markmodel.h"
+
+#include "commontypes.h"
 #include "model/situationmodel.h"
+
+extern int debugLevel;
 
 MarkModel::MarkModel(SituationModel* situation, QObject *parent)
         : PositionModel(parent),
         m_situation(situation),
         m_color(Qt::gray) {
-    std::cout << "new Mark " << this << std::endl;
+    if (debugLevel & 1 << MODEL) std::cout << "new Mark " << this << std::endl;
     setOrder(situation->markSize());
 }
 
 MarkModel::~MarkModel() {
-    std::cout << "delete Mark " << this << std::endl;
+    if (debugLevel & 1 << MODEL) std::cout << "delete Mark " << this << std::endl;
 }
 
 void MarkModel::setColor(const QColor& theValue, bool update) {
