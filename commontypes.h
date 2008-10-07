@@ -20,7 +20,8 @@ typedef enum {
 
 typedef enum {
 	MODEL,
-	VIEW
+	VIEW,
+	COMMAND
 } DebugTraces;
 
 #endif

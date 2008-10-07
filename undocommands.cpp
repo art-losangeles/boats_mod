@@ -14,21 +14,24 @@
 #include <iostream>
 #include <cmath>
 
+#include "commontypes.h"
 #include "model/situationmodel.h"
 #include "model/trackmodel.h"
 #include "model/boatmodel.h"
 #include "model/markmodel.h"
 
+extern int debugLevel;
+
 // Add Track
 AddTrackUndoCommand::AddTrackUndoCommand(SituationModel* situation, QUndoCommand *parent)
         : QUndoCommand(parent),
         m_situation(situation) {
-    std::cout << "new addtrackundocommand" << std::endl;
+    if (debugLevel & 1 << COMMAND) std::cout << "new addtrackundocommand" << std::endl;
     m_track = new TrackModel(situation);
 }
 
 AddTrackUndoCommand::~AddTrackUndoCommand() {
-    std::cout << "end addtrackundocommand" << std::endl;
+    if (debugLevel & 1 << COMMAND) std::cout << "end addtrackundocommand" << std::endl;
     delete m_track;
 }
 
@@ -45,11 +48,11 @@ DeleteTrackUndoCommand::DeleteTrackUndoCommand(SituationModel* situation, TrackM
         : QUndoCommand(parent),
         m_situation(situation),
         m_track(track) {
-    std::cout << "new removetrackundocommand" << std::endl;
+    if (debugLevel & 1 << COMMAND) std::cout << "new removetrackundocommand" << std::endl;
 }
 
 DeleteTrackUndoCommand::~DeleteTrackUndoCommand() {
-    std::cout << "end removetrackundocommand" << std::endl;
+    if (debugLevel & 1 << COMMAND) std::cout << "end removetrackundocommand" << std::endl;
 }
 
 void DeleteTrackUndoCommand::redo() {
@@ -65,11 +68,11 @@ MoveModelUndoCommand::MoveModelUndoCommand(QList<PositionModel*> &modelList, con
         : QUndoCommand(parent),
         m_modelList(modelList),
         m_deltaPosition(deltaPosition) {
-    std::cout << "new movemodelundocommand" << std::endl;
+    if (debugLevel & 1 << COMMAND) std::cout << "new movemodelundocommand" << std::endl;
 }
 
 MoveModelUndoCommand::~MoveModelUndoCommand() {
-    std::cout << "end movemodelundocommand" << std::endl;
+    if (debugLevel & 1 << COMMAND) std::cout << "end movemodelundocommand" << std::endl;
 }
 
 void MoveModelUndoCommand::undo() {
@@ -99,14 +102,14 @@ bool MoveModelUndoCommand::mergeWith(const QUndoCommand *command) {
 AddBoatUndoCommand::AddBoatUndoCommand(TrackModel* track, QPointF& position, qreal heading, QUndoCommand *parent)
         : QUndoCommand(parent),
         m_track(track) {
-    std::cout << "new addboatundocommand" << std::endl;
+    if (debugLevel & 1 << COMMAND) std::cout << "new addboatundocommand" << std::endl;
     m_boat = new BoatModel(track);
     m_boat->setPosition(position);
     m_boat->setHeading(heading);
 }
 
 AddBoatUndoCommand::~AddBoatUndoCommand() {
-    std::cout << "end addboatundocommand" << std::endl;
+    if (debugLevel & 1 << COMMAND) std::cout << "end addboatundocommand" << std::endl;
     delete m_boat;
 }
 
@@ -123,7 +126,7 @@ HeadingBoatUndoCommand::HeadingBoatUndoCommand(QList<BoatModel*> &boatList, cons
         : QUndoCommand(parent),
         m_boatList(boatList),
         m_heading(heading) {
-    std::cout << "new headingboatundocommand" << std::endl;
+    if (debugLevel & 1 << COMMAND) std::cout << "new headingboatundocommand" << std::endl;
     if (heading != 0) {
         foreach (BoatModel *boat, boatList) {
             m_headingList << boat->heading();
@@ -132,7 +135,7 @@ HeadingBoatUndoCommand::HeadingBoatUndoCommand(QList<BoatModel*> &boatList, cons
 }
 
 HeadingBoatUndoCommand::~HeadingBoatUndoCommand() {
-    std::cout << "end headingboatundocommand" << std::endl;
+    if (debugLevel & 1 << COMMAND) std::cout << "end headingboatundocommand" << std::endl;
 }
 
 void HeadingBoatUndoCommand::undo() {
@@ -163,11 +166,11 @@ DeleteBoatUndoCommand::DeleteBoatUndoCommand(TrackModel* track, BoatModel* boat,
         : QUndoCommand(parent),
         m_track(track),
         m_boat(boat) {
-    std::cout << "new deleteboatundocommand" << std::endl;
+    if (debugLevel & 1 << COMMAND) std::cout << "new deleteboatundocommand" << std::endl;
 }
 
 DeleteBoatUndoCommand::~DeleteBoatUndoCommand() {
-    std::cout << "end deletebboatundocommand" << std::endl;
+    if (debugLevel & 1 << COMMAND) std::cout << "end deletebboatundocommand" << std::endl;
 }
 
 void DeleteBoatUndoCommand::redo() {
@@ -182,13 +185,13 @@ void DeleteBoatUndoCommand::undo() {
 AddMarkUndoCommand::AddMarkUndoCommand(SituationModel* situation, QPointF& position, QUndoCommand *parent)
         : QUndoCommand(parent),
         m_situation(situation) {
-    std::cout << "new addmarkundocommand" << std::endl;
+    if (debugLevel & 1 << COMMAND) std::cout << "new addmarkundocommand" << std::endl;
     m_mark = new MarkModel(situation);
     m_mark->setPosition(position);
 }
 
 AddMarkUndoCommand::~AddMarkUndoCommand() {
-    std::cout << "end addmarkundocommand" << std::endl;
+    if (debugLevel & 1 << COMMAND) std::cout << "end addmarkundocommand" << std::endl;
     delete m_mark;
 }
 
@@ -205,11 +208,11 @@ DeleteMarkUndoCommand::DeleteMarkUndoCommand(SituationModel* situation, MarkMode
         : QUndoCommand(parent),
         m_situation(situation),
         m_mark(mark) {
-    std::cout << "new deletemarkundocommand" << std::endl;
+    if (debugLevel & 1 << COMMAND) std::cout << "new deletemarkundocommand" << std::endl;
 }
 
 DeleteMarkUndoCommand::~DeleteMarkUndoCommand() {
-    std::cout << "end deletebmarkundocommand" << std::endl;
+    if (debugLevel & 1 << COMMAND) std::cout << "end deletebmarkundocommand" << std::endl;
 }
 
 void DeleteMarkUndoCommand::redo() {
