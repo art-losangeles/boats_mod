@@ -127,10 +127,8 @@ HeadingBoatUndoCommand::HeadingBoatUndoCommand(QList<BoatModel*> &boatList, cons
         m_boatList(boatList),
         m_heading(heading) {
     if (debugLevel & 1 << COMMAND) std::cout << "new headingboatundocommand" << std::endl;
-    if (heading != 0) {
-        foreach (BoatModel *boat, boatList) {
-            m_headingList << boat->heading();
-        }
+    foreach (BoatModel *boat, boatList) {
+        m_headingList << boat->heading();
     }
 }
 
