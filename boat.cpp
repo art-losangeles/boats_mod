@@ -37,6 +37,7 @@ BoatGraphicsItem::BoatGraphicsItem(BoatModel *boat, QGraphicsItem *parent)
     setFlag(QGraphicsItem::ItemIsSelectable);
 
     setBoundingRegionGranularity(1);
+    setCacheMode(QGraphicsItem::DeviceCoordinateCache);
 
     setSailAngle();
     setPos(boat->position());
@@ -123,6 +124,7 @@ void BoatGraphicsItem::mousePressEvent(QGraphicsSceneMouseEvent *event) {
         scene()->clearSelection();
     }
     setSelected(true);
+    update();
 }
 
 void BoatGraphicsItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
@@ -134,7 +136,7 @@ void BoatGraphicsItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
 }
 
 QRectF BoatGraphicsItem::boundingRect() const {
-    return QRectF(-95, -95, 190, 190);
+    return QRectF(-80, -60, 160, 120);
 }
 
 QPainterPath BoatGraphicsItem::shape() const {
@@ -161,16 +163,16 @@ void BoatGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *
 
     switch (m_series) {
     case KEELBOAT:
-        path.cubicTo(24, 0, 21, 15, 12, 60);
-        path.lineTo(-12, 60);
+        path.cubicTo(24, 0, 21, 15, 12, 58);
+        path.lineTo(-12, 58);
         path.cubicTo(-21, 15, -24, 0, 0, -60);
         path.addText(-5,25,painter->font(),QString::number(m_order));
         break;
     case OPTIMIST:
         path.cubicTo(8, -60, 9, -59, 15, -58);
         path.cubicTo(19, -49, 29, -21, 29, 8);
-        path.cubicTo(29, 28, 26, 47, 24, 60);
-        path.lineTo(-24, 60);
+        path.cubicTo(29, 28, 26, 47, 24, 55);
+        path.lineTo(-24, 55);
         path.cubicTo(-26, 47, -29, 28, -29, 8);
         path.cubicTo(-29, -21, -19, -49, -15, -58);
         path.cubicTo(-9, -59, -8, -60, 0, -60);
@@ -189,7 +191,7 @@ void BoatGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *
         break;
     case OPTIMIST:
         painter->translate(0,-36);
-        sailScale = 2;
+        sailScale = 1.7;
         break;
     default:
         break;
