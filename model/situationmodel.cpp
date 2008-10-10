@@ -82,16 +82,16 @@ void SituationModel::addMark(MarkModel *mark, int order) {
         order = m_marks.size();
     }
     m_marks.insert(order, mark);
-    if (debugLevel & 1 << MODEL) std::cout << "Adding Mark " << order << std::endl;
+    if (debugLevel & 1 << MODEL) std::cout << "Adding Mark " << order+1 << std::endl;
     for (int i=order+1; i<m_marks.size(); i++) {
-        m_marks[i]->setOrder(i, true);
+        m_marks[i]->setOrder(i+1, true);
     }
     emit markAdded(mark);
 }
 
 int SituationModel::deleteMark(MarkModel *mark) {
     int index = m_marks.indexOf(mark);
-    if (debugLevel & 1 << MODEL) std::cout << "Removing Mark " << index << std::endl;
+    if (debugLevel & 1 << MODEL) std::cout << "Removing Mark " << index+1 << std::endl;
     m_marks.removeOne(mark);
     emit markRemoved(mark);
     return index;

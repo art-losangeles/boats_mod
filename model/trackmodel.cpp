@@ -69,9 +69,9 @@ BoatModel * TrackModel::addBoat(BoatModel *boat, int order) {
         order = m_boats.size();
     }
     m_boats.insert(order, boat);
-    if (debugLevel & 1 << MODEL) std::cout << "Adding Boat " << order << std::endl;
+    if (debugLevel & 1 << MODEL) std::cout << "Adding Boat " << order+1 << std::endl;
     for (int i=order+1; i<m_boats.size(); i++) {
-        m_boats[i]->setOrder(i, true);
+        m_boats[i]->setOrder(i+1, true);
     }
     m_situation->addingBoat(boat);
     emit changingTrack(this);
@@ -83,7 +83,7 @@ int TrackModel::deleteBoat(BoatModel *boat) {
     m_boats.removeOne(boat);
     if (debugLevel & 1 << MODEL) std::cout << "Removing Boat " << order+1 << std::endl;
     for (int i=order; i<m_boats.size(); i++) {
-        m_boats[i]->setOrder(i, true);
+        m_boats[i]->setOrder(i+1, true);
     }
     m_situation->removingBoat(boat);
     emit changingTrack(this);

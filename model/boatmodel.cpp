@@ -23,7 +23,7 @@ BoatModel::BoatModel(TrackModel* track, QObject *parent)
         m_track(track),
         m_heading(0) {
     if (debugLevel & 1 << MODEL) std::cout << "new Boat " << this << std::endl;
-    setOrder(track->size());
+    setOrder(track->size()+1);
 }
 
 BoatModel::~BoatModel() {

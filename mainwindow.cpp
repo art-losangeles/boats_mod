@@ -23,7 +23,6 @@
 #include "xmlsituationreader.h"
 #include "xmlsituationwriter.h"
 
-#include "boat.h"
 #include "situationscene.h"
 
 MainWindow::MainWindow(QWidget *parent)

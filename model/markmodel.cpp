@@ -23,7 +23,7 @@ MarkModel::MarkModel(SituationModel* situation, QObject *parent)
         m_situation(situation),
         m_color(Qt::gray) {
     if (debugLevel & 1 << MODEL) std::cout << "new Mark " << this << std::endl;
-    setOrder(situation->markSize());
+    setOrder(situation->markSize()+1);
 }
 
 MarkModel::~MarkModel() {
