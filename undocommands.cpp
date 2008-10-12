@@ -22,6 +22,38 @@
 
 extern int debugLevel;
 
+// Set Layline
+SetLaylineUndoCommand::SetLaylineUndoCommand(SituationModel* situation, const int angle, QUndoCommand *parent)
+        : QUndoCommand(parent),
+        m_situation(situation),
+        m_oldAngle(situation->laylineAngle()),
+        m_newAngle(angle) {
+    if (debugLevel & 1 << COMMAND) std::cout << "new setlaylineundocommand" << std::endl;
+}
+
+SetLaylineUndoCommand::~SetLaylineUndoCommand() {
+    if (debugLevel & 1 << COMMAND) std::cout << "end setlaylineundocommand" << std::endl;
+}
+
+void SetLaylineUndoCommand::undo() {
+    if (debugLevel & 1 << COMMAND) std::cout << "undo setlaylineundocommand" << std::endl;
+    m_situation->setLaylineAngle(m_oldAngle, true);
+}
+
+void SetLaylineUndoCommand::redo() {
+    if (debugLevel & 1 << COMMAND) std::cout << "redo setlaylineundocommand" << std::endl;
+    m_situation->setLaylineAngle(m_newAngle, true);
+}
+
+bool SetLaylineUndoCommand::mergeWith(const QUndoCommand *command) {
+    const SetLaylineUndoCommand *setlaylineCommand = static_cast<const SetLaylineUndoCommand*>(command);
+    if (m_situation != setlaylineCommand->m_situation)
+        return false;
+
+    m_newAngle = setlaylineCommand->m_newAngle;
+    return true;
+}
+
 // Add Track
 AddTrackUndoCommand::AddTrackUndoCommand(SituationModel* situation, QUndoCommand *parent)
         : QUndoCommand(parent),

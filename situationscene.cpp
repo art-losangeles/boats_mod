@@ -55,8 +55,8 @@ SituationScene::SituationScene(SituationModel *situation)
             this, SLOT(addMarkItem(MarkModel*)));
 
     // react to layline angle
-    connect(situation, SIGNAL(laylineChanged(const qreal)),
-            this, SLOT(setLaylines(const qreal)));
+    connect(situation, SIGNAL(laylineChanged(const int)),
+            this, SLOT(setLaylines(const int)));
 
     setLaylines(situation->laylineAngle());
 }
@@ -315,7 +315,7 @@ void SituationScene::setSelectedModels() {
 }
 
 
-void SituationScene::setLaylines(const qreal angle) {
+void SituationScene::setLaylines(const int angle) {
     if (debugLevel & 1 << VIEW) std::cout << "creating layline Background for " << angle << std::endl;
     qreal theta = angle * M_PI /180;
     int x = lround(120*sin(theta));

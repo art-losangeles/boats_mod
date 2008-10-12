@@ -238,7 +238,9 @@ void MainWindow::createDocks() {
     laylineSpin->setWrapping(true);
     laylineSpin->setValue(situation->laylineAngle());
     connect (laylineSpin, SIGNAL(valueChanged(int)),
-            situation, SLOT(setLaylineAngle(int)));
+            this, SLOT(setLayline(int)));
+    connect (situation, SIGNAL(laylineChanged(const int)),
+            laylineSpin, SLOT(setValue(int)));
     situationForm->addRow(new QLabel(tr("Laylines"),scenarioGroup),laylineSpin);
 
     QComboBox *seriesCombo = new QComboBox(scenarioGroup);
@@ -380,6 +382,11 @@ void MainWindow::setCurrentFile(const QString &fileName) {
     setWindowTitle(tr("%1 - %2 [*]").arg(tr("Boats Scenario")).arg(shownName));
 }
 
+void MainWindow::setLayline(int angle) {
+    if (angle != situation->laylineAngle()) {
+        situation->undoStack()->push(new SetLaylineUndoCommand(situation, angle));
+    }
+}
 
 void MainWindow::addTrack() {
     if(scene->state() == CREATE_TRACK) {

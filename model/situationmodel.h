@@ -38,7 +38,7 @@ class SituationModel : public QObject {
         const QList<MarkModel*> marks() const { return m_marks; };
 
         qreal laylineAngle() const { return m_laylineAngle; };
-        void setLaylineAngle(const qreal, bool update = false);
+        void setLaylineAngle(const int theValue, bool update = false);
 
         QStringList discardedXml() const { return m_discardedXml; };
         void appendDiscardedXml(const QString& theValue);
@@ -54,12 +54,11 @@ class SituationModel : public QObject {
         void trackRemoved(TrackModel *track);
         void boatAdded(BoatModel *boat);
         void boatRemoved(BoatModel *boat);
-        void laylineChanged(const qreal angle);
+        void laylineChanged(const int angle);
         void markAdded(MarkModel *mark);
         void markRemoved(MarkModel *mark);
 
     public slots:
-        void setLaylineAngle(const int theValue) { setLaylineAngle(theValue,true);}
         void setSeries(const int theValue);
         void addTrack(TrackModel *track);
         void deleteTrack(TrackModel *track);
@@ -70,7 +69,7 @@ class SituationModel : public QObject {
         QUndoStack *m_undoStack;
         QList<QString> m_seriesNames;
         QString m_fileName;
-        qreal m_laylineAngle;
+        int m_laylineAngle;
         Series m_situationSeries;
         QList<TrackModel*> m_tracks;
         QList<MarkModel*> m_marks;

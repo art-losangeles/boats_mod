@@ -34,7 +34,7 @@ SituationModel::~SituationModel() {
     if (debugLevel & 1 << MODEL) std::cout << "end situation " << this << std::endl;
 }
 
-void SituationModel::setLaylineAngle(const qreal theValue, bool update) {
+void SituationModel::setLaylineAngle(const int theValue, bool update) {
     if (theValue != m_laylineAngle) {
         if (debugLevel & 1 << MODEL) std::cout << "Situation " << this
         << " Layline Angle " << theValue << std::endl;

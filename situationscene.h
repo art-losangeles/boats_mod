@@ -58,7 +58,7 @@ class SituationScene : public QGraphicsScene {
         void deleteBoatItem();
         void addMarkItem(MarkModel *mark);
         void deleteMarkItem();
-        void setLaylines(const qreal angle);
+        void setLaylines(const int angle);
         void setAnimation(QTimeLine *timer);
         void unSetAnimation();
 

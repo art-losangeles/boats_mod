@@ -21,6 +21,28 @@ class PositionModel;
 class BoatModel;
 class MarkModel;
 
+enum {
+    SET_LAYLINE,
+    MOVE_MODEL,
+    HEADING_BOAT
+};
+
+class SetLaylineUndoCommand : public QUndoCommand {
+
+    public:
+        SetLaylineUndoCommand(SituationModel* situation, const int angle, QUndoCommand *parent = 0);
+        ~SetLaylineUndoCommand();
+        void undo();
+        void redo();
+        bool mergeWith(const QUndoCommand *command);
+        int id() const { return SET_LAYLINE; }
+
+    private:
+        SituationModel *m_situation;
+        int m_oldAngle;
+        int m_newAngle;
+};
+
 class AddTrackUndoCommand : public QUndoCommand {
 
     public:
@@ -51,13 +73,12 @@ class DeleteTrackUndoCommand : public QUndoCommand {
 class MoveModelUndoCommand : public QUndoCommand {
 
     public:
-        enum { Id = 1 };
         MoveModelUndoCommand(QList<PositionModel*> &modelList, const QPointF &deltaPosition, QUndoCommand *parent = 0);
         ~MoveModelUndoCommand();
         void undo();
         void redo();
         bool mergeWith(const QUndoCommand *command);
-        int id() const { return Id; }
+        int id() const { return MOVE_MODEL; }
     private:
         QList<PositionModel*> m_modelList;
         QPointF m_deltaPosition;
@@ -81,13 +102,12 @@ class AddBoatUndoCommand : public QUndoCommand {
 class HeadingBoatUndoCommand : public QUndoCommand {
 
     public:
-        enum { Id = 2 };
         HeadingBoatUndoCommand(QList<BoatModel*> &boatList, const qreal &heading, QUndoCommand *parent = 0);
         ~HeadingBoatUndoCommand();
         void undo();
         void redo();
         bool mergeWith(const QUndoCommand *command);
-        int id() const { return Id; }
+        int id() const { return HEADING_BOAT; }
     private:
         QList<BoatModel*> m_boatList;
         QList<qreal> m_headingList;
