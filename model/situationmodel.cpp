@@ -44,7 +44,7 @@ void SituationModel::setLaylineAngle(const int theValue, bool update) {
     }
 }
 
-void SituationModel::setSeries(const int theValue) {
+void SituationModel::setSituationSeries(const int theValue, bool update) {
     if (theValue != m_situationSeries) {
         if (debugLevel & 1 << MODEL) std::cout << "Situation " << this
         << " Series " << m_seriesNames[theValue].toStdString() << std::endl;
@@ -52,6 +52,8 @@ void SituationModel::setSeries(const int theValue) {
         foreach(TrackModel *track, m_tracks) {
             track->setSeries(m_situationSeries, true);
         }
+        if (update)
+            emit seriesChanged(m_situationSeries);
     }
 }
 

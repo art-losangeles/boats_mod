@@ -23,6 +23,7 @@ class MarkModel;
 
 enum {
     SET_LAYLINE,
+    SET_SERIES,
     MOVE_MODEL,
     HEADING_BOAT
 };
@@ -41,6 +42,22 @@ class SetLaylineUndoCommand : public QUndoCommand {
         SituationModel *m_situation;
         int m_oldAngle;
         int m_newAngle;
+};
+
+class SetSeriesUndoCommand : public QUndoCommand {
+
+    public:
+        SetSeriesUndoCommand(SituationModel* situation, const int series, QUndoCommand *parent = 0);
+        ~SetSeriesUndoCommand();
+        void undo();
+        void redo();
+        bool mergeWith(const QUndoCommand *command);
+        int id() const { return SET_SERIES; }
+
+    private:
+        SituationModel *m_situation;
+        int m_oldSeries;
+        int m_newSeries;
 };
 
 class AddTrackUndoCommand : public QUndoCommand {

@@ -30,6 +30,7 @@ class SituationModel : public QObject {
         QList<QString> seriesNames() {return m_seriesNames; };
 
         Series situationSeries() const { return m_situationSeries; };
+        void setSituationSeries(const int theValue, bool update = false);
 
         int size() const { return m_tracks.size();};
         const QList<TrackModel*> tracks() const { return m_tracks; };
@@ -55,11 +56,11 @@ class SituationModel : public QObject {
         void boatAdded(BoatModel *boat);
         void boatRemoved(BoatModel *boat);
         void laylineChanged(const int angle);
+        void seriesChanged(const int series);
         void markAdded(MarkModel *mark);
         void markRemoved(MarkModel *mark);
 
     public slots:
-        void setSeries(const int theValue);
         void addTrack(TrackModel *track);
         void deleteTrack(TrackModel *track);
         void addMark(MarkModel *mark, int order = 0);

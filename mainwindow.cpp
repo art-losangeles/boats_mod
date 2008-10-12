@@ -247,7 +247,9 @@ void MainWindow::createDocks() {
     seriesCombo->addItems(situation->seriesNames());
     seriesCombo->setCurrentIndex(situation->situationSeries());
     connect (seriesCombo, SIGNAL(currentIndexChanged(int)),
-            situation, SLOT(setSeries(int)));
+            this, SLOT(setSeries(int)));
+    connect (situation, SIGNAL(seriesChanged(int)),
+            seriesCombo, SLOT(setCurrentIndex(int)));
     situationForm->addRow(new QLabel(tr("Series"),scenarioGroup),seriesCombo);
 
     situationDock->setWidget(scenarioGroup);
@@ -385,6 +387,12 @@ void MainWindow::setCurrentFile(const QString &fileName) {
 void MainWindow::setLayline(int angle) {
     if (angle != situation->laylineAngle()) {
         situation->undoStack()->push(new SetLaylineUndoCommand(situation, angle));
+    }
+}
+
+void MainWindow::setSeries(int series) {
+    if (series != situation->situationSeries()) {
+        situation->undoStack()->push(new SetSeriesUndoCommand(situation, series));
     }
 }
 

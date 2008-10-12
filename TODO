@@ -1,6 +1,6 @@
 Necessary:
-- undocommand for layline and boat series
 - optimise mousemove without undo commands
+- playable animation
 - case description with rule & comments
 
 Wishlist:
@@ -30,3 +30,4 @@ Done:
 - widget and menus
 - new and save as
 - configurable traces
+- undocommand for layline and boat series

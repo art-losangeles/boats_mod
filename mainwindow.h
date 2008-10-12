@@ -32,6 +32,7 @@ class MainWindow : public QMainWindow {
         bool saveFile();
         bool saveAs();
         void setLayline(int angle);
+        void setSeries(int series);
         void addTrack();
         void addBoat();
         void addMark();

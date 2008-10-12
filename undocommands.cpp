@@ -54,6 +54,38 @@ bool SetLaylineUndoCommand::mergeWith(const QUndoCommand *command) {
     return true;
 }
 
+// Set Series
+SetSeriesUndoCommand::SetSeriesUndoCommand(SituationModel* situation, const int series, QUndoCommand *parent)
+        : QUndoCommand(parent),
+        m_situation(situation),
+        m_oldSeries(situation->situationSeries()),
+        m_newSeries(series) {
+    if (debugLevel & 1 << COMMAND) std::cout << "new setseriesundocommand" << std::endl;
+}
+
+SetSeriesUndoCommand::~SetSeriesUndoCommand() {
+    if (debugLevel & 1 << COMMAND) std::cout << "end setseriesundocommand" << std::endl;
+}
+
+void SetSeriesUndoCommand::undo() {
+    if (debugLevel & 1 << COMMAND) std::cout << "undo setseriesundocommand" << std::endl;
+    m_situation->setSituationSeries(m_oldSeries, true);
+}
+
+void SetSeriesUndoCommand::redo() {
+    if (debugLevel & 1 << COMMAND) std::cout << "redo setseriesundocommand" << std::endl;
+    m_situation->setSituationSeries(m_newSeries, true);
+}
+
+bool SetSeriesUndoCommand::mergeWith(const QUndoCommand *command) {
+    const SetSeriesUndoCommand *setseriesCommand = static_cast<const SetSeriesUndoCommand*>(command);
+    if (m_situation != setseriesCommand->m_situation)
+        return false;
+
+    m_newSeries = setseriesCommand->m_newSeries;
+    return true;
+}
+
 // Add Track
 AddTrackUndoCommand::AddTrackUndoCommand(SituationModel* situation, QUndoCommand *parent)
         : QUndoCommand(parent),
