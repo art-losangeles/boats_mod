@@ -39,6 +39,10 @@ class MainWindow : public QMainWindow {
         void deleteTrack();
         void deleteModels();
         void animate();
+        void play();
+        void pause(bool pause);
+        void stop();
+        void changeAnimationState(QTimeLine::State newState);
 
     protected:
         void closeEvent(QCloseEvent *event);
@@ -57,9 +61,11 @@ class MainWindow : public QMainWindow {
         QGraphicsView *view;
         QMenuBar *menubar;
         QToolBar *toolbar;
+        QToolBar *animationBar;
         QDockWidget *situationDock;
         QStatusBar *statusbar;
         QTimeLine *timeline;
+        QSlider *animationSlider;
 
         QAction *newFileAction;
         QAction *openFileAction;
@@ -74,6 +80,9 @@ class MainWindow : public QMainWindow {
         QAction *deleteAction;
 
         QAction *animateAction;
+        QAction *startAction;
+        QAction *pauseAction;
+        QAction *stopAction;
 
         QAction *undoAction;
         QAction *redoAction;
@@ -81,6 +90,7 @@ class MainWindow : public QMainWindow {
         QMenu *fileMenu;
         QMenu *trackMenu;
         QMenu *historyMenu;
+        QMenu *animationMenu;
 };
 
 #endif

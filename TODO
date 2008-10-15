@@ -1,6 +1,5 @@
 Necessary:
 - optimise mousemove without undo commands
-- playable animation
 - case description with rule & comments
 
 Wishlist:
@@ -31,3 +30,4 @@ Done:
 - new and save as
 - configurable traces
 - undocommand for layline and boat series
+- playable animation

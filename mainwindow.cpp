@@ -15,6 +15,7 @@
 
 #include "mainwindow.h"
 
+#include "commontypes.h"
 #include "model/situationmodel.h"
 #include "model/trackmodel.h"
 #include "model/boatmodel.h"
@@ -25,6 +26,8 @@
 
 #include "situationscene.h"
 
+extern int debugLevel;
+
 MainWindow::MainWindow(QWidget *parent)
         : QMainWindow(parent),
         situation(new SituationModel(this)),
@@ -32,6 +35,7 @@ MainWindow::MainWindow(QWidget *parent)
         view(new QGraphicsView(scene)),
         menubar(new QMenuBar(this)),
         toolbar(new QToolBar(this)),
+        animationBar(new QToolBar(this)),
         situationDock(new QDockWidget(this)),
         statusbar(new QStatusBar(this)),
         timeline(new QTimeLine(1000,this)) {
@@ -51,12 +55,15 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Timeline
     timeline->setCurveShape(QTimeLine::LinearCurve);
-    timeline->setLoopCount(0);
+    //timeline->setLoopCount(0);
+    connect(timeline, SIGNAL(stateChanged(QTimeLine::State)),
+            this, SLOT(changeAnimationState(QTimeLine::State)));
 
     // Bars
     createMenus();
     setMenuBar(menubar);
     addToolBar(toolbar);
+    addToolBar(Qt::BottomToolBarArea, animationBar);
     setStatusBar(statusbar);
 
     // Docks
@@ -130,6 +137,25 @@ void MainWindow::createActions() {
     animateAction->setShortcut(tr("Ctrl+A"));
     connect(animateAction, SIGNAL(triggered()),
             this, SLOT(animate()));
+
+    startAction  = new QAction(QIcon(":/images/player_play.png"), tr("&Play"), this);
+    startAction->setShortcut(tr("P"));
+    startAction->setEnabled(false);
+    connect(startAction, SIGNAL(triggered()),
+            this, SLOT(play()));
+
+    pauseAction  = new QAction(QIcon(":/images/player_pause.png"), tr("&Pause"), this);
+    pauseAction->setShortcut(tr("M"));
+    pauseAction->setEnabled(false);
+    pauseAction->setCheckable(true);
+    connect(pauseAction, SIGNAL(toggled(bool)),
+            this, SLOT(pause(bool)));
+
+    stopAction = new QAction(QIcon(":/images/player_stop.png"), tr("&Stop"), this);
+    stopAction->setShortcut(tr("Space"));
+    stopAction->setEnabled(false);
+    connect(stopAction, SIGNAL(triggered()),
+            this, SLOT(stop()));
 
     undoAction = new QAction(QIcon(":/images/undo.png"), tr("&Undo"), this);
     undoAction->setShortcut(tr("Ctrl+Z"));
@@ -216,6 +242,11 @@ void MainWindow::createMenus() {
     historyMenu->addAction(undoAction);
     historyMenu->addAction(redoAction);
 
+    animationMenu = menubar->addMenu(tr("&Animation"));
+    animationMenu->addAction(startAction);
+    animationMenu->addAction(pauseAction);
+    animationMenu->addAction(stopAction);
+
     toolbar->addAction(newFileAction);
     toolbar->addAction(openFileAction);
     toolbar->addAction(saveFileAction);
@@ -227,6 +258,20 @@ void MainWindow::createMenus() {
     toolbar->addAction(addTrackAction);
     toolbar->addAction(addBoatAction);
     toolbar->addAction(addMarkAction);
+
+    animationSlider = new QSlider(Qt::Horizontal, this);
+    animationSlider->setTickInterval(2000);
+    animationSlider->setTickPosition(QSlider::TicksBelow);
+
+    animationBar->addAction(startAction);
+    animationBar->addAction(pauseAction);
+    animationBar->addAction(stopAction);
+    animationBar->addSeparator();
+    animationBar->addWidget(animationSlider);
+    connect(timeline, SIGNAL(frameChanged(int)),
+            animationSlider, SLOT(setValue(int)));
+    connect(animationSlider, SIGNAL(valueChanged(int)),
+            timeline, SLOT(setCurrentTime(int)));
 }
 
 void MainWindow::createDocks() {
@@ -443,10 +488,67 @@ void MainWindow::animate() {
     if(scene->state() != ANIMATE) {
         scene->setState(ANIMATE);
         scene->setAnimation(timeline);
-        timeline->start();
+        animationSlider->setRange(0,timeline->duration());
+        timeline->setFrameRange(0,timeline->duration());
+        startAction->setEnabled(true);
     } else {
         scene->setState(NO_STATE);
         scene->unSetAnimation();
         timeline->stop();
+        startAction->setEnabled(false);
+        stopAction->setEnabled(false);
+    }
+}
+
+void MainWindow::play() {
+    if (debugLevel & 1 << ANIMATION) std::cout << "playing" << std::endl;
+    animationSlider->blockSignals(true);
+    pauseAction->setChecked(false);
+    timeline->setCurrentTime(0);
+    timeline->start();
+}
+
+void MainWindow::pause(bool pause) {
+    if (pause) {
+        if (debugLevel & 1 << ANIMATION) std::cout << "pausing" << std::endl;
+        timeline->setPaused(true);
+        animationSlider->blockSignals(false);
+    } else {
+        if (debugLevel & 1 << ANIMATION) std::cout << "resuming" << std::endl;
+        animationSlider->blockSignals(true);
+        timeline->resume();
+    }
+}
+
+void MainWindow::stop() {
+    if (debugLevel & 1 << ANIMATION) std::cout << "stopping" << std::endl;
+    pauseAction->setChecked(false);
+    timeline->stop();
+    timeline->setCurrentTime(0);
+    animationSlider->blockSignals(false);
+}
+
+void MainWindow::changeAnimationState(QTimeLine::State newState) {
+    switch(newState) {
+        case QTimeLine::Running:
+            if (debugLevel & 1 << ANIMATION) std::cout << "state running" << std::endl;
+            startAction->setEnabled(false);
+            pauseAction->setEnabled(true);
+            stopAction->setEnabled(true);
+            break;
+
+        case QTimeLine::Paused:
+            if (debugLevel & 1 << ANIMATION) std::cout << "state paused" << std::endl;
+            startAction->setEnabled(true);
+            pauseAction->setEnabled(true);
+            stopAction->setEnabled(true);
+            break;
+
+        case QTimeLine::NotRunning:
+            if (debugLevel & 1 << ANIMATION) std::cout << "state not running" << std::endl;
+            startAction->setEnabled(true);
+            pauseAction->setEnabled(false);
+            stopAction->setEnabled(false);
+            break;
     }
 }
