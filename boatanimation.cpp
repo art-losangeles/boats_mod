@@ -52,6 +52,7 @@ BoatAnimation::BoatAnimation(TrackModel *track, BoatGraphicsItem *boat, int maxS
     m_track->setColor(color, true);
     color.setAlpha(255);
     m_boat->setColor(color);
+    m_boat->setOrder(0);
 
     if (m_rotationList.isEmpty())
         m_rotationList = rotationList();

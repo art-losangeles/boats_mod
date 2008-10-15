@@ -90,6 +90,7 @@ void BoatGraphicsItem::setPosition(QPointF position) {
 void BoatGraphicsItem::setOrder(int value) {
     if (m_order != value) {
         m_order = value;
+        setZValue(m_order);
         update();
     }
 }
@@ -166,7 +167,9 @@ void BoatGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *
         path.cubicTo(24, 0, 21, 15, 12, 58);
         path.lineTo(-12, 58);
         path.cubicTo(-21, 15, -24, 0, 0, -60);
-        path.addText(-5,25,painter->font(),QString::number(m_order));
+        if (m_order) {
+            path.addText(-5,25,painter->font(),QString::number(m_order));
+        }
         break;
     case OPTIMIST:
         path.cubicTo(8, -60, 9, -59, 15, -58);
@@ -176,7 +179,9 @@ void BoatGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *
         path.cubicTo(-26, 47, -29, 28, -29, 8);
         path.cubicTo(-29, -21, -19, -49, -15, -58);
         path.cubicTo(-9, -59, -8, -60, 0, -60);
-        path.addText(-5,25,painter->font(),QString::number(m_order));
+        if (m_order) {
+            path.addText(-5,25,painter->font(),QString::number(m_order));
+        }
         break;
     default:
         break;
