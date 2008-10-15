@@ -9,6 +9,7 @@ HEADERS = \
 	mainwindow.h \
 	mark.h \
 	situationscene.h \
+	trace.h \
 	track.h \
 	undocommands.h \
 	xmlsituationreader.h \
@@ -26,6 +27,7 @@ SOURCES = \
 	mainwindow.cpp \
 	mark.cpp \
 	situationscene.cpp \
+	trace.cpp \
 	track.cpp \
 	undocommands.cpp \
 	xmlsituationreader.cpp \
