@@ -3,9 +3,10 @@
 
 # qt
 .moc
+qrc_*
 
 #products
-Makefile
+Makefile*
 Doxyfile
 tags
 .obj

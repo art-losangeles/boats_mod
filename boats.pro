@@ -1,3 +1,8 @@
+TEMPLATE = app
+TARGET = boats
+
+CONFIG += qt warn_on
+
 HEADERS = \
 	model/boatmodel.h \
 	model/markmodel.h \
@@ -35,13 +40,6 @@ SOURCES = \
 
 RESOURCES = boats.qrc
 
-CONFIG = qt resources debug warn_on
-
 MOC_DIR = .moc/
 
 OBJECTS_DIR = .obj/
-
-TEMPLATE = app
-
-TARGET = boats
-
