@@ -47,3 +47,7 @@ RESOURCES = boats.qrc
 MOC_DIR = .moc/
 
 OBJECTS_DIR = .obj/
+
+win32 {
+	RC_FILE = boats.rc
+}
