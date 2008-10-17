@@ -37,7 +37,6 @@ BoatGraphicsItem::BoatGraphicsItem(BoatModel *boat, QGraphicsItem *parent)
     setFlag(QGraphicsItem::ItemIsSelectable);
 
     setBoundingRegionGranularity(1);
-    setCacheMode(QGraphicsItem::DeviceCoordinateCache);
 
     setSailAngle();
     setPos(boat->position());
