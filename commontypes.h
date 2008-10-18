@@ -15,6 +15,7 @@
 typedef enum {
     KEELBOAT,
     OPTIMIST,
+    TORNADO,
     UNKNOWN
 } Series;
 

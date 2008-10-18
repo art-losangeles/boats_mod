@@ -72,10 +72,23 @@ void BoatGraphicsItem::setSailAngle() {
     qreal layline = m_boat->track()->situation()->laylineAngle() -10;
     if (m_angle< layline || m_angle>360-layline) {
         m_sailAngle = -m_angle;
-    } else if (m_angle<180) {
-        m_sailAngle = -m_angle/1.86 + 6;
-    } else {
-        m_sailAngle = 180-m_angle/1.86 + 6;
+        return;
+    }
+    switch (m_series) {
+    case TORNADO:
+        if (m_angle<180) {
+            m_sailAngle = -20;
+        } else {
+            m_sailAngle = 20;
+        }
+        break;
+    default:
+        if (m_angle<180) {
+            m_sailAngle = -m_angle/1.86 + 6;
+        } else {
+            m_sailAngle = 180-m_angle/1.86 + 6;
+        }
+        break;
     }
 }
 
@@ -136,7 +149,7 @@ void BoatGraphicsItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
 }
 
 QRectF BoatGraphicsItem::boundingRect() const {
-    return QRectF(-80, -60, 160, 120);
+    return QRectF(-80, -80, 160, 160);
 }
 
 QPainterPath BoatGraphicsItem::shape() const {
@@ -182,6 +195,28 @@ void BoatGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *
             path.addText(-5,25,painter->font(),QString::number(m_order));
         }
         break;
+    case TORNADO:
+        path.moveTo(0,0);
+        path.lineTo(21, 0);
+        path.cubicTo(22, -23, 24, -39, 26, -60);
+        path.cubicTo(29, -40, 30, -12, 30, 12);
+        path.cubicTo(30, 27, 29, 41, 29, 59);
+        path.cubicTo(27, 60, 27, 60, 25, 60);
+        path.cubicTo(24, 60, 24, 60, 21, 59);
+        path.lineTo(21, 47);
+
+        path.lineTo(-21, 47);
+        path.lineTo(-21, 59);
+        path.cubicTo(-24, 60, -24, 60, -25, 60);
+        path.cubicTo(-27, 60, -27, 60, -29, 59);
+        path.cubicTo(-29, 41, -30, 27, -30, 12);
+        path.cubicTo(-30, -12, -29, -40, -26, -60);
+        path.cubicTo(-24, -39, -22, -23, -21, 0);
+        path.lineTo(0, 0);
+        if (m_order) {
+            path.addText(-5,25,painter->font(),QString::number(m_order));
+        }
+        break;
     default:
         break;
     }
@@ -196,6 +231,9 @@ void BoatGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *
     case OPTIMIST:
         painter->translate(0,-36);
         sailScale = 1.7;
+        break;
+    case TORNADO:
+        sailScale = 1;
         break;
     default:
         break;
