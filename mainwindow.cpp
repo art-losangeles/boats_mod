@@ -133,8 +133,9 @@ void MainWindow::createActions() {
     connect(deleteAction, SIGNAL(triggered()),
             this, SLOT(deleteModels()));
 
-    animateAction = new QAction(tr("&Animate"), this);
+    animateAction = new QAction(QIcon(":/images/animate.png"), tr("&Animate"), this);
     animateAction->setShortcut(tr("Ctrl+A"));
+    animateAction->setCheckable(true);
     connect(animateAction, SIGNAL(triggered()),
             this, SLOT(animate()));
 
@@ -186,6 +187,7 @@ void MainWindow::changeState(SceneState newState) {
             addTrackAction->setChecked(true);
             addBoatAction->setChecked(false);
             addMarkAction->setChecked(false);
+            animateAction->setChecked(false);
             break;
         case CREATE_BOAT:
             view->setCursor(Qt::CrossCursor);
@@ -193,6 +195,7 @@ void MainWindow::changeState(SceneState newState) {
             addTrackAction->setChecked(false);
             addBoatAction->setChecked(true);
             addMarkAction->setChecked(false);
+            animateAction->setChecked(false);
             break;
         case CREATE_MARK:
             view->setCursor(Qt::CrossCursor);
@@ -200,6 +203,14 @@ void MainWindow::changeState(SceneState newState) {
             addTrackAction->setChecked(false);
             addBoatAction->setChecked(false);
             addMarkAction->setChecked(true);
+            animateAction->setChecked(false);
+            break;
+        case ANIMATE:
+            statusbar->showMessage(tr("ANIMATE"));
+            addTrackAction->setChecked(false);
+            addBoatAction->setChecked(false);
+            addMarkAction->setChecked(false);
+            animateAction->setChecked(true);
             break;
         default:
             view->unsetCursor();
@@ -207,6 +218,7 @@ void MainWindow::changeState(SceneState newState) {
             addTrackAction->setChecked(false);
             addBoatAction->setChecked(false);
             addMarkAction->setChecked(false);
+            animateAction->setChecked(false);
     }
 }
 
@@ -258,6 +270,9 @@ void MainWindow::createMenus() {
     toolbar->addAction(addTrackAction);
     toolbar->addAction(addBoatAction);
     toolbar->addAction(addMarkAction);
+    toolbar->addSeparator();
+    toolbar->addAction(animateAction);
+
 
     animationSlider = new QSlider(Qt::Horizontal, this);
     animationSlider->setTickInterval(2000);

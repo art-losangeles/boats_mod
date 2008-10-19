@@ -1,5 +1,6 @@
  <!DOCTYPE RCC><RCC version="1.0">
  <qresource>
+     <file>images/animate.png</file>
      <file>images/addboat.png</file>
      <file>images/addmark.png</file>
      <file>images/addtrack.png</file>
