@@ -48,7 +48,7 @@ BoatAnimation::BoatAnimation(TrackModel *track, BoatGraphicsItem *boat, int maxS
     }
 
     QColor color = m_track->color();
-    color.setAlpha(128);
+    color.setAlpha(64);
     m_track->setColor(color, true);
     color.setAlpha(255);
     m_boat->setColor(color);
