@@ -27,7 +27,7 @@ SituationModel::SituationModel(QObject *parent)
         m_laylineAngle(40),
         m_situationSeries(KEELBOAT) {
     if (debugLevel & 1 << MODEL) std::cout << "new situation " << this << std::endl;
-    m_seriesNames << "keelboat" << "optimist" << "tornado";
+    m_seriesNames << "keelboat" << "laser" << "optimist" << "tornado";
 }
 
 SituationModel::~SituationModel() {

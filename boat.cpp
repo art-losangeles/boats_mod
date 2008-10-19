@@ -149,7 +149,7 @@ void BoatGraphicsItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
 }
 
 QRectF BoatGraphicsItem::boundingRect() const {
-    return QRectF(-80, -80, 160, 160);
+    return QRectF(-80, -65, 160, 130);
 }
 
 QPainterPath BoatGraphicsItem::shape() const {
@@ -179,9 +179,15 @@ void BoatGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *
         path.cubicTo(24, 0, 21, 15, 12, 58);
         path.lineTo(-12, 58);
         path.cubicTo(-21, 15, -24, 0, 0, -60);
-        if (m_order) {
-            path.addText(-5,25,painter->font(),QString::number(m_order));
-        }
+        break;
+    case LASER:
+        path.cubicTo(1, -59, 1, -60, 2, -59);
+        path.cubicTo(10, -43, 20, -10, 20, 14);
+        path.cubicTo(20, 33, 20, 43, 15, 60);
+        path.lineTo(-15, 60);
+        path.cubicTo(-20, 43, -20, 33, -20, 14);
+        path.cubicTo(-20, -10, -10, -43, -2, -59);
+        path.cubicTo(-1, -60, -1, -59, 0, -60);
         break;
     case OPTIMIST:
         path.cubicTo(8, -60, 9, -59, 15, -58);
@@ -191,9 +197,6 @@ void BoatGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *
         path.cubicTo(-26, 47, -29, 28, -29, 8);
         path.cubicTo(-29, -21, -19, -49, -15, -58);
         path.cubicTo(-9, -59, -8, -60, 0, -60);
-        if (m_order) {
-            path.addText(-5,25,painter->font(),QString::number(m_order));
-        }
         break;
     case TORNADO:
         path.moveTo(0,0);
@@ -213,12 +216,12 @@ void BoatGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *
         path.cubicTo(-30, -12, -29, -40, -26, -60);
         path.cubicTo(-24, -39, -22, -23, -21, 0);
         path.lineTo(0, 0);
-        if (m_order) {
-            path.addText(-5,25,painter->font(),QString::number(m_order));
-        }
         break;
     default:
         break;
+    }
+    if (m_order) {
+        path.addText(-5,25,painter->font(),QString::number(m_order));
     }
     painter->drawPath(path);
 
@@ -227,6 +230,10 @@ void BoatGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *
     case KEELBOAT:
         painter->translate(0,-10);
         sailScale = 1;
+        break;
+    case LASER:
+        painter->translate(0, -26);
+        sailScale = 1.7;
         break;
     case OPTIMIST:
         painter->translate(0,-36);
