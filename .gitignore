@@ -8,6 +8,7 @@ qrc_*
 #products
 Makefile*
 Doxyfile
+doxygen/*
 tags
 .obj
 
