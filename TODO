@@ -1,12 +1,15 @@
 Necessary:
 - optimise mousemove without undo commands
 - case description with rule & comments
+- overlap line
+- zone at marks
+- animation replay
+- more boat shapes
 
 Wishlist:
 - track line to mouse position
 - insert between boats
 - contextual menus
-- overlap line
 - tabs for multiple situations
 
 Done:
