@@ -38,7 +38,7 @@ class MainWindow : public QMainWindow {
         void addMark();
         void deleteTrack();
         void deleteModels();
-        void animate();
+        void animate(bool state);
         void play();
         void pause(bool pause);
         void stop();

@@ -136,8 +136,8 @@ void MainWindow::createActions() {
     animateAction = new QAction(QIcon(":/images/animate.png"), tr("&Animate"), this);
     animateAction->setShortcut(tr("Ctrl+A"));
     animateAction->setCheckable(true);
-    connect(animateAction, SIGNAL(triggered()),
-            this, SLOT(animate()));
+    connect(animateAction, SIGNAL(toggled(bool)),
+            this, SLOT(animate(bool)));
 
     startAction  = new QAction(QIcon(":/images/player_play.png"), tr("&Play"), this);
     startAction->setShortcut(tr("P"));
@@ -360,10 +360,10 @@ void MainWindow::closeEvent(QCloseEvent *event) {
 
 void MainWindow::newFile() {
     if (maybeSave()) {
+        scene->setState(NO_STATE);
         situation->undoStack()->setIndex(0);
         situation->undoStack()->clear();
         setCurrentFile("");
-        scene->setState(NO_STATE);
     }
 }
 
@@ -375,7 +375,8 @@ void MainWindow::openFile() {
     if (fileName.isEmpty())
         return;
 
-//    delete situation;
+    // delete situation;
+    newFile();
 
     QFile file(fileName);
     if (!file.open(QFile::ReadOnly | QFile::Text)) {
@@ -499,15 +500,19 @@ void MainWindow::addMark() {
     }
 }
 
-void MainWindow::animate() {
-    if(scene->state() != ANIMATE) {
-        scene->setState(ANIMATE);
-        scene->setAnimation(timeline);
-        animationSlider->setRange(0,timeline->duration());
-        timeline->setFrameRange(0,timeline->duration());
-        startAction->setEnabled(true);
+void MainWindow::animate(bool state) {
+    if (state) {
+        if (scene->state() != ANIMATE) {
+            scene->setState(ANIMATE);
+            scene->setAnimation(timeline);
+            animationSlider->setRange(0,timeline->duration());
+            timeline->setFrameRange(0,timeline->duration());
+            startAction->setEnabled(true);
+        }
     } else {
-        scene->setState(NO_STATE);
+        if (scene->state() == ANIMATE) {
+            scene->setState(NO_STATE);
+        }
         scene->unSetAnimation();
         timeline->stop();
         startAction->setEnabled(false);
