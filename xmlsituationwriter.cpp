@@ -31,6 +31,18 @@ bool XmlSituationWriter::writeFile(QIODevice *device) {
     writeDTD("<!DOCTYPE xmlsituation>");
     writeStartElement("xmlsituation");
     writeAttribute("version", "1.0");
+    if (!m_situation->title().isEmpty()) {
+        writeTextElement("title", m_situation->title());
+    }
+    if (!m_situation->rules().isEmpty()) {
+        writeTextElement("rules", m_situation->rules());
+    }
+    if (!m_situation->abstract().isEmpty()) {
+        writeTextElement("abstract", m_situation->abstract());
+    }
+    if (!m_situation->description().isEmpty()) {
+        writeTextElement("description", m_situation->description());
+    }
     writeTextElement("layline",QString::number(m_situation->laylineAngle()));
     foreach(QString discarded, m_situation->discardedXml())
         writeUnknownElement(discarded);

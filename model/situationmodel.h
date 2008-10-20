@@ -32,6 +32,14 @@ class SituationModel : public QObject {
         Series situationSeries() const { return m_situationSeries; };
         void setSituationSeries(const int theValue, bool update = false);
 
+        QString title() const { return m_title; };
+
+        QString rules() const { return m_rules; };
+
+        QString abstract() const { return m_abstract; };
+
+        QString description() const { return m_description; };
+
         int size() const { return m_tracks.size();};
         const QList<TrackModel*> tracks() const { return m_tracks; };
 
@@ -61,6 +69,10 @@ class SituationModel : public QObject {
         void markRemoved(MarkModel *mark);
 
     public slots:
+        void setTitle(const QString theValue) { m_title = theValue; };
+        void setRules(const QString theValue) { m_rules = theValue; };
+        void setAbstract(const QString theValue) { m_abstract = theValue; };
+        void setDescription(const QString theValue) { m_description = theValue; };
         void addTrack(TrackModel *track);
         void deleteTrack(TrackModel *track);
         void addMark(MarkModel *mark, int order = 0);
@@ -70,6 +82,10 @@ class SituationModel : public QObject {
         QUndoStack *m_undoStack;
         QList<QString> m_seriesNames;
         QString m_fileName;
+        QString m_title;
+        QString m_rules;
+        QString m_abstract;
+        QString m_description;
         int m_laylineAngle;
         Series m_situationSeries;
         QList<TrackModel*> m_tracks;

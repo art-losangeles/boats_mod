@@ -68,7 +68,15 @@ void XmlSituationReader::readSituation() {
         if (isEndElement())
             break;
         if (isStartElement()) {
-            if (name() == "layline")
+            if (name() == "title")
+                m_situation->setTitle(readElementText());
+            else if (name() == "rules")
+                m_situation->setRules(readElementText());
+            else if (name() == "abstract")
+                m_situation->setAbstract(readElementText());
+            else if (name() == "description")
+                m_situation->setDescription(readElementText());
+            else if (name() == "layline")
                 m_situation->setLaylineAngle(readElementText().toFloat(), true);
             else if (name() == "mark")
                 readMark(m_situation);
