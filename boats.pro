@@ -14,6 +14,7 @@ HEADERS = \
 	mainwindow.h \
 	mark.h \
 	situationscene.h \
+	situationwidget.h \
 	trace.h \
 	track.h \
 	undocommands.h \
@@ -32,6 +33,7 @@ SOURCES = \
 	mainwindow.cpp \
 	mark.cpp \
 	situationscene.cpp \
+	situationwidget.cpp \
 	trace.cpp \
 	track.cpp \
 	undocommands.cpp \

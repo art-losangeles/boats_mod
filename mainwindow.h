@@ -14,6 +14,7 @@
 
 #include <QtGui>
 
+#include "situationwidget.h"
 #include "situationscene.h"
 
 class SituationModel;
@@ -31,8 +32,6 @@ class MainWindow : public QMainWindow {
         void openFile();
         bool saveFile();
         bool saveAs();
-        void setLayline(int angle);
-        void setSeries(int series);
         void addTrack();
         void addBoat();
         void addMark();
@@ -63,6 +62,7 @@ class MainWindow : public QMainWindow {
         QToolBar *toolbar;
         QToolBar *animationBar;
         QDockWidget *situationDock;
+        SituationWidget *situationWidget;
         QStatusBar *statusbar;
         QTimeLine *timeline;
         QSlider *animationSlider;

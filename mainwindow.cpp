@@ -24,6 +24,7 @@
 #include "xmlsituationreader.h"
 #include "xmlsituationwriter.h"
 
+#include "situationwidget.h"
 #include "situationscene.h"
 
 extern int debugLevel;
@@ -37,6 +38,7 @@ MainWindow::MainWindow(QWidget *parent)
         toolbar(new QToolBar(this)),
         animationBar(new QToolBar(this)),
         situationDock(new QDockWidget(this)),
+        situationWidget(new SituationWidget(situationDock)),
         statusbar(new QStatusBar(this)),
         timeline(new QTimeLine(1000,this)) {
 
@@ -290,29 +292,8 @@ void MainWindow::createMenus() {
 }
 
 void MainWindow::createDocks() {
-    QGroupBox *scenarioGroup = new QGroupBox(tr("Scenario"),situationDock);
-    QFormLayout *situationForm = new QFormLayout(scenarioGroup);
-
-    QSpinBox *laylineSpin = new QSpinBox(scenarioGroup);
-    laylineSpin->setRange(0, 359);
-    laylineSpin->setWrapping(true);
-    laylineSpin->setValue(situation->laylineAngle());
-    connect (laylineSpin, SIGNAL(valueChanged(int)),
-            this, SLOT(setLayline(int)));
-    connect (situation, SIGNAL(laylineChanged(const int)),
-            laylineSpin, SLOT(setValue(int)));
-    situationForm->addRow(new QLabel(tr("Laylines"),scenarioGroup),laylineSpin);
-
-    QComboBox *seriesCombo = new QComboBox(scenarioGroup);
-    seriesCombo->addItems(situation->seriesNames());
-    seriesCombo->setCurrentIndex(situation->situationSeries());
-    connect (seriesCombo, SIGNAL(currentIndexChanged(int)),
-            this, SLOT(setSeries(int)));
-    connect (situation, SIGNAL(seriesChanged(int)),
-            seriesCombo, SLOT(setCurrentIndex(int)));
-    situationForm->addRow(new QLabel(tr("Series"),scenarioGroup),seriesCombo);
-
-    situationDock->setWidget(scenarioGroup);
+    situationWidget->setSituation(situation);
+    situationDock->setWidget(situationWidget);
     situationDock->setFeatures(QDockWidget::NoDockWidgetFeatures);
 }
 
@@ -363,6 +344,10 @@ void MainWindow::newFile() {
         scene->setState(NO_STATE);
         situation->undoStack()->setIndex(0);
         situation->undoStack()->clear();
+        situation->setTitle("");
+        situation->setRules("");
+        situationWidget->unSetSituation();
+        situationWidget->setSituation(situation);
         setCurrentFile("");
     }
 }
@@ -443,18 +428,6 @@ void MainWindow::setCurrentFile(const QString &fileName) {
 
     QString shownName = QFileInfo(fileName).fileName();
     setWindowTitle(tr("%1 - %2 [*]").arg(tr("Boats Scenario")).arg(shownName));
-}
-
-void MainWindow::setLayline(int angle) {
-    if (angle != situation->laylineAngle()) {
-        situation->undoStack()->push(new SetLaylineUndoCommand(situation, angle));
-    }
-}
-
-void MainWindow::setSeries(int series) {
-    if (series != situation->situationSeries()) {
-        situation->undoStack()->push(new SetSeriesUndoCommand(situation, series));
-    }
 }
 
 void MainWindow::addTrack() {
