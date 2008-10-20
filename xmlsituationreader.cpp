@@ -128,9 +128,17 @@ void XmlSituationReader::readBoat(SituationModel *situation, TrackModel *track) 
                 discarded.append(readUnknownElement());
         }
     }
-    AddBoatUndoCommand *command = new AddBoatUndoCommand(track, pos, heading);
-    situation->undoStack()->push(command);
-    BoatModel *boat = command->boat();
+    BoatModel *boat;
+    if (track->size() == 0) {
+        boat = new BoatModel(track);
+        boat->setPosition(pos);
+        boat->setHeading(heading);
+        track->addBoat(boat);
+    } else {
+        AddBoatUndoCommand *command = new AddBoatUndoCommand(track, pos, heading);
+        situation->undoStack()->push(command);
+        boat = command->boat();
+    }
     foreach (QString elem, discarded) {
         boat->appendDiscardedXml(elem);
     }
