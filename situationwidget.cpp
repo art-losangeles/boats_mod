@@ -67,12 +67,23 @@ SituationWidget::SituationWidget(QWidget *parent)
     this->setLayout(situationLayout);
 }
 
+void SituationWidget::update() {
+    if (m_situation) {
+        title->setText(m_situation->title());
+        seriesCombo->setCurrentIndex(m_situation->situationSeries());
+        laylineSpin->setValue(m_situation->laylineAngle());
+        abstract->setPlainText(m_situation->abstract());
+        description->setPlainText(m_situation->description());
+    }
+}
+
 void SituationWidget::setSituation(SituationModel *situation) {
     if (situation != m_situation) {
         m_situation = situation;
 
+        update();
+
         // Scenario Group
-        title->setText(situation->title());
         connect (title, SIGNAL(textEdited(QString)),
                 situation, SLOT(setTitle(QString)));
 
@@ -81,7 +92,6 @@ void SituationWidget::setSituation(SituationModel *situation) {
                 situation, SLOT(setRules(QString)));
 
         seriesCombo->addItems(situation->seriesNames());
-        seriesCombo->setCurrentIndex(situation->situationSeries());
         connect (seriesCombo, SIGNAL(currentIndexChanged(int)),
                 this, SLOT(setSeries(int)));
         connect (situation, SIGNAL(seriesChanged(int)),
@@ -89,7 +99,6 @@ void SituationWidget::setSituation(SituationModel *situation) {
 
         laylineSpin->setRange(0, 359);
         laylineSpin->setWrapping(true);
-        laylineSpin->setValue(situation->laylineAngle());
         connect (laylineSpin, SIGNAL(valueChanged(int)),
                 this, SLOT(setLayline(int)));
         connect (situation, SIGNAL(laylineChanged(const int)),
@@ -97,8 +106,11 @@ void SituationWidget::setSituation(SituationModel *situation) {
 
 
         // Description Group
-        abstract->setText(situation->abstract());
-        description->setText(situation->description());
+        connect(abstract->document(), SIGNAL(contentsChanged()),
+                this, SLOT(setAbstract()));
+
+        connect(description->document(), SIGNAL(contentsChanged()),
+                this, SLOT(setDescription()));
     }
 }
 

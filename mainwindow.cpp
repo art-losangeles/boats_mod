@@ -381,6 +381,7 @@ void MainWindow::openFile() {
                              .arg(reader.columnNumber())
                              .arg(reader.errorString()));
     } else {
+        situationWidget->update();
         setCurrentFile(fileName);
         statusbar->showMessage(tr("File loaded"), 2000);
     }

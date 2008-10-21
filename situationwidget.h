@@ -22,6 +22,8 @@ class SituationWidget : public QWidget {
         SituationWidget(QWidget *parent = 0);
         ~SituationWidget() {}
 
+        void update();
+
     public slots:
         void setSituation(SituationModel *situation);
         void unSetSituation();
