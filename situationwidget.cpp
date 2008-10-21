@@ -98,24 +98,30 @@ void SituationWidget::setSituation(SituationModel *situation) {
 }
 
 void SituationWidget::unSetSituation() {
-    m_situation = 0;
 
     // Scenario Group
+    disconnect(title, 0, 0, 0);
     title->clear();
-    disconnect (title, 0, 0, 0);
 
+    disconnect(rules, 0, 0, 0);
     rules->clear();
-    disconnect (rules, 0, 0, 0);
 
+    disconnect(seriesCombo, 0, 0, 0);
+    disconnect(m_situation, 0, seriesCombo, 0);
+    seriesCombo->clear();
     seriesCombo->setCurrentIndex(0);
-    disconnect (seriesCombo, 0, 0, 0);
 
+    disconnect(laylineSpin,  0, 0, 0);
+    disconnect(m_situation, 0, laylineSpin, 0);
     laylineSpin->setValue(40);
-    disconnect (laylineSpin,  0, 0, 0);
 
     // Description Group
+    disconnect(abstract, 0, 0, 0);
     abstract->clear();
+    disconnect(description, 0, 0, 0);
     description->clear();
+
+    m_situation = 0;
 }
 
 void SituationWidget::setLayline(int angle) {
