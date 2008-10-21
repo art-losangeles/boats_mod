@@ -9,6 +9,7 @@
 // Copyright: See COPYING file that comes with this distribution
 //
 //
+#include <iostream>
 
 #include <QtGui>
 
@@ -17,6 +18,8 @@
 #include "model/situationmodel.h"
 
 #include "undocommands.h"
+
+extern int debugLevel;
 
 SituationWidget::SituationWidget(QWidget *parent)
     : QWidget(parent),
@@ -47,12 +50,14 @@ SituationWidget::SituationWidget(QWidget *parent)
     descriptionLayout->addWidget(abstractLabel,0,0);
 
     abstract = new QTextEdit(descriptionGroup);
+    abstract->setAcceptRichText(false);
     descriptionLayout->addWidget(abstract,1,0);
 
     QLabel *descriptionLabel = new QLabel(tr("Description"),descriptionGroup);
     descriptionLayout->addWidget(descriptionLabel,2,0);
 
     description = new QTextEdit(descriptionGroup);
+    description->setAcceptRichText(false);
     descriptionLayout->addWidget(description,3,0);
 
     // last bricks
@@ -140,3 +145,16 @@ void SituationWidget::setSeries(int series) {
     }
 }
 
+void SituationWidget::setAbstract() {
+    if (m_situation) {
+        if (debugLevel & 1 << COMMAND) std::cout << "setting Abstract" << std::endl;
+        m_situation->setAbstract(abstract->document()->toPlainText());
+    }
+}
+
+void SituationWidget::setDescription() {
+    if (m_situation) {
+        if (debugLevel & 1 << COMMAND) std::cout << "setting Description" << std::endl;
+        m_situation->setDescription(description->document()->toPlainText());
+    }
+}

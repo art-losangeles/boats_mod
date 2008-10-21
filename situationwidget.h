@@ -27,6 +27,8 @@ class SituationWidget : public QWidget {
         void unSetSituation();
         void setLayline(int angle);
         void setSeries(int series);
+        void setAbstract();
+        void setDescription();
 
     private:
         SituationModel *m_situation;
