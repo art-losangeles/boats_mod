@@ -12,6 +12,8 @@
 #ifndef COMMONTYPES_H
 #define COMMONTYPES_H
 
+#define VERSION 200810
+
 typedef enum {
     KEELBOAT,
     LASER,

@@ -42,6 +42,7 @@ class MainWindow : public QMainWindow {
         void pause(bool pause);
         void stop();
         void changeAnimationState(QTimeLine::State newState);
+        void about();
 
     protected:
         void closeEvent(QCloseEvent *event);
@@ -86,6 +87,8 @@ class MainWindow : public QMainWindow {
 
         QAction *undoAction;
         QAction *redoAction;
+
+        QAction *aboutAction;
 
         QMenu *fileMenu;
         QMenu *trackMenu;

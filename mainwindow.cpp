@@ -179,6 +179,10 @@ void MainWindow::createActions() {
             redoAction, SLOT(setEnabled(bool)));
     connect(situation->undoStack(), SIGNAL(cleanChanged(bool)),
             this, SLOT(cleanState(bool)));
+
+    aboutAction = new QAction(tr("&About"), this);
+    connect(aboutAction, SIGNAL(triggered()),
+            this, SLOT(about()));
 }
 
 void MainWindow::changeState(SceneState newState) {
@@ -260,6 +264,8 @@ void MainWindow::createMenus() {
     animationMenu->addAction(startAction);
     animationMenu->addAction(pauseAction);
     animationMenu->addAction(stopAction);
+
+    menubar->addAction(aboutAction);
 
     toolbar->addAction(newFileAction);
     toolbar->addAction(openFileAction);
@@ -547,4 +553,22 @@ void MainWindow::changeAnimationState(QTimeLine::State newState) {
             stopAction->setEnabled(false);
             break;
     }
+}
+
+void MainWindow::about() {
+    QMessageBox::about(this, tr("About Boats Scenario"),
+        tr("<center><img src=\":/images/about.png\">"
+            "<p><b>Boats Scenario</b> - a Race Scenario drawing tool.</p>"
+            "<p>Version %1</p></center>"
+            "<p>Copyright (C) 2008 Thibaut GRIDEL </p>"
+            "<p></p>"
+            "<p>This program is free software; you can redistribute it and/or modify "
+            "it under the terms of the GNU General Public License as published by "
+            "the Free Software Foundation; either version 2 of the License, or "
+            "(at your option) any later version.</p>"
+            "<p></p>"
+            "<p>This program is distributed in the hope that it will be useful, "
+            "but WITHOUT ANY WARRANTY; without even the implied warranty of "
+            "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the "
+            "GNU General Public License for more details.</p>").arg(VERSION));
 }
