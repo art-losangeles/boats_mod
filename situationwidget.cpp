@@ -70,6 +70,7 @@ SituationWidget::SituationWidget(QWidget *parent)
 void SituationWidget::update() {
     if (m_situation) {
         title->setText(m_situation->title());
+        rules->setText(m_situation->rules());
         seriesCombo->setCurrentIndex(m_situation->situationSeries());
         laylineSpin->setValue(m_situation->laylineAngle());
         abstract->setPlainText(m_situation->abstract());
@@ -87,7 +88,6 @@ void SituationWidget::setSituation(SituationModel *situation) {
         connect (title, SIGNAL(textEdited(QString)),
                 situation, SLOT(setTitle(QString)));
 
-        rules->setText(situation->rules());
         connect (rules, SIGNAL(textEdited(QString)),
                 situation, SLOT(setRules(QString)));
 
