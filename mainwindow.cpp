@@ -279,6 +279,8 @@ void MainWindow::createMenus() {
     animationSlider = new QSlider(Qt::Horizontal, this);
     animationSlider->setTickInterval(2000);
     animationSlider->setTickPosition(QSlider::TicksBelow);
+    animationSlider->setSingleStep(400);
+    animationSlider->setPageStep(2000);
 
     animationBar->addAction(startAction);
     animationBar->addAction(pauseAction);
