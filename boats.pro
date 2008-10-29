@@ -3,20 +3,22 @@ TARGET = boats
 
 CONFIG += qt warn_on
 
+INCLUDEPATH += graphicsview
+
 HEADERS = \
 	model/boatmodel.h \
 	model/markmodel.h \
 	model/positionmodel.h \
 	model/situationmodel.h \
 	model/trackmodel.h \
-	boat.h \
-	boatanimation.h \
+	graphicsview/boat.h \
+	graphicsview/boatanimation.h \
+	graphicsview/mark.h \
+	graphicsview/situationscene.h \
+	graphicsview/track.h \
 	mainwindow.h \
-	mark.h \
-	situationscene.h \
 	situationwidget.h \
 	trace.h \
-	track.h \
 	undocommands.h \
 	xmlsituationreader.h \
 	xmlsituationwriter.h
@@ -27,15 +29,15 @@ SOURCES = \
 	model/positionmodel.cpp \
 	model/situationmodel.cpp \
 	model/trackmodel.cpp \
-	boat.cpp \
-	boatanimation.cpp \
+	graphicsview/boat.cpp \
+	graphicsview/boatanimation.cpp \
+	graphicsview/mark.cpp \
+	graphicsview/situationscene.cpp \
+	graphicsview/track.cpp \
 	main.cpp \
 	mainwindow.cpp \
-	mark.cpp \
-	situationscene.cpp \
 	situationwidget.cpp \
 	trace.cpp \
-	track.cpp \
 	undocommands.cpp \
 	xmlsituationreader.cpp \
 	xmlsituationwriter.cpp
