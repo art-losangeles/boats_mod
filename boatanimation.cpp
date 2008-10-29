@@ -32,17 +32,24 @@ BoatAnimation::BoatAnimation(TrackModel *track, BoatGraphicsItem *boat, int maxS
     setRotationAt(0,m_track->boats()[0]->heading());
 
     for (int i=0; i< size; i++) {
+        qreal index;
         QPointF c1 = path.elementAt(i*3+1);
         QPointF c2 = path.elementAt(i*3+2);
         QPointF end = path.elementAt(i*3+3);
+        bool stalled = ((point == c1) || (c2 == end));
         QPainterPath curve(point);
         curve.cubicTo(c1,c2,end);
         qreal length = curve.length();
         for (int j=1; j<=4; j++) {
             qreal percent = curve.percentAtLength(length*j/4.0);
-            qreal index = (i*4.0+j)/(maxSize*4.0);
+            index = (i*4.0+j)/(maxSize*4.0);
             setPosAt(index, curve.pointAtPercent(percent));
-            setRotationAt(index, fmod(360+90-curve.angleAtPercent(percent),360.0));
+            if (!stalled) {
+                setRotationAt(index, fmod(360+90-curve.angleAtPercent(percent),360.0));
+            }
+        }
+        if (stalled) {
+            setRotationAt(index, fmod(m_track->boats()[i+1]->heading(),360.0));
         }
         point = end;
     }

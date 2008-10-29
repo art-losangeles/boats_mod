@@ -112,6 +112,7 @@ void TrackModel::changingTrack(TrackModel *track) {
         return;
     }
 
+    qreal layline = m_situation->laylineAngle() *M_PI /180;
     QPointF pos0(m_boats[0]->position());
     qreal heading0 = m_boats[0]->heading()  * M_PI /180;
 
@@ -121,10 +122,22 @@ void TrackModel::changingTrack(TrackModel *track) {
     while (boatI.hasNext()) {
         BoatModel *boat = boatI.next();
         QPointF pos1(boat->position());
+
+        qreal min = 60;
+        QPointF c1(pos0);
+        if ((heading0 >= layline) &&
+            (heading0 <= (2*M_PI - layline))) {
+            c1 += QPointF(min*sin(heading0),-min*cos(heading0));
+        }
+
         qreal heading1 = (boat->heading()) * M_PI /180;
-        path.cubicTo(pos0 + QPointF(60*sin(heading0),-60*cos(heading0)),
-                        pos1 - QPointF(60*sin(heading1),-60*cos(heading1)),
-                        pos1);
+        QPointF c2(pos1);
+        if ((heading1 >= layline) &&
+            (heading1 <= (2*M_PI - layline))) {
+            c2 -= QPointF(min*sin(heading1),-min*cos(heading1));
+        }
+
+        path.cubicTo(c1, c2, pos1);
         pos0 = pos1;
         heading0 = heading1;
     }
