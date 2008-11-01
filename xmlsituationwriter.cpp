@@ -28,8 +28,8 @@ bool XmlSituationWriter::writeFile(QIODevice *device) {
     setDevice(device);
 
     writeStartDocument();
-    writeDTD("<!DOCTYPE xmlsituation>");
-    writeStartElement("xmlsituation");
+    writeDTD("<!DOCTYPE xmlscenario>");
+    writeStartElement("xmlscenario");
     writeAttribute("version", "1.0");
     if (!m_situation->title().isEmpty()) {
         writeTextElement("title", m_situation->title());

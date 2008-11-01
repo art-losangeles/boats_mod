@@ -34,10 +34,10 @@ bool XmlSituationReader::read(QIODevice *device) {
         readNext();
 
         if (isStartElement()) {
-            if (name() == "xmlsituation" && attributes().value("version") == "1.0")
+            if (name() == "xmlscenario" && attributes().value("version") == "1.0")
                 readSituation();
             else
-                raiseError(QObject::tr("The file is not an xmlsituation version 1.0 file."));
+                raiseError(QObject::tr("The file is not an xmlscenario version 1.0 file."));
         }
     }
     return !error();

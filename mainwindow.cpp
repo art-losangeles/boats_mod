@@ -362,9 +362,9 @@ void MainWindow::newFile() {
 
 void MainWindow::openFile() {
     QString fileName =
-             QFileDialog::getOpenFileName(this, tr("Open Situation File"),
+             QFileDialog::getOpenFileName(this, tr("Open Scenario File"),
                                           QDir::currentPath(),
-                                          tr("xmlsituation Files (*.xboat *.xml)"));
+                                          tr("xmlscenario Files (*.xbs)"));
     if (fileName.isEmpty())
         return;
 
@@ -373,7 +373,7 @@ void MainWindow::openFile() {
 
     QFile file(fileName);
     if (!file.open(QFile::ReadOnly | QFile::Text)) {
-        QMessageBox::warning(this, tr("Open Situation File"),
+        QMessageBox::warning(this, tr("Open Scenario File"),
                              tr("Cannot read file %1:\n%2.")
                              .arg(fileName)
                              .arg(file.errorString()));
@@ -382,7 +382,7 @@ void MainWindow::openFile() {
 
     XmlSituationReader reader(situation);
     if (!reader.read(&file)) {
-        QMessageBox::warning(this, tr("Open Situation file"),
+        QMessageBox::warning(this, tr("Open Scenario file"),
                              tr("Parse error in file %1 at line %2, column %3:\n%4")
                              .arg(fileName)
                              .arg(reader.lineNumber())
@@ -398,7 +398,7 @@ void MainWindow::openFile() {
 bool MainWindow::saveFile(QString &fileName) {
     QFile file(fileName);
     if (!file.open(QFile::WriteOnly | QFile::Text)) {
-        QMessageBox::warning(this, tr("Save Situation"),
+        QMessageBox::warning(this, tr("Save Scenario"),
                             tr("Cannot write file %1:\n%2.")
                             .arg(fileName)
                             .arg(file.errorString()));
@@ -420,11 +420,11 @@ bool MainWindow::saveFile() {
 }
 
 bool MainWindow::saveAs() {
-    QString defaultFile = QDateTime::currentDateTime().toString("yyMMdd") + ".xboat";
+    QString defaultFile = QDateTime::currentDateTime().toString("yyMMdd") + ".xbs";
     QString fileName =
-            QFileDialog::getSaveFileName(this, tr("Save Situation"),
+            QFileDialog::getSaveFileName(this, tr("Save Scenario"),
                                          defaultFile,
-                                         tr("Situation Files (*.xboat *.xml)"));
+                                         tr("xmlscenario Files (*.xbs)"));
     if (fileName.isEmpty()) {
         return false;
     }
