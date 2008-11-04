@@ -15,6 +15,7 @@ HEADERS = \
 	graphicsview/boatanimation.h \
 	graphicsview/mark.h \
 	graphicsview/situationscene.h \
+	graphicsview/situationview.h \
 	graphicsview/track.h \
 	mainwindow.h \
 	situationwidget.h \
@@ -33,6 +34,7 @@ SOURCES = \
 	graphicsview/boatanimation.cpp \
 	graphicsview/mark.cpp \
 	graphicsview/situationscene.cpp \
+	graphicsview/situationview.cpp \
 	graphicsview/track.cpp \
 	main.cpp \
 	mainwindow.cpp \

@@ -16,6 +16,7 @@
 
 #include "situationwidget.h"
 #include "situationscene.h"
+#include "situationview.h"
 
 class SituationModel;
 class TrackWidget;
@@ -58,7 +59,7 @@ class MainWindow : public QMainWindow {
 
         SituationModel *situation;
         SituationScene *scene;
-        QGraphicsView *view;
+        SituationView *view;
         QMenuBar *menubar;
         QToolBar *toolbar;
         QToolBar *animationBar;

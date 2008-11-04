@@ -26,6 +26,7 @@
 
 #include "situationwidget.h"
 #include "situationscene.h"
+#include "situationview.h"
 
 extern int debugLevel;
 
@@ -33,7 +34,7 @@ MainWindow::MainWindow(QWidget *parent)
         : QMainWindow(parent),
         situation(new SituationModel(this)),
         scene(new SituationScene(situation)),
-        view(new QGraphicsView(scene)),
+        view(new SituationView(scene)),
         menubar(new QMenuBar(this)),
         toolbar(new QToolBar(this)),
         animationBar(new QToolBar(this)),
@@ -48,12 +49,6 @@ MainWindow::MainWindow(QWidget *parent)
     // Scene
     connect(scene, SIGNAL(stateChanged(SceneState)),
             this, SLOT(changeState(SceneState)));
-
-    // View
-    view->setRenderHint(QPainter::Antialiasing);
-    view->setViewportUpdateMode(QGraphicsView::SmartViewportUpdate);
-    view->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-    setCentralWidget(view);
 
     // Timeline
     timeline->setCurveShape(QTimeLine::LinearCurve);
@@ -71,6 +66,13 @@ MainWindow::MainWindow(QWidget *parent)
     // Docks
     createDocks();
     addDockWidget(Qt::LeftDockWidgetArea, situationDock);
+
+    // View
+    view->setRenderHints( QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
+    view->setViewportUpdateMode(QGraphicsView::SmartViewportUpdate);
+    view->setResizeAnchor(QGraphicsView::AnchorViewCenter);
+    setCentralWidget(view);
+    view->setFocus();
 
     readSettings();
     setCurrentFile("");
@@ -357,6 +359,8 @@ void MainWindow::newFile() {
         situationWidget->unSetSituation();
         situationWidget->setSituation(situation);
         setCurrentFile("");
+        view->centerOn(0,0);
+        view->resetMatrix();
     }
 }
 
@@ -391,6 +395,7 @@ void MainWindow::openFile() {
     } else {
         situationWidget->update();
         setCurrentFile(fileName);
+        view->centerOn(scene->itemsBoundingRect().center());
         statusbar->showMessage(tr("File loaded"), 2000);
     }
 }
