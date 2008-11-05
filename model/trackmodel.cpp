@@ -112,9 +112,8 @@ void TrackModel::changingTrack(TrackModel *track) {
         return;
     }
 
-    qreal layline = m_situation->laylineAngle() *M_PI /180;
     QPointF pos0(m_boats[0]->position());
-    qreal heading0 = m_boats[0]->heading()  * M_PI /180;
+    qreal heading0 = m_boats[0]->heading();
 
     path.moveTo(pos0);
     QListIterator<BoatModel*> boatI(m_boats);
@@ -122,19 +121,30 @@ void TrackModel::changingTrack(TrackModel *track) {
     while (boatI.hasNext()) {
         BoatModel *boat = boatI.next();
         QPointF pos1(boat->position());
+        qreal heading1 = boat->heading();
 
-        qreal min = 60;
+        // distance and angle between positions
+        QPointF delta = pos1-pos0;
+        qreal dist = sqrt(pow(delta.x(),2) + pow(delta.y(),2));
+        qreal theta = fmod(atan2 (delta.x(), -delta.y()) *180/M_PI +360, 360);
+
+        // empirical factor for control point distance
+        qreal factor = dist*2/5;
+
         QPointF c1(pos0);
-        if ((heading0 >= layline) &&
-            (heading0 <= (2*M_PI - layline))) {
-            c1 += QPointF(min*sin(heading0),-min*cos(heading0));
+        // stalled condition when next boat in the back
+        qreal angle0 = fmod(theta - heading0 +360, 360);
+        bool stalled0 = ((angle0 >= 90) && (angle0 <= 270));
+        if (!stalled0) {
+            c1 += QPointF(factor*sin(heading0 * M_PI /180), -factor*cos(heading0 * M_PI /180));
         }
 
-        qreal heading1 = (boat->heading()) * M_PI /180;
         QPointF c2(pos1);
-        if ((heading1 >= layline) &&
-            (heading1 <= (2*M_PI - layline))) {
-            c2 -= QPointF(min*sin(heading1),-min*cos(heading1));
+        // stalled condition when previous boat in the back
+        qreal angle1 = fmod(theta- heading1 +360, 360);
+        bool stalled1 = ((angle1 >= 90) && (angle1 <= 270)) ;
+        if (!stalled1) {
+            c2 -= QPointF(factor*sin(heading1 * M_PI /180), -factor*cos(heading1 * M_PI /180));
         }
 
         path.cubicTo(c1, c2, pos1);

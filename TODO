@@ -1,5 +1,4 @@
 Necessary:
-- better stall detection
 - track table
 - optimise mousemove
 - overlap line
@@ -14,6 +13,8 @@ Wishlist:
 - tabs for multiple situations
 
 Done:
+- better stall detection
+- zoom in view
 - case description with rule & comments
 - playable animation
 - undocommand for layline and boat series
