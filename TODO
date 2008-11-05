@@ -1,9 +1,9 @@
 Necessary:
+- undo for texts
 - track table
 - optimise mousemove
 - overlap line
 - zone at marks
-- animation replay
 - more boat shapes
 
 Wishlist:
@@ -13,6 +13,7 @@ Wishlist:
 - tabs for multiple situations
 
 Done:
+- animation replay
 - better stall detection
 - zoom in view
 - case description with rule & comments

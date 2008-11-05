@@ -42,6 +42,7 @@ class MainWindow : public QMainWindow {
         void play();
         void pause(bool pause);
         void stop();
+        void loop(bool loop);
         void changeAnimationState(QTimeLine::State newState);
         void about();
 
@@ -85,6 +86,7 @@ class MainWindow : public QMainWindow {
         QAction *startAction;
         QAction *pauseAction;
         QAction *stopAction;
+        QAction *loopAction;
 
         QAction *undoAction;
         QAction *redoAction;

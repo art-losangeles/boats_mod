@@ -162,6 +162,13 @@ void MainWindow::createActions() {
     connect(stopAction, SIGNAL(triggered()),
             this, SLOT(stop()));
 
+    loopAction = new QAction(QIcon(":/images/player_loop.png"), tr("&Loop"), this);
+    loopAction->setShortcut(tr("L"));
+    loopAction->setEnabled(false);
+    loopAction->setCheckable(true);
+    connect(loopAction, SIGNAL(toggled(bool)),
+            this, SLOT(loop(bool)));
+
     undoAction = new QAction(QIcon(":/images/undo.png"), tr("&Undo"), this);
     undoAction->setShortcut(tr("Ctrl+Z"));
     undoAction->setEnabled(false);
@@ -266,6 +273,7 @@ void MainWindow::createMenus() {
     animationMenu->addAction(startAction);
     animationMenu->addAction(pauseAction);
     animationMenu->addAction(stopAction);
+    animationMenu->addAction(loopAction);
 
     menubar->addAction(aboutAction);
 
@@ -294,6 +302,7 @@ void MainWindow::createMenus() {
     animationBar->addAction(startAction);
     animationBar->addAction(pauseAction);
     animationBar->addAction(stopAction);
+    animationBar->addAction(loopAction);
     animationBar->addSeparator();
     animationBar->addWidget(animationSlider);
     connect(timeline, SIGNAL(frameChanged(int)),
@@ -497,6 +506,7 @@ void MainWindow::animate(bool state) {
             animationSlider->setEnabled(true);
             timeline->setFrameRange(0,timeline->duration());
             startAction->setEnabled(true);
+            loopAction->setEnabled(true);
         }
     } else {
         if (scene->state() == ANIMATE) {
@@ -507,6 +517,7 @@ void MainWindow::animate(bool state) {
         timeline->stop();
         startAction->setEnabled(false);
         stopAction->setEnabled(false);
+        loopAction->setEnabled(false);
     }
 }
 
@@ -536,6 +547,16 @@ void MainWindow::stop() {
     timeline->stop();
     timeline->setCurrentTime(0);
     animationSlider->blockSignals(false);
+}
+
+void MainWindow::loop(bool loop) {
+    if (loop) {
+        if (debugLevel & 1 << ANIMATION) std::cout << "loop play" << std::endl;
+        timeline->setLoopCount(0);
+    } else {
+        if (debugLevel & 1 << ANIMATION) std::cout << "single play" << std::endl;
+        timeline->setLoopCount(1);
+    }
 }
 
 void MainWindow::changeAnimationState(QTimeLine::State newState) {
