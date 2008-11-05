@@ -289,6 +289,7 @@ void MainWindow::createMenus() {
     animationSlider->setTickPosition(QSlider::TicksBelow);
     animationSlider->setSingleStep(400);
     animationSlider->setPageStep(2000);
+    animationSlider->setEnabled(false);
 
     animationBar->addAction(startAction);
     animationBar->addAction(pauseAction);
@@ -493,6 +494,7 @@ void MainWindow::animate(bool state) {
             scene->setState(ANIMATE);
             scene->setAnimation(timeline);
             animationSlider->setRange(0,timeline->duration());
+            animationSlider->setEnabled(true);
             timeline->setFrameRange(0,timeline->duration());
             startAction->setEnabled(true);
         }
@@ -501,6 +503,7 @@ void MainWindow::animate(bool state) {
             scene->setState(NO_STATE);
         }
         scene->unSetAnimation();
+        animationSlider->setEnabled(false);
         timeline->stop();
         startAction->setEnabled(false);
         stopAction->setEnabled(false);
