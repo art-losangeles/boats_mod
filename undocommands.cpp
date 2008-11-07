@@ -22,6 +22,70 @@
 
 extern int debugLevel;
 
+// Set Title
+SetTitleUndoCommand::SetTitleUndoCommand(SituationModel* situation, QString title, QUndoCommand *parent)
+        : QUndoCommand(parent),
+        m_situation(situation),
+        m_oldTitle(situation->title()),
+        m_newTitle(title) {
+    if (debugLevel & 1 << COMMAND) std::cout << "new settitleundocommand" << std::endl;
+}
+
+SetTitleUndoCommand::~SetTitleUndoCommand() {
+    if (debugLevel & 1 << COMMAND) std::cout << "end settitleundocommand" << std::endl;
+}
+
+void SetTitleUndoCommand::undo() {
+    if (debugLevel & 1 << COMMAND) std::cout << "undo settitleundocommand"<< std::endl;
+    m_situation->setTitle(m_oldTitle, true);
+}
+
+void SetTitleUndoCommand::redo() {
+    if (debugLevel & 1 << COMMAND) std::cout << "redo settitleundocommand" << std::endl;
+    m_situation->setTitle(m_newTitle, true);
+}
+
+bool SetTitleUndoCommand::mergeWith(const QUndoCommand *command) {
+    const SetTitleUndoCommand *settitleCommand = static_cast<const SetTitleUndoCommand*>(command);
+    if (m_situation != settitleCommand->m_situation)
+        return false;
+
+    m_newTitle = settitleCommand->m_newTitle;
+    return true;
+}
+
+// Set Rules
+SetRulesUndoCommand::SetRulesUndoCommand(SituationModel* situation, QString rules, QUndoCommand *parent)
+        : QUndoCommand(parent),
+        m_situation(situation),
+        m_oldRules(situation->rules()),
+        m_newRules(rules) {
+    if (debugLevel & 1 << COMMAND) std::cout << "new setrulesundocommand" << std::endl;
+}
+
+SetRulesUndoCommand::~SetRulesUndoCommand() {
+    if (debugLevel & 1 << COMMAND) std::cout << "end setrulesundocommand" << std::endl;
+}
+
+void SetRulesUndoCommand::undo() {
+    if (debugLevel & 1 << COMMAND) std::cout << "undo setrulesundocommand"<< std::endl;
+    m_situation->setRules(m_oldRules, true);
+}
+
+void SetRulesUndoCommand::redo() {
+    if (debugLevel & 1 << COMMAND) std::cout << "redo setrulesundocommand" << std::endl;
+    m_situation->setRules(m_newRules, true);
+}
+
+bool SetRulesUndoCommand::mergeWith(const QUndoCommand *command) {
+    const SetRulesUndoCommand *setrulesCommand = static_cast<const SetRulesUndoCommand*>(command);
+    if (m_situation != setrulesCommand->m_situation)
+        return false;
+
+    m_newRules = setrulesCommand->m_newRules;
+    return true;
+}
+
 // Set Layline
 SetLaylineUndoCommand::SetLaylineUndoCommand(SituationModel* situation, const int angle, QUndoCommand *parent)
         : QUndoCommand(parent),
@@ -83,6 +147,70 @@ bool SetSeriesUndoCommand::mergeWith(const QUndoCommand *command) {
         return false;
 
     m_newSeries = setseriesCommand->m_newSeries;
+    return true;
+}
+
+// Set Abstract
+SetAbstractUndoCommand::SetAbstractUndoCommand(SituationModel* situation, QString abstract, QUndoCommand *parent)
+        : QUndoCommand(parent),
+        m_situation(situation),
+        m_oldAbstract(situation->abstract()),
+        m_newAbstract(abstract) {
+    if (debugLevel & 1 << COMMAND) std::cout << "new setabstractundocommand" << std::endl;
+}
+
+SetAbstractUndoCommand::~SetAbstractUndoCommand() {
+    if (debugLevel & 1 << COMMAND) std::cout << "end setabstractundocommand" << std::endl;
+}
+
+void SetAbstractUndoCommand::undo() {
+    if (debugLevel & 1 << COMMAND) std::cout << "undo setabstractundocommand"<< std::endl;
+    m_situation->setAbstract(m_oldAbstract, true);
+}
+
+void SetAbstractUndoCommand::redo() {
+    if (debugLevel & 1 << COMMAND) std::cout << "redo setabstractundocommand" << std::endl;
+    m_situation->setAbstract(m_newAbstract, true);
+}
+
+bool SetAbstractUndoCommand::mergeWith(const QUndoCommand *command) {
+    const SetAbstractUndoCommand *setabstractCommand = static_cast<const SetAbstractUndoCommand*>(command);
+    if (m_situation != setabstractCommand->m_situation)
+        return false;
+
+    m_newAbstract = setabstractCommand->m_newAbstract;
+    return true;
+}
+
+// Set Description
+SetDescriptionUndoCommand::SetDescriptionUndoCommand(SituationModel* situation, QString description, QUndoCommand *parent)
+        : QUndoCommand(parent),
+        m_situation(situation),
+        m_oldDescription(situation->description()),
+        m_newDescription(description) {
+    if (debugLevel & 1 << COMMAND) std::cout << "new setdescriptionundocommand" << std::endl;
+}
+
+SetDescriptionUndoCommand::~SetDescriptionUndoCommand() {
+    if (debugLevel & 1 << COMMAND) std::cout << "end setdescriptionundocommand" << std::endl;
+}
+
+void SetDescriptionUndoCommand::undo() {
+    if (debugLevel & 1 << COMMAND) std::cout << "undo setdescriptionundocommand"<< std::endl;
+    m_situation->setDescription(m_oldDescription, true);
+}
+
+void SetDescriptionUndoCommand::redo() {
+    if (debugLevel & 1 << COMMAND) std::cout << "redo setdescriptionundocommand" << std::endl;
+    m_situation->setDescription(m_newDescription, true);
+}
+
+bool SetDescriptionUndoCommand::mergeWith(const QUndoCommand *command) {
+    const SetDescriptionUndoCommand *setdescriptionCommand = static_cast<const SetDescriptionUndoCommand*>(command);
+    if (m_situation != setdescriptionCommand->m_situation)
+        return false;
+
+    m_newDescription = setdescriptionCommand->m_newDescription;
     return true;
 }
 

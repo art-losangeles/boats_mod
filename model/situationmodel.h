@@ -33,12 +33,16 @@ class SituationModel : public QObject {
         void setSituationSeries(const int theValue, bool update = false);
 
         QString title() const { return m_title; };
+        void setTitle(const QString theValue, bool update = false);
 
         QString rules() const { return m_rules; };
+        void setRules(const QString theValue, bool update = false);
 
         QString abstract() const { return m_abstract; };
+        void setAbstract(const QString theValue, bool update = false);
 
         QString description() const { return m_description; };
+        void setDescription(const QString theValue, bool update = false);
 
         int size() const { return m_tracks.size();};
         const QList<TrackModel*> tracks() const { return m_tracks; };
@@ -63,16 +67,16 @@ class SituationModel : public QObject {
         void trackRemoved(TrackModel *track);
         void boatAdded(BoatModel *boat);
         void boatRemoved(BoatModel *boat);
+        void titleChanged(const QString title);
+        void rulesChanged(const QString rules);
         void laylineChanged(const int angle);
         void seriesChanged(const int series);
+        void abstractChanged(const QString abstract);
+        void descriptionChanged(const QString description);
         void markAdded(MarkModel *mark);
         void markRemoved(MarkModel *mark);
 
     public slots:
-        void setTitle(const QString theValue) { m_title = theValue; };
-        void setRules(const QString theValue) { m_rules = theValue; };
-        void setAbstract(const QString theValue) { m_abstract = theValue; };
-        void setDescription(const QString theValue) { m_description = theValue; };
         void addTrack(TrackModel *track);
         void deleteTrack(TrackModel *track);
         void addMark(MarkModel *mark, int order = 0);

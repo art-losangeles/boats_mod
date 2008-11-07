@@ -29,11 +29,11 @@ SituationWidget::SituationWidget(QWidget *parent)
     scenarioGroup = new QGroupBox(tr("Scenario"),this);
     scenarioForm = new QFormLayout(scenarioGroup);
 
-    title = new QLineEdit(scenarioGroup);
-    scenarioForm->addRow(new QLabel(tr("Title"),scenarioGroup),title);
+    titleEdit = new QLineEdit(scenarioGroup);
+    scenarioForm->addRow(new QLabel(tr("Title"),scenarioGroup),titleEdit);
 
-    rules = new QLineEdit(scenarioGroup);
-    scenarioForm->addRow(new QLabel(tr("Rules"),scenarioGroup),rules);
+    rulesEdit = new QLineEdit(scenarioGroup);
+    scenarioForm->addRow(new QLabel(tr("Rules"),scenarioGroup),rulesEdit);
 
     seriesCombo = new QComboBox(scenarioGroup);
     scenarioForm->addRow(new QLabel(tr("Series"),scenarioGroup),seriesCombo);
@@ -49,16 +49,18 @@ SituationWidget::SituationWidget(QWidget *parent)
     QLabel *abstractLabel = new QLabel(tr("Abstract"),descriptionGroup);
     descriptionLayout->addWidget(abstractLabel,0,0);
 
-    abstract = new QTextEdit(descriptionGroup);
-    abstract->setAcceptRichText(false);
-    descriptionLayout->addWidget(abstract,1,0);
+    abstractEdit = new QPlainTextEdit(descriptionGroup);
+    abstractEdit->setUndoRedoEnabled(false);
+    abstractEdit->setContextMenuPolicy(Qt::NoContextMenu);
+    descriptionLayout->addWidget(abstractEdit,1,0);
 
     QLabel *descriptionLabel = new QLabel(tr("Description"),descriptionGroup);
     descriptionLayout->addWidget(descriptionLabel,2,0);
 
-    description = new QTextEdit(descriptionGroup);
-    description->setAcceptRichText(false);
-    descriptionLayout->addWidget(description,3,0);
+    descriptionEdit = new QPlainTextEdit(descriptionGroup);
+    descriptionEdit->setUndoRedoEnabled(false);
+    descriptionEdit->setContextMenuPolicy(Qt::NoContextMenu);
+    descriptionLayout->addWidget(descriptionEdit,3,0);
 
     // last bricks
     situationLayout = new QVBoxLayout(this);
@@ -69,12 +71,12 @@ SituationWidget::SituationWidget(QWidget *parent)
 
 void SituationWidget::update() {
     if (m_situation) {
-        title->setText(m_situation->title());
-        rules->setText(m_situation->rules());
+        titleEdit->setText(m_situation->title());
+        rulesEdit->setText(m_situation->rules());
         seriesCombo->setCurrentIndex(m_situation->situationSeries());
         laylineSpin->setValue(m_situation->laylineAngle());
-        abstract->setPlainText(m_situation->abstract());
-        description->setPlainText(m_situation->description());
+        abstractEdit->setPlainText(m_situation->abstract());
+        descriptionEdit->setPlainText(m_situation->description());
     }
 }
 
@@ -85,11 +87,15 @@ void SituationWidget::setSituation(SituationModel *situation) {
         update();
 
         // Scenario Group
-        connect (title, SIGNAL(textEdited(QString)),
-                situation, SLOT(setTitle(QString)));
+        connect (titleEdit, SIGNAL(textEdited(QString)),
+                this, SLOT(setTitle(QString)));
+        connect (situation, SIGNAL(titleChanged(QString)),
+                titleEdit, SLOT(setText(QString)));
 
-        connect (rules, SIGNAL(textEdited(QString)),
-                situation, SLOT(setRules(QString)));
+        connect (rulesEdit, SIGNAL(textEdited(QString)),
+                this, SLOT(setRules(QString)));
+        connect (situation, SIGNAL(rulesChanged(QString)),
+                rulesEdit, SLOT(setText(QString)));
 
         seriesCombo->addItems(situation->seriesNames());
         connect (seriesCombo, SIGNAL(currentIndexChanged(int)),
@@ -106,22 +112,26 @@ void SituationWidget::setSituation(SituationModel *situation) {
 
 
         // Description Group
-        connect(abstract->document(), SIGNAL(contentsChanged()),
+        connect(abstractEdit->document(), SIGNAL(contentsChanged()),
                 this, SLOT(setAbstract()));
+        connect(situation, SIGNAL(abstractChanged(const QString)),
+                this, SLOT(updateAbstract(const QString)));
 
-        connect(description->document(), SIGNAL(contentsChanged()),
+        connect(descriptionEdit->document(), SIGNAL(contentsChanged()),
                 this, SLOT(setDescription()));
+        connect(situation, SIGNAL(descriptionChanged(const QString)),
+                this, SLOT(updateDescription(const QString)));
     }
 }
 
 void SituationWidget::unSetSituation() {
 
     // Scenario Group
-    disconnect(title, 0, 0, 0);
-    title->clear();
+    disconnect(titleEdit, 0, 0, 0);
+    titleEdit->clear();
 
-    disconnect(rules, 0, 0, 0);
-    rules->clear();
+    disconnect(rulesEdit, 0, 0, 0);
+    rulesEdit->clear();
 
     disconnect(seriesCombo, 0, 0, 0);
     disconnect(m_situation, 0, seriesCombo, 0);
@@ -133,12 +143,29 @@ void SituationWidget::unSetSituation() {
     laylineSpin->setValue(40);
 
     // Description Group
-    disconnect(abstract, 0, 0, 0);
-    abstract->clear();
-    disconnect(description, 0, 0, 0);
-    description->clear();
+    disconnect(m_situation, 0, this, 0);
+    disconnect(abstractEdit->document(), 0, 0, 0);
+    abstractEdit->clear();
+    disconnect(descriptionEdit->document(), 0, 0, 0);
+    descriptionEdit->clear();
 
     m_situation = 0;
+}
+
+void SituationWidget::setTitle(QString title) {
+    if (m_situation) {
+        if (title != m_situation->title()) {
+            m_situation->undoStack()->push(new SetTitleUndoCommand(m_situation, title));
+        }
+    }
+}
+
+void SituationWidget::setRules(QString rules) {
+    if (m_situation) {
+        if (rules != m_situation->rules()) {
+            m_situation->undoStack()->push(new SetRulesUndoCommand(m_situation, rules));
+        }
+    }
 }
 
 void SituationWidget::setLayline(int angle) {
@@ -159,14 +186,39 @@ void SituationWidget::setSeries(int series) {
 
 void SituationWidget::setAbstract() {
     if (m_situation) {
-        if (debugLevel & 1 << COMMAND) std::cout << "setting Abstract" << std::endl;
-        m_situation->setAbstract(abstract->document()->toPlainText());
+        if (abstractEdit->document()->toPlainText() != m_situation->abstract()) {
+            m_situation->undoStack()->push(new SetAbstractUndoCommand(m_situation, abstractEdit->document()->toPlainText()));
+        }
     }
 }
 
 void SituationWidget::setDescription() {
     if (m_situation) {
-        if (debugLevel & 1 << COMMAND) std::cout << "setting Description" << std::endl;
-        m_situation->setDescription(description->document()->toPlainText());
+        if (descriptionEdit->document()->toPlainText() != m_situation->description()) {
+            m_situation->undoStack()->push(new SetDescriptionUndoCommand(m_situation, descriptionEdit->document()->toPlainText()));
+        }
     }
 }
+
+void SituationWidget::updateAbstract(const QString abstract) {
+    if (m_situation) {
+        if (abstractEdit->document()->toPlainText() != abstract) {
+            disconnect(abstractEdit->document(), 0, 0, 0);
+            abstractEdit->document()->setPlainText(abstract);
+            connect(abstractEdit->document(), SIGNAL(contentsChanged()),
+                    this, SLOT(setAbstract()));
+        }
+    }
+}
+
+void SituationWidget::updateDescription(const QString description) {
+    if (m_situation) {
+        if (descriptionEdit->document()->toPlainText() != description) {
+            disconnect(descriptionEdit->document(), 0, 0, 0);
+            descriptionEdit->document()->setPlainText(description);
+            connect(descriptionEdit->document(), SIGNAL(contentsChanged()),
+                    this, SLOT(setDescription()));
+        }
+    }
+}
+

@@ -22,10 +22,46 @@ class BoatModel;
 class MarkModel;
 
 enum {
+    SET_TITLE,
+    SET_RULES,
     SET_LAYLINE,
     SET_SERIES,
+    SET_ABSTRACT,
+    SET_DESCRIPTION,
     MOVE_MODEL,
     HEADING_BOAT
+};
+
+class SetTitleUndoCommand : public QUndoCommand {
+
+    public:
+        SetTitleUndoCommand(SituationModel* situation, QString title, QUndoCommand *parent = 0);
+        ~SetTitleUndoCommand();
+        void undo();
+        void redo();
+        bool mergeWith(const QUndoCommand *command);
+        int id() const { return SET_TITLE; }
+
+    private:
+        SituationModel *m_situation;
+        QString m_oldTitle;
+        QString m_newTitle;
+};
+
+class SetRulesUndoCommand : public QUndoCommand {
+
+    public:
+        SetRulesUndoCommand(SituationModel* situation, QString rules, QUndoCommand *parent = 0);
+        ~SetRulesUndoCommand();
+        void undo();
+        void redo();
+        bool mergeWith(const QUndoCommand *command);
+        int id() const { return SET_RULES; }
+
+    private:
+        SituationModel *m_situation;
+        QString m_oldRules;
+        QString m_newRules;
 };
 
 class SetLaylineUndoCommand : public QUndoCommand {
@@ -58,6 +94,38 @@ class SetSeriesUndoCommand : public QUndoCommand {
         SituationModel *m_situation;
         int m_oldSeries;
         int m_newSeries;
+};
+
+class SetAbstractUndoCommand : public QUndoCommand {
+
+    public:
+        SetAbstractUndoCommand(SituationModel* situation, QString abstract, QUndoCommand *parent = 0);
+        ~SetAbstractUndoCommand();
+        void undo();
+        void redo();
+        bool mergeWith(const QUndoCommand *command);
+        int id() const { return SET_ABSTRACT; }
+
+    private:
+        SituationModel *m_situation;
+        QString m_oldAbstract;
+        QString m_newAbstract;
+};
+
+class SetDescriptionUndoCommand : public QUndoCommand {
+
+    public:
+        SetDescriptionUndoCommand(SituationModel* situation, QString description, QUndoCommand *parent = 0);
+        ~SetDescriptionUndoCommand();
+        void undo();
+        void redo();
+        bool mergeWith(const QUndoCommand *command);
+        int id() const { return SET_DESCRIPTION; }
+
+    private:
+        SituationModel *m_situation;
+        QString m_oldDescription;
+        QString m_newDescription;
 };
 
 class AddTrackUndoCommand : public QUndoCommand {

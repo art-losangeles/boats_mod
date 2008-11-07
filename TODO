@@ -1,5 +1,4 @@
 Necessary:
-- undo for texts
 - track table
 - optimise mousemove
 - overlap line
@@ -13,6 +12,7 @@ Wishlist:
 - tabs for multiple situations
 
 Done:
+- undo for texts
 - animation replay
 - better stall detection
 - zoom in view

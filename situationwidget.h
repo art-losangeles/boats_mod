@@ -27,24 +27,32 @@ class SituationWidget : public QWidget {
     public slots:
         void setSituation(SituationModel *situation);
         void unSetSituation();
+
+        // set the model from widgets
+        void setTitle(QString title);
+        void setRules(QString rules);
         void setLayline(int angle);
         void setSeries(int series);
         void setAbstract();
         void setDescription();
 
+        // set the widget from the model
+        void updateAbstract(const QString abstract);
+        void updateDescription(const QString description);
+
     private:
         SituationModel *m_situation;
 
         QGroupBox *scenarioGroup;
-        QLineEdit *title;
-        QLineEdit *rules;
+        QLineEdit *titleEdit;
+        QLineEdit *rulesEdit;
         QComboBox *seriesCombo;
         QSpinBox *laylineSpin;
         QFormLayout *scenarioForm;
 
         QGroupBox *descriptionGroup;
-        QTextEdit *abstract;
-        QTextEdit *description;
+        QPlainTextEdit *abstractEdit;
+        QPlainTextEdit *descriptionEdit;
         QGridLayout *descriptionLayout;
 
         QVBoxLayout *situationLayout;

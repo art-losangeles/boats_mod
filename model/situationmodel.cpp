@@ -34,6 +34,24 @@ SituationModel::~SituationModel() {
     if (debugLevel & 1 << MODEL) std::cout << "end situation " << this << std::endl;
 }
 
+void SituationModel::setTitle(const QString theValue, bool update) {
+    if (theValue != m_title) {
+        if (debugLevel & 1 << MODEL) std::cout << "Setting Title " << theValue.toStdString() << std::endl;
+        m_title = theValue;
+        if (update)
+            emit titleChanged(m_title);
+    }
+}
+
+void SituationModel::setRules(const QString theValue, bool update) {
+    if (theValue != m_rules) {
+        if (debugLevel & 1 << MODEL) std::cout << "Setting Rules " << theValue.toStdString() << std::endl;
+       m_rules = theValue;
+        if (update)
+            emit rulesChanged(m_rules);
+    }
+}
+
 void SituationModel::setLaylineAngle(const int theValue, bool update) {
     if (theValue != m_laylineAngle) {
         if (debugLevel & 1 << MODEL) std::cout << "Situation " << this
@@ -54,6 +72,24 @@ void SituationModel::setSituationSeries(const int theValue, bool update) {
         }
         if (update)
             emit seriesChanged(m_situationSeries);
+    }
+}
+
+void SituationModel::setAbstract(const QString theValue, bool update) {
+    if (theValue != m_abstract) {
+        if (debugLevel & 1 << MODEL) std::cout << "Setting Abstract " << theValue.toStdString() << std::endl;
+        m_abstract = theValue;
+        if (update)
+            emit abstractChanged(m_abstract);
+    }
+}
+
+void SituationModel::setDescription(const QString theValue, bool update) {
+    if (theValue != m_description) {
+        if (debugLevel & 1 << MODEL) std::cout << "Setting Description " << theValue.toStdString() << std::endl;
+        m_description = theValue;
+        if (update)
+            emit descriptionChanged(m_description);
     }
 }
 
