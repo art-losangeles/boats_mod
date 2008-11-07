@@ -103,6 +103,11 @@ void MainWindow::createActions() {
     connect(saveAsAction, SIGNAL(triggered()),
             this, SLOT(saveAs()));
 
+    exportImageAction = new QAction(QIcon(":/images/export.png"), tr("Export &Image"), this);
+    exportImageAction->setShortcut(tr("Ctrl+E"));
+    connect(exportImageAction, SIGNAL(triggered()),
+            this, SLOT(exportImage()));
+
     exitAction = new QAction(tr("E&xit"), this);
     exitAction->setShortcut(tr("Ctrl+Q"));
     exitAction->setStatusTip(tr("Exit the application"));
@@ -253,6 +258,8 @@ void MainWindow::createMenus() {
     fileMenu->addAction(saveFileAction);
     fileMenu->addAction(saveAsAction);
     fileMenu->addSeparator();
+    fileMenu->addAction(exportImageAction);
+    fileMenu->addSeparator();
     fileMenu->addAction(exitAction);
 
     trackMenu = menubar->addMenu(tr("&Edit"));
@@ -281,6 +288,7 @@ void MainWindow::createMenus() {
     toolbar->addAction(openFileAction);
     toolbar->addAction(saveFileAction);
     toolbar->addAction(saveAsAction);
+    toolbar->addAction(exportImageAction);
     toolbar->addSeparator();
     toolbar->addAction(undoAction);
     toolbar->addAction(redoAction);
@@ -444,6 +452,34 @@ bool MainWindow::saveAs() {
         return false;
     }
     return saveFile(fileName);
+}
+
+void MainWindow::exportImage() {
+    QString defaultName(situation->fileName());
+    defaultName.chop(4);
+    defaultName.append(".png");
+    QList<QByteArray> formatsList = QImageWriter::supportedImageFormats();
+    QString formats;
+    for (int i=0; i<formatsList.size(); i++)
+        formats.append(formatsList[i].toUpper()).append(" Files (*.").append(formatsList[i]).append(");;");
+    QString fileName =
+            QFileDialog::getSaveFileName(this, tr("Save Scenario"),
+                                         defaultName,
+                                         formats);
+    if (fileName.isEmpty()) {
+        return;
+    }
+
+    QPixmap pixmap = view->screenShot();
+    QFile file(fileName);
+    if (!file.open(QFile::WriteOnly | QFile::Text)) {
+        QMessageBox::warning(this, tr("Export Image"),
+                            tr("Cannot write file %1:\n%2.")
+                            .arg(fileName)
+                            .arg(file.errorString()));
+        return;
+    }
+    pixmap.save(fileName);
 }
 
 void MainWindow::setCurrentFile(const QString &fileName) {

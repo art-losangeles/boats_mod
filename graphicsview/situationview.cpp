@@ -29,6 +29,15 @@ SituationView::SituationView(QGraphicsScene *scene, QWidget *parent)
 SituationView::~SituationView() {
 }
 
+QPixmap SituationView::screenShot() {
+    QPixmap pixmap(size());
+    pixmap.fill(Qt::white);
+    QPainter painter(&pixmap);
+    painter.setRenderHints( QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
+    render(&painter);
+    return pixmap;
+}
+
 void SituationView::wheelEvent(QWheelEvent *event) {
     if (debugLevel & 1 << VIEW) std::cout << "wheel event " << event->delta() << std::endl;
     setScale(event->delta() > 0);

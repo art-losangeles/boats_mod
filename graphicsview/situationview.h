@@ -20,6 +20,7 @@ class SituationView : public QGraphicsView {
         SituationView(QWidget *parent = 0);
         SituationView(QGraphicsScene *scene, QWidget *parent = 0);
         ~SituationView();
+        QPixmap screenShot();
 
     protected:
         void wheelEvent(QWheelEvent *event);

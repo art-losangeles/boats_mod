@@ -33,6 +33,7 @@ class MainWindow : public QMainWindow {
         void openFile();
         bool saveFile();
         bool saveAs();
+        void exportImage();
         void addTrack();
         void addBoat();
         void addMark();
@@ -74,6 +75,7 @@ class MainWindow : public QMainWindow {
         QAction *openFileAction;
         QAction *saveFileAction;
         QAction *saveAsAction;
+        QAction *exportImageAction;
         QAction *exitAction;
 
         QAction *addTrackAction;
