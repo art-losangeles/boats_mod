@@ -155,6 +155,7 @@ void XmlSituationReader::readBoat(SituationModel *situation, TrackModel *track) 
 void XmlSituationReader::readMark(SituationModel *situation) {
     QPointF pos;
     QColor color;
+    bool zone = false;
     QStringList discarded;
     while (!atEnd()) {
         readNext();
@@ -167,6 +168,8 @@ void XmlSituationReader::readMark(SituationModel *situation) {
                 pos.setY(readElementText().toFloat());
             else if (name() == "color")
                 color.setNamedColor(readElementText());
+            else if (name() == "zone")
+                zone = (readElementText() == "1");
             else
                 discarded.append(readUnknownElement());
         }
@@ -175,4 +178,5 @@ void XmlSituationReader::readMark(SituationModel *situation) {
     situation->undoStack()->push(command);
     MarkModel *mark = command->mark();
     mark->setColor(color,true);
+    mark->setZone(zone,true);
 }

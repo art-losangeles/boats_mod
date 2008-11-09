@@ -81,6 +81,7 @@ void XmlSituationWriter::writeMark(MarkModel *mark) {
     writeTextElement("x",QString::number(mark->position().x()));
     writeTextElement("y",QString::number(mark->position().y()));
     writeTextElement("color",mark->color().name());
+    writeTextElement("zone",QString::number(mark->zone()));
     foreach(QString discarded, mark->discardedXml())
         writeUnknownElement(discarded);
     writeEndElement();

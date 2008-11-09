@@ -27,6 +27,7 @@ MarkGraphicsItem::MarkGraphicsItem(MarkModel *mark, QGraphicsItem *parent)
         : QGraphicsItem(parent),
         m_mark(mark),
         m_color(mark->color()),
+        m_zone(mark->zone()),
         m_selected(false),
         m_order(mark->order()) {
     setFlag(QGraphicsItem::ItemIsMovable);
@@ -41,6 +42,8 @@ MarkGraphicsItem::MarkGraphicsItem(MarkModel *mark, QGraphicsItem *parent)
             this, SLOT(setOrder(int)));
     connect(mark, SIGNAL(colorChanged(QColor)),
             this, SLOT(setColor(QColor)));
+    connect(mark, SIGNAL(zoneChanged(bool)),
+            this, SLOT(setZone(bool)));
     connect(mark->situation(), SIGNAL(markRemoved(MarkModel*)),
             this, SLOT(deleteItem(MarkModel*)));
 }
@@ -69,6 +72,13 @@ void MarkGraphicsItem::setColor(QColor value) {
     }
 }
 
+void MarkGraphicsItem::setZone(bool value) {
+    if (m_zone != value) {
+        m_zone = value;
+        update();
+    }
+}
+
 void MarkGraphicsItem::deleteItem(MarkModel *mark) {
     if (mark == m_mark) {
         if (debugLevel & 1 << VIEW) std::cout << "deleting markGraphics for model" << m_mark << std::endl;
@@ -78,7 +88,7 @@ void MarkGraphicsItem::deleteItem(MarkModel *mark) {
 }
 
 QRectF MarkGraphicsItem::boundingRect() const {
-    return QRectF(-10, -10, 20, 20);
+    return QRectF(-240, -240, 480, 480);
 }
 
 QPainterPath MarkGraphicsItem::shape() const {
@@ -101,6 +111,11 @@ void MarkGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *
     QPointF point(0, 0);
     painter->drawEllipse(point,10,10);
     painter->drawText(QRectF(-10,-10,20,20),Qt::AlignCenter,QString::number(m_order));
+    if (m_zone) {
+        painter->setBrush(Qt::NoBrush);
+        painter->setPen(Qt::DashLine);
+        painter->drawEllipse(point,240,240);
+    }
 }
 
 int MarkGraphicsItem::type() const {

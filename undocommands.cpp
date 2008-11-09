@@ -407,6 +407,43 @@ void AddMarkUndoCommand::undo() {
     m_situation->deleteMark(m_mark);
 }
 
+// Zone Mark
+ZoneMarkUndoCommand::ZoneMarkUndoCommand(SituationModel *situation, QList<MarkModel*> &markList, QUndoCommand *parent)
+        : QUndoCommand(parent),
+        m_situation(situation),
+        m_markList(markList) {
+    if (debugLevel & 1 << COMMAND) std::cout << "new zonemarkundocommand" << std::endl;
+}
+
+ZoneMarkUndoCommand::~ZoneMarkUndoCommand() {
+    if (debugLevel & 1 << COMMAND) std::cout << "end zonemarkundocommand" << std::endl;
+}
+
+void ZoneMarkUndoCommand::undo() {
+    if (debugLevel & 1 << COMMAND) std::cout << "undo zonemarkundocommand" << std::endl;
+    for(int i=0; i< m_markList.size(); i++) {
+        MarkModel *mark = m_markList[i];
+        mark->setZone(!mark->zone(), true);
+    }
+}
+
+void ZoneMarkUndoCommand::redo() {
+    if (debugLevel & 1 << COMMAND) std::cout << "redo zonemarkundocommand" << std::endl;
+    for(int i=0; i< m_markList.size(); i++) {
+        MarkModel *mark = m_markList[i];
+        mark->setZone(!mark->zone(), true);
+    }
+}
+
+bool ZoneMarkUndoCommand::mergeWith(const QUndoCommand *command) {
+    const ZoneMarkUndoCommand *zoneCommand = static_cast<const ZoneMarkUndoCommand*>(command);
+    if (m_markList != zoneCommand->m_markList)
+        return false;
+    undo();
+    m_situation->undoStack()->setIndex(m_situation->undoStack()->index()-1);
+    return true;
+}
+
 // Delete Mark
 DeleteMarkUndoCommand::DeleteMarkUndoCommand(SituationModel* situation, MarkModel* mark, QUndoCommand *parent)
         : QUndoCommand(parent),
