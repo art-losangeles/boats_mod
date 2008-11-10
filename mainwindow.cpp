@@ -457,17 +457,25 @@ bool MainWindow::saveAs() {
 void MainWindow::exportImage() {
     QString defaultName(situation->fileName());
     defaultName.chop(4);
-    defaultName.append(".png");
     QList<QByteArray> formatsList = QImageWriter::supportedImageFormats();
     QString formats;
     for (int i=0; i<formatsList.size(); i++)
         formats.append(formatsList[i].toUpper()).append(" Files (*.").append(formatsList[i]).append(");;");
+    QString ext;
     QString fileName =
             QFileDialog::getSaveFileName(this, tr("Save Scenario"),
                                          defaultName,
-                                         formats);
+                                         formats,
+                                         &ext);
     if (fileName.isEmpty()) {
         return;
+    }
+
+    // if no provided extension or incorrect extension, use selected filter
+    int dotIndex = fileName.lastIndexOf(".");
+    QString newExt = fileName.right(fileName.size()-dotIndex-1);
+    if (!formatsList.contains(newExt.toAscii())) {
+        fileName.append(".").append(ext.left(ext.indexOf(' ')).toLower());
     }
 
     QPixmap pixmap = view->screenShot();
