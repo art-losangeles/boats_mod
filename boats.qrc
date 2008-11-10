@@ -1,5 +1,6 @@
  <!DOCTYPE RCC><RCC version="1.0">
  <qresource>
+     <file>locale/boats_fr.qm</file>
      <file>images/about.png</file>
      <file>images/animate.png</file>
      <file>images/addboat.png</file>

@@ -46,6 +46,8 @@ SOURCES = \
 
 RESOURCES = boats.qrc
 
+TRANSLATIONS = locale/boats_fr.ts
+
 MOC_DIR = .moc/
 
 OBJECTS_DIR = .obj/

@@ -26,6 +26,14 @@ int main(int argc, char *argv[]) {
 		debugLevel = arguments[i+1].toInt();
 		std::cout << "debug level set to " << debugLevel << std::endl;
 	}
+
+    // Locale and translation setup
+    QString locale = QLocale::system().name();
+
+    QTranslator translator;
+    translator.load(QString(":/locale/boats_") + locale);
+    app.installTranslator(&translator);
+
     // MainWindow
     MainWindow window;
     window.show();
