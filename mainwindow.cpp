@@ -86,7 +86,7 @@ void MainWindow::createActions() {
     connect(newFileAction, SIGNAL(triggered()),
             this, SLOT(newFile()));
 
-    openFileAction = new QAction(QIcon(":/images/fileopen.png"), tr("&Open File"), this);
+    openFileAction = new QAction(QIcon(":/images/fileopen.png"), tr("&Open File..."), this);
     openFileAction->setShortcut(tr("Ctrl+O"));
     connect(openFileAction, SIGNAL(triggered()),
             this, SLOT(openFile()));
@@ -103,7 +103,7 @@ void MainWindow::createActions() {
     connect(saveAsAction, SIGNAL(triggered()),
             this, SLOT(saveAs()));
 
-    exportImageAction = new QAction(QIcon(":/images/export.png"), tr("Export &Image"), this);
+    exportImageAction = new QAction(QIcon(":/images/export.png"), tr("Export &Image..."), this);
     exportImageAction->setShortcut(tr("Ctrl+E"));
     connect(exportImageAction, SIGNAL(triggered()),
             this, SLOT(exportImage()));
@@ -203,7 +203,7 @@ void MainWindow::changeState(SceneState newState) {
     switch(newState) {
         case CREATE_TRACK:
             view->setCursor(Qt::CrossCursor);
-            statusbar->showMessage(tr("CREATE_TRACK"));
+            statusbar->showMessage(tr("Create Track"));
             addTrackAction->setChecked(true);
             addBoatAction->setChecked(false);
             addMarkAction->setChecked(false);
@@ -211,7 +211,7 @@ void MainWindow::changeState(SceneState newState) {
             break;
         case CREATE_BOAT:
             view->setCursor(Qt::CrossCursor);
-            statusbar->showMessage(tr("CREATE_BOAT"));
+            statusbar->showMessage(tr("Create Boat"));
             addTrackAction->setChecked(false);
             addBoatAction->setChecked(true);
             addMarkAction->setChecked(false);
@@ -219,14 +219,14 @@ void MainWindow::changeState(SceneState newState) {
             break;
         case CREATE_MARK:
             view->setCursor(Qt::CrossCursor);
-            statusbar->showMessage(tr("CREATE_MARK"));
+            statusbar->showMessage(tr("Create Mark"));
             addTrackAction->setChecked(false);
             addBoatAction->setChecked(false);
             addMarkAction->setChecked(true);
             animateAction->setChecked(false);
             break;
         case ANIMATE:
-            statusbar->showMessage(tr("ANIMATE"));
+            statusbar->showMessage(tr("Animate"));
             addTrackAction->setChecked(false);
             addBoatAction->setChecked(false);
             addMarkAction->setChecked(false);
