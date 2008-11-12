@@ -567,9 +567,7 @@ void MainWindow::animate(bool state) {
 
 void MainWindow::play() {
     if (debugLevel & 1 << ANIMATION) std::cout << "playing" << std::endl;
-    animationSlider->blockSignals(true);
     pauseAction->setChecked(false);
-    timeline->setCurrentTime(0);
     timeline->start();
 }
 
@@ -577,10 +575,8 @@ void MainWindow::pause(bool pause) {
     if (pause) {
         if (debugLevel & 1 << ANIMATION) std::cout << "pausing" << std::endl;
         timeline->setPaused(true);
-        animationSlider->blockSignals(false);
     } else {
         if (debugLevel & 1 << ANIMATION) std::cout << "resuming" << std::endl;
-        animationSlider->blockSignals(true);
         timeline->resume();
     }
 }
@@ -590,7 +586,6 @@ void MainWindow::stop() {
     pauseAction->setChecked(false);
     timeline->stop();
     timeline->setCurrentTime(0);
-    animationSlider->blockSignals(false);
 }
 
 void MainWindow::loop(bool loop) {
@@ -610,6 +605,7 @@ void MainWindow::changeAnimationState(QTimeLine::State newState) {
             startAction->setEnabled(false);
             pauseAction->setEnabled(true);
             stopAction->setEnabled(true);
+            animationSlider->blockSignals(true);
             break;
 
         case QTimeLine::Paused:
@@ -617,6 +613,7 @@ void MainWindow::changeAnimationState(QTimeLine::State newState) {
             startAction->setEnabled(true);
             pauseAction->setEnabled(true);
             stopAction->setEnabled(true);
+            animationSlider->blockSignals(false);
             break;
 
         case QTimeLine::NotRunning:
@@ -624,6 +621,7 @@ void MainWindow::changeAnimationState(QTimeLine::State newState) {
             startAction->setEnabled(true);
             pauseAction->setEnabled(false);
             stopAction->setEnabled(false);
+            animationSlider->blockSignals(false);
             break;
     }
 }
