@@ -37,6 +37,7 @@ class BoatAnimation : public QGraphicsItemAnimation {
         QList<BoatModel*> m_boats;
         BoatGraphicsItem *m_boat;
         int m_maxSize;
+        QTime m_time;
 };
 
 #endif

@@ -22,7 +22,8 @@ BoatAnimation::BoatAnimation(TrackModel *track, BoatGraphicsItem *boat, int maxS
     : QGraphicsItemAnimation(parent),
     m_track(track),
     m_boat(boat),
-    m_maxSize(maxSize) {
+    m_maxSize(maxSize),
+    m_time(QTime::currentTime()) {
 
     QPainterPath path = m_track->path();
     qreal size = m_track->boats().size() - 1;
@@ -122,6 +123,11 @@ qreal BoatAnimation::headingAt(qreal step) const {
 }
 
 void BoatAnimation::afterAnimationStep(qreal step) {
+    // limit update rate to 40ms
+    if ((m_time.elapsed() < 40) && (step != 0) && (step != 1)) {
+        return;
+    }
+
     m_boat->setPosition(posAt(step));
     m_boat->setHeading(headingAt(step));
 
@@ -137,4 +143,7 @@ void BoatAnimation::afterAnimationStep(qreal step) {
             m_boats.pop_back();
         }
     }
+
+    // trigger next update rate calculation
+    m_time.start();
 }
