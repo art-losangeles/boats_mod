@@ -12,7 +12,7 @@
 #ifndef COMMONTYPES_H
 #define COMMONTYPES_H
 
-#define VERSION 200810
+#define VERSION "200811-rc1"
 
 typedef enum {
     KEELBOAT,
