@@ -84,6 +84,7 @@ class SituationScene : public QGraphicsScene {
         TrackModel *m_trackCreated;
         QPointF m_fromPosition;
         SceneState m_state;
+        QTime m_time;
 };
 
 #endif

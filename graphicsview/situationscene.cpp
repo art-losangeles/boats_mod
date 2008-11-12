@@ -35,7 +35,8 @@ SituationScene::SituationScene(SituationModel *situation)
         : QGraphicsScene(situation),
         m_situation(situation),
         m_trackCreated(0),
-        m_state(NO_STATE) {
+        m_state(NO_STATE),
+        m_time(QTime::currentTime()) {
     // react to self change of selection
     connect(this, SIGNAL(selectionChanged()),
             this, SLOT(setSelectedModels()));
@@ -173,6 +174,11 @@ void SituationScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
 }
 
 void SituationScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
+    // limit update rate to 40ms
+    if ((m_time.elapsed() <40) ) {
+        return;
+    }
+
     QGraphicsScene::mouseMoveEvent(event);
 
     switch (m_state) {
@@ -192,6 +198,9 @@ void SituationScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
         default:
             break;
     }
+
+    // trigger next update rate calculation
+    m_time.start();
 }
 
 void SituationScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
