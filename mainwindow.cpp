@@ -549,6 +549,8 @@ void MainWindow::animate(bool state) {
             animationSlider->setRange(0,timeline->duration());
             animationSlider->setEnabled(true);
             timeline->setFrameRange(0,timeline->duration());
+            timeline->setCurrentTime(timeline->duration());
+            timeline->setCurrentTime(0);
             startAction->setEnabled(true);
             loopAction->setEnabled(true);
         }
