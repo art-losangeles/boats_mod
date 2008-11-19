@@ -163,14 +163,22 @@ void SituationScene::keyPressEvent(QKeyEvent *event) {
 }
 
 void SituationScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
-    // propagate mouse event first for selected items
-    QGraphicsScene::mousePressEvent(event);
-    if (!m_selectedBoatModels.isEmpty())
-        m_trackCreated = m_selectedBoatModels[0]->track();
-
-    m_fromPosition = event->scenePos();
-    if (debugLevel & 1 << VIEW) std::cout << "Mouse pressed with " << m_selectedModels.size()
-    << " items selected" << std::endl;
+    switch (m_state) {
+        case NO_STATE:
+            mouseSelectEvent(event);
+            if (!m_selectedBoatModels.isEmpty()) {
+                m_trackCreated = m_selectedBoatModels[0]->track();
+            }
+            break;
+        case CREATE_BOAT:
+        case CREATE_MARK:
+            if (event->buttons() == Qt::RightButton) {
+                mouseSelectEvent(event);
+            }
+            break;
+        default:
+            break;
+    }
 }
 
 void SituationScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
@@ -240,9 +248,15 @@ void SituationScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
             break;
     }
 }
-// itemselected should connect trackwidget with item
-//    headingbox->connect(headingbox,SIGNAL(valueChanged(int)),
-//        boat,SLOT(setHeading(int)));
+
+void SituationScene::mouseSelectEvent(QGraphicsSceneMouseEvent *event) {
+    // propagate mouse event first for selected items
+    QGraphicsScene::mousePressEvent(event);
+
+    m_fromPosition = event->scenePos();
+    if (debugLevel & 1 << VIEW) std::cout << "Mouse pressed with " << m_selectedModels.size()
+    << " items selected" << std::endl;
+}
 
 void SituationScene::mouseMoveModelEvent(QGraphicsSceneMouseEvent *event) {
     if (!m_selectedModels.isEmpty() && event->scenePos() != m_fromPosition) {
