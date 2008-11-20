@@ -37,6 +37,13 @@ SituationScene::SituationScene(SituationModel *situation)
         m_trackCreated(0),
         m_state(NO_STATE),
         m_time(QTime::currentTime()) {
+
+    // try to set a minimum scene rect
+    QGraphicsItem *e = addEllipse(QRectF());
+    e->setPos(-500,-500);
+    e->setPos(500,500);
+    delete e;
+
     // react to self change of selection
     connect(this, SIGNAL(selectionChanged()),
             this, SLOT(setSelectedModels()));
