@@ -43,6 +43,27 @@ void SituationView::wheelEvent(QWheelEvent *event) {
     setScale(event->delta() > 0);
 }
 
+void SituationView::zoomIn() {
+    setScale(true);
+}
+
+void SituationView::zoomOut() {
+    setScale(false);
+}
+
+void SituationView::zoomFit() {
+    QMatrix old = matrix();
+    fitInView(scene()->itemsBoundingRect(),Qt::KeepAspectRatio);
+    qreal s = matrix().m11();
+    if (s < 3.0 && s > 0.1) {
+        // adopt scaling
+        scaleValue = (round(s * 20)) / 20.0;
+    }
+    // apply calculated or default scale
+    QMatrix m(scaleValue, old.m21(), old.m21(), scaleValue, old.dx(), old.dy());
+    setMatrix(m);
+}
+
 void SituationView::setScale(bool in) {
     if (in) {
         if (scaleValue < 3.0) {

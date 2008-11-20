@@ -93,11 +93,16 @@ class MainWindow : public QMainWindow {
         QAction *undoAction;
         QAction *redoAction;
 
+        QAction *zoomInAction;
+        QAction *zoomOutAction;
+        QAction *zoomFitAction;
+
         QAction *aboutAction;
 
         QMenu *fileMenu;
         QMenu *trackMenu;
         QMenu *historyMenu;
+        QMenu *zoomMenu;
         QMenu *animationMenu;
 };
 

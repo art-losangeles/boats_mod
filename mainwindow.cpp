@@ -194,6 +194,21 @@ void MainWindow::createActions() {
     connect(situation->undoStack(), SIGNAL(cleanChanged(bool)),
             this, SLOT(cleanState(bool)));
 
+    zoomInAction = new QAction(QIcon(":/images/zoomin.png"), tr("Zoom &In"), this);
+    zoomInAction->setShortcut(tr("Ctrl++"));
+    connect(zoomInAction, SIGNAL(triggered()),
+            view, SLOT(zoomIn()));
+
+    zoomOutAction = new QAction(QIcon(":/images/zoomout.png"), tr("Zoom &Out"), this);
+    zoomOutAction->setShortcut(tr("Ctrl+-"));
+    connect(zoomOutAction, SIGNAL(triggered()),
+            view, SLOT(zoomOut()));
+
+    zoomFitAction = new QAction(QIcon(":/images/zoomfit.png"), tr("Zoom &Fit"), this);
+    zoomFitAction->setShortcut(tr("Ctrl+F"));
+    connect(zoomFitAction, SIGNAL(triggered()),
+            view, SLOT(zoomFit()));
+
     aboutAction = new QAction(tr("&About"), this);
     connect(aboutAction, SIGNAL(triggered()),
             this, SLOT(about()));
@@ -282,6 +297,11 @@ void MainWindow::createMenus() {
     animationMenu->addAction(stopAction);
     animationMenu->addAction(loopAction);
 
+    zoomMenu = menubar->addMenu(tr("&Zoom"));
+    zoomMenu->addAction(zoomInAction);
+    zoomMenu->addAction(zoomFitAction);
+    zoomMenu->addAction(zoomOutAction);
+
     menubar->addAction(aboutAction);
 
     toolbar->addAction(newFileAction);
@@ -298,6 +318,10 @@ void MainWindow::createMenus() {
     toolbar->addAction(addMarkAction);
     toolbar->addSeparator();
     toolbar->addAction(animateAction);
+    toolbar->addSeparator();
+    toolbar->addAction(zoomOutAction);
+    toolbar->addAction(zoomFitAction);
+    toolbar->addAction(zoomInAction);
 
 
     animationSlider = new QSlider(Qt::Horizontal, this);

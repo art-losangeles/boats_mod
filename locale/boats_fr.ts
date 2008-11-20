@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS><TS version="1.1" language="fr">
+<defaultcodec></defaultcodec>
 <context>
     <name>MainWindow</name>
     <message>
@@ -193,136 +194,171 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="197"/>
+        <location filename="../mainwindow.cpp" line="212"/>
         <source>&amp;About</source>
         <translation>&amp;A Propos</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="206"/>
+        <location filename="../mainwindow.cpp" line="221"/>
         <source>Create Track</source>
         <translation>Créer une Piste</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="214"/>
+        <location filename="../mainwindow.cpp" line="229"/>
         <source>Create Boat</source>
         <translation>Créer un Bateau</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="222"/>
+        <location filename="../mainwindow.cpp" line="237"/>
         <source>Create Mark</source>
         <translation>Créer une Marque</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="229"/>
+        <location filename="../mainwindow.cpp" line="244"/>
         <source>Animate</source>
         <translation>Animer</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="255"/>
+        <location filename="../mainwindow.cpp" line="270"/>
         <source>&amp;File</source>
         <translation>&amp;Fichier</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="265"/>
+        <location filename="../mainwindow.cpp" line="280"/>
         <source>&amp;Edit</source>
         <translation>&amp;Edition</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="275"/>
+        <location filename="../mainwindow.cpp" line="290"/>
         <source>&amp;History</source>
         <translation>&amp;Historique</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="279"/>
+        <location filename="../mainwindow.cpp" line="294"/>
         <source>&amp;Animation</source>
         <translation>&amp;Animation</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="349"/>
+        <location filename="../mainwindow.cpp" line="373"/>
         <source>Application</source>
         <translation>Application</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="351"/>
+        <location filename="../mainwindow.cpp" line="375"/>
         <source>The document has been modified.
 Do you want to save your changes?</source>
         <translation>Le document a été modifié.
 Voulez-vous sauver vos modifications?</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="398"/>
+        <location filename="../mainwindow.cpp" line="422"/>
         <source>Open Scenario File</source>
         <translation>Ouvrir un fichier Scénario</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="450"/>
+        <location filename="../mainwindow.cpp" line="474"/>
         <source>xmlscenario Files (*.xbs)</source>
         <translation>Fichiers xmlscenario (*.xbs)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="400"/>
+        <location filename="../mainwindow.cpp" line="424"/>
         <source>Cannot read file %1:
 %2.</source>
         <translation>Ne peut pas lire le Fichier %1: %2.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="407"/>
+        <location filename="../mainwindow.cpp" line="431"/>
         <source>Open Scenario file</source>
         <translation>Ouvrir un fichier Scénario</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="409"/>
+        <location filename="../mainwindow.cpp" line="433"/>
         <source>Parse error in file %1 at line %2, column %3:
 %4</source>
         <translation>Erreur dans le fichier %1 ligne %2, colonne %3:
 %4</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="417"/>
+        <location filename="../mainwindow.cpp" line="441"/>
         <source>File loaded</source>
         <translation>Fichier chargé</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="466"/>
+        <location filename="../mainwindow.cpp" line="490"/>
         <source>Save Scenario</source>
         <translation>Sauvegarder un Scénario</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="486"/>
+        <location filename="../mainwindow.cpp" line="510"/>
         <source>Cannot write file %1:
 %2.</source>
         <translation>Ne peut pas écrire le fichier %1:
 %2.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="433"/>
+        <location filename="../mainwindow.cpp" line="457"/>
         <source>File saved</source>
         <translation>Fichier sauvegardé</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="484"/>
+        <location filename="../mainwindow.cpp" line="508"/>
         <source>Export Image</source>
         <translation>Exporter une Image</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="498"/>
+        <location filename="../mainwindow.cpp" line="522"/>
         <source>%1 - %2 [*]</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="498"/>
+        <location filename="../mainwindow.cpp" line="522"/>
         <source>Boat Scenario</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="632"/>
+        <location filename="../mainwindow.cpp" line="656"/>
         <source>About Boat Scenario</source>
         <translation>A propos de Boat Scenario</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="647"/>
+        <location filename="../mainwindow.cpp" line="671"/>
         <source>&lt;center&gt;&lt;img src=&quot;:/images/about.png&quot;&gt;&lt;p&gt;&lt;b&gt;Boat Scenario&lt;/b&gt; - a Race Scenario drawing tool.&lt;/p&gt;&lt;p&gt;Version %1&lt;/p&gt;&lt;/center&gt;&lt;p&gt;Copyright (C) 2008 Thibaut GRIDEL &lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;visit &lt;a href=&quot;http://boats.berlios.de&quot;&gt;http://boats.berlios.de&lt;/a&gt;&lt;/p&gt;&lt;p&gt;This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="197"/>
+        <source>Zoom &amp;In</source>
+        <translation>Zoom A&amp;vant</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="198"/>
+        <source>Ctrl++</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="202"/>
+        <source>Zoom &amp;Out</source>
+        <translation>Zoom A&amp;rrière</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="203"/>
+        <source>Ctrl+-</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="207"/>
+        <source>Zoom &amp;Fit</source>
+        <translation>Zoom &amp;Cadrage</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="208"/>
+        <source>Ctrl+F</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="300"/>
+        <source>&amp;Zoom</source>
+        <translation>&amp;Zoom</translation>
     </message>
 </context>
 <context>

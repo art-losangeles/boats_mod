@@ -15,7 +15,7 @@
 #include <QtGui>
 
 class SituationView : public QGraphicsView {
-
+    Q_OBJECT
     public:
         SituationView(QWidget *parent = 0);
         SituationView(QGraphicsScene *scene, QWidget *parent = 0);
@@ -24,6 +24,11 @@ class SituationView : public QGraphicsView {
 
     protected:
         void wheelEvent(QWheelEvent *event);
+
+    public slots:
+        void zoomIn();
+        void zoomOut();
+        void zoomFit();
 
     private:
         void setScale(bool in);
