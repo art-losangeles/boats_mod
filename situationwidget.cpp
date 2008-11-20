@@ -40,6 +40,9 @@ SituationWidget::SituationWidget(QWidget *parent)
 
     laylineSpin = new QSpinBox(scenarioGroup);
     scenarioForm->addRow(new QLabel(tr("Laylines"),scenarioGroup),laylineSpin);
+
+    lengthSpin = new QSpinBox(scenarioGroup);
+    scenarioForm->addRow(new QLabel(tr("Zone Length"),scenarioGroup),lengthSpin);
     scenarioGroup->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Maximum);
 
     // Description layout
@@ -75,6 +78,7 @@ void SituationWidget::update() {
         rulesEdit->setText(m_situation->rules());
         seriesCombo->setCurrentIndex(m_situation->situationSeries());
         laylineSpin->setValue(m_situation->laylineAngle());
+        lengthSpin->setValue(m_situation->situationLength());
         abstractEdit->setPlainText(m_situation->abstract());
         descriptionEdit->setPlainText(m_situation->description());
     }
@@ -110,6 +114,11 @@ void SituationWidget::setSituation(SituationModel *situation) {
         connect (situation, SIGNAL(laylineChanged(const int)),
                 laylineSpin, SLOT(setValue(int)));
 
+        lengthSpin->setRange(1,5);
+        connect (lengthSpin, SIGNAL(valueChanged(int)),
+                this, SLOT(setLength(int)));
+        connect (situation, SIGNAL(lengthChanged(const int)),
+                lengthSpin, SLOT(setValue(int)));
 
         // Description Group
         connect(abstractEdit->document(), SIGNAL(contentsChanged()),
@@ -141,6 +150,10 @@ void SituationWidget::unSetSituation() {
     disconnect(laylineSpin,  0, 0, 0);
     disconnect(m_situation, 0, laylineSpin, 0);
     laylineSpin->setValue(40);
+
+    disconnect(lengthSpin, 0, 0, 0);
+    disconnect(m_situation, 0, lengthSpin, 0);
+    lengthSpin->setValue(3);
 
     // Description Group
     disconnect(m_situation, 0, this, 0);
@@ -175,6 +188,15 @@ void SituationWidget::setLayline(int angle) {
         }
     }
 }
+
+void SituationWidget::setLength(int length) {
+    if (m_situation) {
+        if (length != m_situation->situationLength()) {
+            m_situation->undoStack()->push(new LengthMarkUndoCommand(m_situation, length));
+        }
+    }
+}
+
 
 void SituationWidget::setSeries(int series) {
     if (m_situation) {

@@ -20,14 +20,19 @@ class MarkModel : public PositionModel {
         bool zone() const { return m_zone; }
         void setZone(const bool theValue, bool update = false);
 
+        int length() const { return m_length; }
+        void setLength(const int theValue, bool update = false);
+
     signals:
         void colorChanged(QColor color);
         void zoneChanged(bool zone);
+        void lengthChanged(int length);
 
     private:
         SituationModel *m_situation;
         QColor m_color;
         bool m_zone;
+        int m_length;
 };
 
 #endif

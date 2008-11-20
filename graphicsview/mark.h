@@ -37,12 +37,14 @@ class MarkGraphicsItem : public QObject, public QGraphicsItem {
         void setOrder(int value);
         void setColor(QColor value);
         void setZone(bool zone);
+        void setLength(int length);
         void deleteItem(MarkModel *mark);
 
     private:
         MarkModel *m_mark;
         QColor m_color;
         bool m_zone;
+        int m_length;
         bool m_selected;
         int m_order;
 };

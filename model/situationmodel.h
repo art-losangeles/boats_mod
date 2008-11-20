@@ -32,6 +32,9 @@ class SituationModel : public QObject {
         Series situationSeries() const { return m_situationSeries; };
         void setSituationSeries(const int theValue, bool update = false);
 
+        int situationLength() const { return m_situationLength; };
+        void setSituationLength(const int theValue, bool update = false);
+
         QString title() const { return m_title; };
         void setTitle(const QString theValue, bool update = false);
 
@@ -71,6 +74,7 @@ class SituationModel : public QObject {
         void rulesChanged(const QString rules);
         void laylineChanged(const int angle);
         void seriesChanged(const int series);
+        void lengthChanged(const int length);
         void abstractChanged(const QString abstract);
         void descriptionChanged(const QString description);
         void markAdded(MarkModel *mark);
@@ -92,6 +96,7 @@ class SituationModel : public QObject {
         QString m_description;
         int m_laylineAngle;
         Series m_situationSeries;
+        int m_situationLength;
         QList<TrackModel*> m_tracks;
         QList<MarkModel*> m_marks;
         QStringList m_discardedXml;

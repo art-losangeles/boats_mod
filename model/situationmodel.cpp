@@ -25,7 +25,8 @@ SituationModel::SituationModel(QObject *parent)
         : QObject(parent),
         m_undoStack(new QUndoStack(this)),
         m_laylineAngle(40),
-        m_situationSeries(KEELBOAT) {
+        m_situationSeries(KEELBOAT),
+        m_situationLength(3) {
     if (debugLevel & 1 << MODEL) std::cout << "new situation " << this << std::endl;
     m_seriesNames << "keelboat" << "laser" << "optimist" << "tornado";
 }
@@ -72,6 +73,19 @@ void SituationModel::setSituationSeries(const int theValue, bool update) {
         }
         if (update)
             emit seriesChanged(m_situationSeries);
+    }
+}
+
+void SituationModel::setSituationLength(const int theValue, bool update) {
+    if (theValue != m_situationLength) {
+        if (debugLevel & 1 << MODEL) std::cout << "Situation " << this
+        << " Length " << theValue << std::endl;
+        m_situationLength = theValue;
+        foreach(MarkModel *mark, m_marks) {
+            mark->setLength(m_situationLength, true);
+        }
+        if (update)
+            emit lengthChanged(m_situationLength);
     }
 }
 

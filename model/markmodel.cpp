@@ -22,7 +22,8 @@ MarkModel::MarkModel(SituationModel* situation, QObject *parent)
         : PositionModel(parent),
         m_situation(situation),
         m_color(Qt::gray),
-        m_zone(false) {
+        m_zone(false),
+        m_length(situation->situationLength()) {
     if (debugLevel & 1 << MODEL) std::cout << "new Mark " << this << std::endl;
     setOrder(situation->markSize()+1);
 }
@@ -46,5 +47,15 @@ void MarkModel::setZone(const bool theValue, bool update) {
         m_zone = theValue;
         if (update)
             emit zoneChanged(m_zone);
+    }
+}
+
+void MarkModel::setLength(const int theValue, bool update) {
+    if (theValue != m_length) {
+        if (debugLevel & 1 << MODEL) std::cout << "Mark " << this
+        << " length " << theValue << std::endl;
+        m_length = theValue;
+        if (update)
+            emit lengthChanged(m_length);
     }
 }

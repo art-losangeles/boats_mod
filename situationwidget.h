@@ -33,6 +33,7 @@ class SituationWidget : public QWidget {
         void setRules(QString rules);
         void setLayline(int angle);
         void setSeries(int series);
+        void setLength(int length);
         void setAbstract();
         void setDescription();
 
@@ -48,6 +49,7 @@ class SituationWidget : public QWidget {
         QLineEdit *rulesEdit;
         QComboBox *seriesCombo;
         QSpinBox *laylineSpin;
+        QSpinBox *lengthSpin;
         QFormLayout *scenarioForm;
 
         QGroupBox *descriptionGroup;

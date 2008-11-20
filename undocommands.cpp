@@ -444,6 +444,38 @@ bool ZoneMarkUndoCommand::mergeWith(const QUndoCommand *command) {
     return true;
 }
 
+// Set Length
+LengthMarkUndoCommand::LengthMarkUndoCommand(SituationModel* situation, const int length, QUndoCommand *parent)
+        : QUndoCommand(parent),
+        m_situation(situation),
+        m_oldLength(situation->situationLength()),
+        m_newLength(length) {
+    if (debugLevel & 1 << COMMAND) std::cout << "new lengthmarkundocommand" << std::endl;
+}
+
+LengthMarkUndoCommand::~LengthMarkUndoCommand() {
+    if (debugLevel & 1 << COMMAND) std::cout << "end lengthmarkundocommand" << std::endl;
+}
+
+void LengthMarkUndoCommand::undo() {
+    if (debugLevel & 1 << COMMAND) std::cout << "undo lengthmarkundocommand" << std::endl;
+    m_situation->setSituationLength(m_oldLength, true);
+}
+
+void LengthMarkUndoCommand::redo() {
+    if (debugLevel & 1 << COMMAND) std::cout << "redo lengthmarkundocommand" << std::endl;
+    m_situation->setSituationLength(m_newLength, true);
+}
+
+bool LengthMarkUndoCommand::mergeWith(const QUndoCommand *command) {
+    const LengthMarkUndoCommand *lengthmarkCommand = static_cast<const LengthMarkUndoCommand*>(command);
+    if (m_situation != lengthmarkCommand->m_situation)
+        return false;
+
+    m_newLength = lengthmarkCommand->m_newLength;
+    return true;
+}
+
 // Delete Mark
 DeleteMarkUndoCommand::DeleteMarkUndoCommand(SituationModel* situation, MarkModel* mark, QUndoCommand *parent)
         : QUndoCommand(parent),

@@ -30,7 +30,8 @@ enum {
     SET_DESCRIPTION,
     MOVE_MODEL,
     HEADING_BOAT,
-    ZONE_MARK
+    ZONE_MARK,
+    LENGTH_MARK
 };
 
 class SetTitleUndoCommand : public QUndoCommand {
@@ -241,6 +242,22 @@ class ZoneMarkUndoCommand : public QUndoCommand {
     private:
         SituationModel *m_situation;
         QList<MarkModel*> m_markList;
+};
+
+class LengthMarkUndoCommand : public QUndoCommand {
+
+    public:
+        LengthMarkUndoCommand(SituationModel* situation, const int length, QUndoCommand *parent = 0);
+        ~LengthMarkUndoCommand();
+        void undo();
+        void redo();
+        bool mergeWith(const QUndoCommand *command);
+        int id() const { return LENGTH_MARK; }
+
+    private:
+        SituationModel *m_situation;
+        int m_oldLength;
+        int m_newLength;
 };
 
 class DeleteMarkUndoCommand : public QUndoCommand {
