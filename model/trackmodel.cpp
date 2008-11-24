@@ -26,6 +26,7 @@ TrackModel::TrackModel(SituationModel *situation, QObject *parent)
         m_series(Boats::unknown),
         m_situation(situation),
         m_length(0) {
+    m_order = situation->size();
     static int track_id = 0;
     if (debugLevel & 1 << MODEL) std::cout << "new track " << this << std::endl;
     switch (track_id % 6) {
@@ -42,6 +43,14 @@ TrackModel::TrackModel(SituationModel *situation, QObject *parent)
 
 TrackModel::~TrackModel() {
     if (debugLevel & 1 << MODEL) std::cout << "end track " << this << std::endl;
+}
+
+void TrackModel::setOrder(const int theValue, bool update) {
+    if (theValue != m_order) {
+        m_order = theValue;
+        if (update)
+            emit orderChanged(m_order);
+    }
 }
 
 void TrackModel::setColor(const QColor& theValue, bool update) {

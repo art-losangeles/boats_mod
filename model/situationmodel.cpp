@@ -136,19 +136,28 @@ void SituationModel::appendDiscardedXml(const QString& theValue) {
     }
 }
 
-void SituationModel::addTrack(TrackModel *track) {
-    m_tracks.push_back(track);
-    if (debugLevel & 1 << MODEL) std::cout << "Adding Track " << m_tracks.size() << std::endl;
+void SituationModel::addTrack(TrackModel *track, int order) {
+    if (order == 0) {
+        order = m_tracks.size();
+    }
+    m_tracks.insert(order,track);
+    if (debugLevel & 1 << MODEL) std::cout << "Adding Track " << order+1 <<  std::endl;
+    for (int i=order+1; i<m_tracks.size(); i++) {
+        m_tracks[i]->setOrder(i+1, true);
+    }
     track->displayBoats();
     emit trackAdded(track);
 }
 
 void SituationModel::deleteTrack(TrackModel *track) {
     int index = m_tracks.indexOf(track);
-    if (debugLevel & 1 << MODEL) std::cout << "Removing Track " << index
+    if (debugLevel & 1 << MODEL) std::cout << "Removing Track " << index+1
     << " with " << track->size() << std::endl;
     track->hideBoats();
     m_tracks.removeOne(track);
+    for (int i=index; i<m_tracks.size(); i++) {
+        m_tracks[i]->setOrder(i+1, true);
+    }
     emit trackRemoved(track);
 }
 

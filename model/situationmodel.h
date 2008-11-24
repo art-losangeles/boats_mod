@@ -112,7 +112,7 @@ class SituationModel : public QObject {
 
     public slots:
         // Slots for Tracks
-        void addTrack(TrackModel *track);
+        void addTrack(TrackModel *track, int order = 0);
         void deleteTrack(TrackModel *track);
 
         // Slots for Marks

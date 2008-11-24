@@ -51,6 +51,9 @@ class TrackModel : public QObject {
         void hideBoats();
 
         // Setters and Getters for Model Data
+        int order() const { return m_order; }
+        void setOrder(const int theValue, bool update = false);
+
         QColor color() const { return m_color;};
         void setColor(const QColor& theValue, bool update = false);
 
@@ -74,12 +77,16 @@ class TrackModel : public QObject {
 
     signals:
         // Signals for TrackModel parameters
+        void orderChanged(int order);
         void colorChanged(QColor color);
         void seriesChanged(Boats::Series series);
         void trackChanged(TrackModel *track);
 
     private:
         // Model Data
+        /// \a m_order holds the stacking order of the Track
+        int m_order;
+
         /// \a m_color holds the color of the Track
         QColor m_color;
 
