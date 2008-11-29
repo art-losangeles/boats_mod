@@ -14,6 +14,8 @@
 
 #include <QtGui>
 
+#include "tracktablemodel.h"
+
 class SituationModel;
 
 class SituationWidget : public QWidget {
@@ -50,6 +52,8 @@ class SituationWidget : public QWidget {
         QComboBox *seriesCombo;
         QSpinBox *laylineSpin;
         QSpinBox *lengthSpin;
+        TrackTableModel *trackTableModel;
+        QTableView *trackTableView;
         QFormLayout *scenarioForm;
 
         QGroupBox *descriptionGroup;

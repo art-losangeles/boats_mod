@@ -45,6 +45,10 @@ SituationWidget::SituationWidget(QWidget *parent)
     scenarioForm->addRow(new QLabel(tr("Zone Length"),scenarioGroup),lengthSpin);
     scenarioGroup->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Maximum);
 
+    trackTableModel = new TrackTableModel(m_situation);
+    trackTableView = new QTableView(scenarioGroup);
+    scenarioForm->addRow(new QLabel(tr("Tracks"),scenarioGroup),trackTableView);
+
     // Description layout
     descriptionGroup = new QGroupBox(tr("Description"),this);
     descriptionLayout = new QGridLayout(descriptionGroup);
@@ -120,6 +124,13 @@ void SituationWidget::setSituation(SituationModel *situation) {
         connect (situation, SIGNAL(lengthChanged(const int)),
                 lengthSpin, SLOT(setValue(int)));
 
+        trackTableModel->setSituation(m_situation);
+        connect(situation, SIGNAL(trackAdded(TrackModel*)),
+                trackTableModel, SLOT(addTrack(TrackModel*)));
+        connect(situation, SIGNAL(trackRemoved(TrackModel*)),
+                trackTableModel, SLOT(deleteTrack(TrackModel*)));
+        trackTableView->setModel(trackTableModel);
+
         // Description Group
         connect(abstractEdit->document(), SIGNAL(contentsChanged()),
                 this, SLOT(setAbstract()));
@@ -154,6 +165,8 @@ void SituationWidget::unSetSituation() {
     disconnect(lengthSpin, 0, 0, 0);
     disconnect(m_situation, 0, lengthSpin, 0);
     lengthSpin->setValue(3);
+
+    disconnect(m_situation, 0, trackTableModel, 0);
 
     // Description Group
     disconnect(m_situation, 0, this, 0);

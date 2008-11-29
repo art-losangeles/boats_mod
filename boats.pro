@@ -3,7 +3,7 @@ TARGET = boats
 
 CONFIG += qt warn_on
 
-INCLUDEPATH += graphicsview
+INCLUDEPATH += graphicsview; itemviews
 
 HEADERS = \
 	model/boatmodel.h \
@@ -17,6 +17,7 @@ HEADERS = \
 	graphicsview/situationscene.h \
 	graphicsview/situationview.h \
 	graphicsview/track.h \
+	itemviews/tracktablemodel.h \
 	boats.h \
 	commontypes.h \
 	mainwindow.h \
@@ -38,6 +39,7 @@ SOURCES = \
 	graphicsview/situationscene.cpp \
 	graphicsview/situationview.cpp \
 	graphicsview/track.cpp \
+	itemviews/tracktablemodel.cpp \
 	boats.cpp \
 	main.cpp \
 	mainwindow.cpp \
