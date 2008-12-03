@@ -55,7 +55,7 @@ void SituationView::zoomFit() {
     QMatrix old = matrix();
     fitInView(scene()->itemsBoundingRect(),Qt::KeepAspectRatio);
     qreal s = matrix().m11();
-    if (s < 3.0 && s > 0.1) {
+    if (s < 10.0 && s > 0.1) {
         // adopt scaling
         scaleValue = (round(s * 20)) / 20.0;
     }
@@ -66,7 +66,7 @@ void SituationView::zoomFit() {
 
 void SituationView::setScale(bool in) {
     if (in) {
-        if (scaleValue < 3.0) {
+        if (scaleValue < 10.0) {
             scaleValue += .05;
         }
     } else if (scaleValue > 0.1) {

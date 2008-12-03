@@ -36,6 +36,7 @@ class TrackModel : public QObject {
         void setColor(const QColor& theValue, bool update = false);
         Series series() const { return m_series;};
         void setSeries(const Series theValue, bool update = false);
+        int length() const { return m_length; };
         int size() const { return m_boats.size();};
         const QList<BoatModel*> boats() const { return m_boats; };
         const QPainterPath path() const { return m_path; };
@@ -54,6 +55,7 @@ class TrackModel : public QObject {
         SituationModel *m_situation;
         QColor m_color;
         Series m_series;
+        int m_length;
         QList<BoatModel*> m_boats;
         QPainterPath m_path;
         QStringList m_discardedXml;

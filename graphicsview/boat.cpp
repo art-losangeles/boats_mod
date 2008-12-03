@@ -149,7 +149,18 @@ void BoatGraphicsItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
 }
 
 QRectF BoatGraphicsItem::boundingRect() const {
-    return QRectF(-80, -65, 160, 130);
+    switch (m_series) {
+    case KEELBOAT:
+        return QRectF(-67, -54, 133, 108);
+    case LASER:
+        return QRectF(-27, -22, 54, 44);
+    case OPTIMIST:
+        return QRectF(-15, -12, 31, 25);
+    case TORNADO:
+        return QRectF(-40, -33, 81, 66);
+    default:
+        return QRectF(-50, -50, 100, 100);
+    }
 }
 
 QPainterPath BoatGraphicsItem::shape() const {
@@ -163,84 +174,110 @@ void BoatGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *
                              QWidget *widget) {
     Q_UNUSED(option);
     Q_UNUSED(widget);
-    if (isSelected())
-        painter->setPen(Qt::red);
-    else
-        painter->setPen(Qt::black);
 
-    painter->setBrush(m_color);
-    painter->rotate(m_angle);
-
-    //painter->setBrush(Qt::NoBrush);
-    QPainterPath path(QPointF(0, -60));
+    QPainterPath path;
+    QPainterPath fpath;
+    QFont f(painter->font());
+    QString number = QString::number(m_order);
 
     switch (m_series) {
     case KEELBOAT:
-        path.cubicTo(24, 0, 21, 15, 12, 58);
-        path.lineTo(-12, 58);
-        path.cubicTo(-21, 15, -24, 0, 0, -60);
+        path.moveTo(0,-50);
+        path.cubicTo(20, 0, 18, 13, 10, 48);
+        path.lineTo(-10, 48);
+        path.cubicTo(-18, 13, -20, 0, 0, -50);
+        if (m_order) {
+            f.setPointSize(12);
+            QFontMetrics fm(f);
+            fpath.addText(-fm.width(number)/2.0, 25 ,f,number);
+        }
         break;
     case LASER:
-        path.cubicTo(1, -59, 1, -60, 2, -59);
-        path.cubicTo(10, -43, 20, -10, 20, 14);
-        path.cubicTo(20, 33, 20, 43, 15, 60);
-        path.lineTo(-15, 60);
-        path.cubicTo(-20, 43, -20, 33, -20, 14);
-        path.cubicTo(-20, -10, -10, -43, -2, -59);
-        path.cubicTo(-1, -60, -1, -59, 0, -60);
+        path.moveTo(0,-20);
+        path.cubicTo(0.3, -19.7, 0.3, -20, 0.7, -19.7);
+        path.cubicTo(3.3, -14.3, 6.7, -3.3, 6.7, 4.7);
+        path.cubicTo(6.7, 11.0, 6.7, 14.3, 5.0, 20.0);
+        path.lineTo(-5.0, 20.0);
+        path.cubicTo(-6.7, 14.3, -6.7, 11.0, -6.7, 4.7);
+        path.cubicTo(-6.7, -3.3, -3.3, -14.3, -0.7, -19.7);
+        path.cubicTo(0.3, -20.0, 0.3, -19.7, 0, -20);
+        if (m_order) {
+            f.setPointSize(7);
+            QFontMetrics fm(f);
+            fpath.addText(-fm.width(number)/2.0, 10 ,f,number);
+        }
         break;
     case OPTIMIST:
-        path.cubicTo(8, -60, 9, -59, 15, -58);
-        path.cubicTo(19, -49, 29, -21, 29, 8);
-        path.cubicTo(29, 28, 26, 47, 24, 55);
-        path.lineTo(-24, 55);
-        path.cubicTo(-26, 47, -29, 28, -29, 8);
-        path.cubicTo(-29, -21, -19, -49, -15, -58);
-        path.cubicTo(-9, -59, -8, -60, 0, -60);
+        path.moveTo(0,-11.5);
+        path.cubicTo(1.5, -11.5, 1.7, -11.3, 2.9, -11.1);
+        path.cubicTo(3.6, -9.4, 5.6, -4.0, 5.6, 1.5);
+        path.cubicTo(5.6, 5.4, 5.0, 9.0, 4.6, 11.5);
+        path.lineTo(-4.6, 11.5);
+        path.cubicTo(-5.0, 9.0, -5.6, 5.4, -5.6, 1.5);
+        path.cubicTo(-5.6, -4.0, -3.6, -9.4, -2.9, -11.1);
+        path.cubicTo(-1.7, -11.3, -1.5, -11.5, 0, -11.5);
+        if (m_order) {
+            f.setPointSize(6);
+            QFontMetrics fm(f);
+            fpath.addText(-fm.width(number)/2.0, 5 ,f,number);
+        }
         break;
     case TORNADO:
         path.moveTo(0,0);
-        path.lineTo(21, 0);
-        path.cubicTo(22, -23, 24, -39, 26, -60);
-        path.cubicTo(29, -40, 30, -12, 30, 12);
-        path.cubicTo(30, 27, 29, 41, 29, 59);
-        path.cubicTo(27, 60, 27, 60, 25, 60);
-        path.cubicTo(24, 60, 24, 60, 21, 59);
-        path.lineTo(21, 47);
+        path.lineTo(10.7, 0);
+        path.cubicTo(11.2, -11.7, 12.2, -19.8, 13.2, -30.5);
+        path.cubicTo(14.7, -20.3, 15.3, -6.1, 15.3, 6.1);
+        path.cubicTo(15.3, 13.7, 14.7, 20.8, 14.7, 30.0);
+        path.cubicTo(13.7, 30.5, 13.7, 30.5, 12.7, 30.5);
+        path.cubicTo(12.2, 30.5, 12.2, 30.5, 10.7, 30.0);
+        path.lineTo(10.7, 23.9);
 
-        path.lineTo(-21, 47);
-        path.lineTo(-21, 59);
-        path.cubicTo(-24, 60, -24, 60, -25, 60);
-        path.cubicTo(-27, 60, -27, 60, -29, 59);
-        path.cubicTo(-29, 41, -30, 27, -30, 12);
-        path.cubicTo(-30, -12, -29, -40, -26, -60);
-        path.cubicTo(-24, -39, -22, -23, -21, 0);
+        path.lineTo(-10.7, 23.9);
+        path.lineTo(-10.7, 30.0);
+        path.cubicTo(-12.2, 30.5, -12.2, 30.5, -12.7, 30.5);
+        path.cubicTo(-13.7, 30.5, -13.7, 30.5, -14.7, 30);
+        path.cubicTo(-14.7, 20.8, -15.3, 13.7, -15.3, 6.1);
+        path.cubicTo(-15.3, -6.1, -14.7, -20.3, -13.2, -30.5);
+        path.cubicTo(-12.2, -19.8, -11.2, -11.7, -10.7, 0);
         path.lineTo(0, 0);
+        if (m_order) {
+            f.setPointSize(10);
+            QFontMetrics fm(f);
+            fpath.addText(-fm.width(number)/2.0, 17 ,f,number);
+        }
         break;
     default:
         break;
     }
-    if (m_order) {
-        path.addText(-5,25,painter->font(),QString::number(m_order));
-    }
+
+    painter->rotate(m_angle);
+
+    if (isSelected())
+        painter->setPen(Qt::red);
+    else
+        painter->setPen(Qt::black);
+    painter->setBrush(m_color);
     painter->drawPath(path);
+
+    painter->setBrush(Qt::black);
+    painter->drawPath(fpath);
 
     qreal sailScale;
     switch (m_series) {
     case KEELBOAT:
-        painter->translate(0,-10);
-        sailScale = 1;
+        painter->translate(0,-8);
+        sailScale = .83;
         break;
     case LASER:
-        painter->translate(0, -26);
-        sailScale = 1.7;
+        painter->translate(0, -8.7);
+        sailScale = 0.57;
         break;
     case OPTIMIST:
-        painter->translate(0,-36);
-        sailScale = 1.7;
+        painter->translate(0,-6.9);
+        sailScale = 0.33;
         break;
     case TORNADO:
-        sailScale = 1;
+        sailScale = 0.51;
         break;
     default:
         break;

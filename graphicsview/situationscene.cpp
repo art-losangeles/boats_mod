@@ -312,8 +312,9 @@ void SituationScene::mouseCreateBoatEvent(QGraphicsSceneMouseEvent *event) {
         const BoatModel* lastBoat = m_trackCreated->boats().last();
         // calculate new heading:
         // from position of head of last boat to new position
+        qreal length = m_trackCreated->length() / 2.0;
         qreal theta0 = lastBoat->heading() * M_PI /180;
-        QPointF point2 = point - (lastBoat->position() + QPointF(60*sin(theta0),-60*cos(theta0)));
+        QPointF point2 = point - (lastBoat->position() + QPointF(length*sin(theta0),-length*cos(theta0)));
         qreal heading = fmod(atan2 (point2.x(), -point2.y()) * 180 / M_PI + 360.0, 360.0);
         AddBoatUndoCommand *command = new AddBoatUndoCommand(m_trackCreated, point, heading);
         m_situation->undoStack()->push(command);
