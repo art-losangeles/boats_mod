@@ -31,6 +31,7 @@ class MainWindow : public QMainWindow {
         void cleanState(bool state);
         void newFile();
         void openFile();
+        void openFile(QString &fileName);
         bool saveFile();
         bool saveAs();
         void exportImage();

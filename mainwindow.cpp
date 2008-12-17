@@ -414,6 +414,10 @@ void MainWindow::openFile() {
     if (fileName.isEmpty())
         return;
 
+    openFile(fileName);
+}
+
+void MainWindow::openFile(QString &fileName) {
     // delete situation;
     newFile();
 

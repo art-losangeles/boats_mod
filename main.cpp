@@ -20,12 +20,15 @@ int debugLevel = 0;
 int main(int argc, char *argv[]) {
     QApplication app(argc, argv);
 
-	int i;
-	QStringList arguments = QCoreApplication::arguments();
-	if (-1 != (i=arguments.indexOf("-debug"))) {
-		debugLevel = arguments[i+1].toInt();
-		std::cout << "debug level set to " << debugLevel << std::endl;
-	}
+    int i;
+    QStringList arguments = QCoreApplication::arguments();
+    arguments.removeAt(0);
+    if (-1 != (i=arguments.indexOf("-debug"))) {
+        debugLevel = arguments[i+1].toInt();
+        std::cout << "debug level set to " << debugLevel << std::endl;
+        arguments.removeAt(i+1);
+        arguments.removeAt(i);
+    }
 
     // Locale and translation setup
     QString locale = QLocale::system().name();
@@ -37,6 +40,11 @@ int main(int argc, char *argv[]) {
     // MainWindow
     MainWindow window;
     window.show();
+
+    foreach(QString fileName, arguments) {
+        std::cout << "opening " << fileName.toStdString() << std::endl;
+        window.openFile(fileName);
+    }
 
     return app.exec();
 }
