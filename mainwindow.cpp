@@ -451,9 +451,16 @@ bool MainWindow::saveFile(QString &fileName) {
                             .arg(file.errorString()));
         return false;
     }
+    bool animated = (scene->state() == ANIMATE);
+    if (animated) {
+        scene->setState(NO_STATE);
+    }
     XmlSituationWriter writer(situation);
     writer.writeFile(&file);
     setCurrentFile(fileName);
+    if (animated) {
+        animate(true);
+    }
     statusbar->showMessage(tr("File saved"), 2000);
     return true;
 }
