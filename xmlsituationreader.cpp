@@ -76,6 +76,8 @@ void XmlSituationReader::readSituation() {
                 m_situation->setAbstract(readElementText());
             else if (name() == "description")
                 m_situation->setDescription(readElementText());
+            else if (name() == "series")
+                m_situation->setSituationSeries(series(readElementText()), true);
             else if (name() == "layline")
                 m_situation->setLaylineAngle(readElementText().toFloat(), true);
             else if (name() == "mark")
@@ -100,7 +102,7 @@ void XmlSituationReader::readTrack(SituationModel *situation) {
             if (name() == "color")
                 track->setColor(QColor(readElementText()));
             else if (name() == "series")
-                readSeries(track, readElementText());
+                track->setSeries(series(readElementText()), true);
             else if (name() == "boat")
                 readBoat(situation, track);
             else
@@ -109,14 +111,6 @@ void XmlSituationReader::readTrack(SituationModel *situation) {
     }
 }
 
-void XmlSituationReader::readSeries(TrackModel *track, const QString series) {
-    int i;
-    for (i=0; series!=m_situation->seriesNames()[i] && i < m_situation->seriesNames().size(); i++) {
-    }
-    if (i != UNKNOWN) {
-        track->setSeries((Series)i, true);
-    }
-}
 void XmlSituationReader::readBoat(SituationModel *situation, TrackModel *track) {
     QPointF pos;
     qreal heading = 0;
@@ -184,5 +178,16 @@ void XmlSituationReader::readMark(SituationModel *situation) {
     mark->setZone(zone,true);
     if (length != 0) {
         mark->setLength(length, true);
+    }
+}
+
+Series XmlSituationReader::series(const QString series) {
+    int i;
+    for (i=0; series!=m_situation->seriesNames()[i] && i < m_situation->seriesNames().size(); i++) {
+    }
+    if (i != UNKNOWN) {
+        return (Series)i;
+    } else {
+        return KEELBOAT;
     }
 }

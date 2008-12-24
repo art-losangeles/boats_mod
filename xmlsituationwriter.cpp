@@ -43,6 +43,7 @@ bool XmlSituationWriter::writeFile(QIODevice *device) {
     if (!m_situation->description().isEmpty()) {
         writeTextElement("description", m_situation->description());
     }
+    writeTextElement("series",m_situation->seriesNames()[m_situation->situationSeries()]);
     writeTextElement("layline",QString::number(m_situation->laylineAngle()));
     foreach(QString discarded, m_situation->discardedXml())
         writeUnknownElement(discarded);
