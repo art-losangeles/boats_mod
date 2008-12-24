@@ -93,8 +93,10 @@ void SituationModel::setSituationSeries(const int theValue, bool update) {
         foreach(TrackModel *track, m_tracks) {
             track->setSeries(m_situationSeries, true);
         }
-        if (update)
+        if (update) {
             emit seriesChanged(m_situationSeries);
+            emit laylineChanged(m_laylineAngle);
+        }
     }
 }
 

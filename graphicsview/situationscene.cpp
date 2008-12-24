@@ -354,10 +354,8 @@ void SituationScene::setSelectedModels() {
 void SituationScene::setLaylines(const int angle) {
     if (debugLevel & 1 << VIEW) std::cout << "creating layline Background for " << angle << std::endl;
     qreal theta = angle * M_PI /180;
-    qreal length = 100;
-    if (m_situation->size()) {
-        length = m_situation->tracks()[0]->length();
-    }
+    int length = m_situation->sizeForSeries(m_situation->situationSeries());
+
     int x = lround(2*length*sin(theta));
     int y = lround(2*length*cos(theta));
 
