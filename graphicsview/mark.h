@@ -16,6 +16,8 @@
 #include <QObject>
 #include <QColor>
 
+#include "commontypes.h"
+
 class MarkModel;
 
 class MarkGraphicsItem : public QObject, public QGraphicsItem {
@@ -38,6 +40,7 @@ class MarkGraphicsItem : public QObject, public QGraphicsItem {
         void setColor(QColor value);
         void setZone(bool zone);
         void setLength(int length);
+        void setSeries(int value);
         void deleteItem(MarkModel *mark);
 
     private:
@@ -45,6 +48,7 @@ class MarkGraphicsItem : public QObject, public QGraphicsItem {
         QColor m_color;
         bool m_zone;
         int m_length;
+        int m_boatLength;
         bool m_selected;
         int m_order;
 };
