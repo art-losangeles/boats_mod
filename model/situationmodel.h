@@ -29,6 +29,8 @@ class SituationModel : public QObject {
         QUndoStack * undoStack() const { return m_undoStack;};
         QList<QString> seriesNames() {return m_seriesNames; };
 
+        int sizeForSeries(const Series series);
+
         Series situationSeries() const { return m_situationSeries; };
         void setSituationSeries(const int theValue, bool update = false);
 

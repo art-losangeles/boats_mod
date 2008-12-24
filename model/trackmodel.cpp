@@ -55,23 +55,7 @@ void TrackModel::setColor(const QColor& theValue, bool update) {
 void TrackModel::setSeries(const Series theValue, bool update) {
     if (theValue != m_series) {
         m_series = theValue;
-        switch (m_series) {
-            case KEELBOAT:
-                m_length = 100;
-                break;
-            case LASER:
-                m_length = 40;
-                break;
-            case OPTIMIST:
-                m_length = 23;
-                break;
-            case TORNADO:
-                m_length = 61;
-                break;
-            default:
-                m_length = 100;
-                break;
-        }
+        m_length = m_situation->sizeForSeries(m_series);
         if (update)
             emit seriesChanged(m_series);
     }
