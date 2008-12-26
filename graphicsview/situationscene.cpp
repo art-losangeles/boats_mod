@@ -356,17 +356,26 @@ void SituationScene::setLaylines(const int angle) {
     qreal theta = angle * M_PI /180;
     int length = m_situation->sizeForSeries(m_situation->situationSeries());
 
-    int x = lround(2*length*sin(theta));
-    int y = lround(2*length*cos(theta));
+    // draw 4 times as big, then use transform to scale back the brush
+    // gives better precision grid
+    qreal x = 2*length*sin(theta) * 4;
+    qreal y = 2*length*cos(theta) * 4;
 
     QPixmap pixmap(x,y);
     pixmap.fill(Qt::transparent);
     QPainter painter(&pixmap);
-    painter.setPen(Qt::DashLine);
-    painter.drawLine(0,0,x,y);
-    painter.drawLine(0,y,x,0);
+    QPen pen;
+    pen.setWidth(2);
+    pen.setStyle(Qt::DashLine);
+    painter.setPen(pen);
+    painter.setRenderHints(QPainter::Antialiasing);
+    painter.drawLine(QLineF(0,0,x,y));
+    painter.drawLine(QLineF(0,y,x,0));
 
     QBrush brush;
+    QTransform transform;
+    transform.scale(0.25, 0.25);
+    brush.setTransform(transform);
     brush.setTexture(pixmap);
     setBackgroundBrush(brush);
 }
