@@ -194,13 +194,13 @@ void BoatGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *
         break;
     case LASER:
         path.moveTo(0,-20);
-        path.cubicTo(0.3, -19.7, 0.3, -20, 0.7, -19.7);
+        path.cubicTo(0.3, -19.7, 0.3, -20.0, 0.7, -19.7);
         path.cubicTo(3.3, -14.3, 6.7, -3.3, 6.7, 4.7);
         path.cubicTo(6.7, 11.0, 6.7, 14.3, 5.0, 20.0);
         path.lineTo(-5.0, 20.0);
         path.cubicTo(-6.7, 14.3, -6.7, 11.0, -6.7, 4.7);
         path.cubicTo(-6.7, -3.3, -3.3, -14.3, -0.7, -19.7);
-        path.cubicTo(0.3, -20.0, 0.3, -19.7, 0, -20);
+        path.cubicTo(-0.3, -20.0, -0.3, -19.7, 0, -20);
         if (m_order) {
             f.setPointSize(7);
             QFontMetrics fm(f);
