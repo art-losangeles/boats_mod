@@ -55,7 +55,7 @@ class SituationModel : public QObject {
         int markSize() const { return m_marks.size();};
         const QList<MarkModel*> marks() const { return m_marks; };
 
-        qreal laylineAngle() const { return m_laylineAngle; };
+        int laylineAngle() const { return m_laylineAngle; };
         void setLaylineAngle(const int theValue, bool update = false);
 
         QStringList discardedXml() const { return m_discardedXml; };
