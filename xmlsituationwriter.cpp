@@ -43,7 +43,7 @@ bool XmlSituationWriter::writeFile(QIODevice *device) {
     if (!m_situation->description().isEmpty()) {
         writeTextElement("description", m_situation->description());
     }
-    writeTextElement("series",m_situation->seriesNames()[m_situation->situationSeries()]);
+    writeTextElement("series",ENUM_NAME(Boats, Series, m_situation->situationSeries()));
     writeTextElement("layline",QString::number(m_situation->laylineAngle()));
     foreach(QString discarded, m_situation->discardedXml())
         writeUnknownElement(discarded);
@@ -59,7 +59,7 @@ bool XmlSituationWriter::writeFile(QIODevice *device) {
 void XmlSituationWriter::writeTrack(TrackModel *track) {
     writeStartElement("track");
     writeTextElement("color",track->color().name());
-    writeTextElement("series",m_situation->seriesNames()[track->series()]);
+    writeTextElement("series",ENUM_NAME(Boats, Series, track->series()));
     foreach(QString discarded, track->discardedXml())
         writeUnknownElement(discarded);
     foreach (BoatModel *boat, track->boats())

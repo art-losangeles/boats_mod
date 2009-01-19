@@ -181,13 +181,12 @@ void XmlSituationReader::readMark(SituationModel *situation) {
     }
 }
 
-Series XmlSituationReader::series(const QString series) {
+Boats::Series XmlSituationReader::series(const QString series) {
     int i;
-    for (i=0; series!=m_situation->seriesNames()[i] && i < m_situation->seriesNames().size(); i++) {
-    }
-    if (i != UNKNOWN) {
-        return (Series)i;
+    i = ENUM_VALUE(Boats, Series, series.toStdString().c_str());
+    if (i != -1) {
+        return (Boats::Series)i;
     } else {
-        return KEELBOAT;
+        return Boats::keelboat;
     }
 }

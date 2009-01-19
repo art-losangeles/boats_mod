@@ -14,19 +14,11 @@
 
 #define VERSION "200811"
 
-typedef enum {
-    KEELBOAT,
-    LASER,
-    OPTIMIST,
-    TORNADO,
-    UNKNOWN
-} Series;
-
-typedef enum {
+enum DebugTraces {
     MODEL,
     VIEW,
     COMMAND,
     ANIMATION
-} DebugTraces;
+};
 
 #endif

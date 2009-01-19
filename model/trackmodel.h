@@ -14,7 +14,7 @@
 
 #include <QtGui>
 
-#include "commontypes.h"
+#include "boats.h"
 
 class SituationModel;
 class BoatModel;
@@ -34,8 +34,8 @@ class TrackModel : public QObject {
         SituationModel* situation() const { return m_situation; }
         QColor color() const { return m_color;};
         void setColor(const QColor& theValue, bool update = false);
-        Series series() const { return m_series;};
-        void setSeries(const Series theValue, bool update = false);
+        Boats::Series series() const { return m_series;};
+        void setSeries(const Boats::Series theValue, bool update = false);
         int length() const { return m_length; };
         int size() const { return m_boats.size();};
         const QList<BoatModel*> boats() const { return m_boats; };
@@ -48,13 +48,13 @@ class TrackModel : public QObject {
 
     signals:
         void colorChanged(QColor color);
-        void seriesChanged(Series series);
+        void seriesChanged(Boats::Series series);
         void trackChanged(TrackModel *track);
 
     private:
         SituationModel *m_situation;
         QColor m_color;
-        Series m_series;
+        Boats::Series m_series;
         int m_length;
         QList<BoatModel*> m_boats;
         QPainterPath m_path;

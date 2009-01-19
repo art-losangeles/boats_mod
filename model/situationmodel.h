@@ -14,7 +14,7 @@
 
 #include <QtGui>
 
-#include "commontypes.h"
+#include "boats.h"
 
 class TrackModel;
 class BoatModel;
@@ -27,11 +27,10 @@ class SituationModel : public QObject {
         ~SituationModel();
 
         QUndoStack * undoStack() const { return m_undoStack;};
-        QList<QString> seriesNames() {return m_seriesNames; };
 
-        int sizeForSeries(const Series series);
+        int sizeForSeries(const Boats::Series series);
 
-        Series situationSeries() const { return m_situationSeries; };
+        Boats::Series situationSeries() const { return m_situationSeries; };
         void setSituationSeries(const int theValue, bool update = false);
 
         int situationLength() const { return m_situationLength; };
@@ -90,14 +89,13 @@ class SituationModel : public QObject {
 
     private:
         QUndoStack *m_undoStack;
-        QList<QString> m_seriesNames;
         QString m_fileName;
         QString m_title;
         QString m_rules;
         QString m_abstract;
         QString m_description;
         int m_laylineAngle;
-        Series m_situationSeries;
+        Boats::Series m_situationSeries;
         int m_situationLength;
         QList<TrackModel*> m_tracks;
         QList<MarkModel*> m_marks;

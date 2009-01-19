@@ -95,7 +95,7 @@ void MarkGraphicsItem::setLength(int value) {
 }
 
 void MarkGraphicsItem::setSeries(int value) {
-    int boatLength = m_mark->situation()->sizeForSeries((Series)value);
+    int boatLength = m_mark->situation()->sizeForSeries((Boats::Series)value);
     if (m_boatLength != boatLength) {
         setZone(!m_zone);
         m_boatLength = boatLength;

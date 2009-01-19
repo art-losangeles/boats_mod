@@ -24,7 +24,7 @@ TrackModel::TrackModel(SituationModel *situation, QObject *parent)
         : QObject(parent),
         m_situation(situation),
         m_color(),
-        m_series(UNKNOWN),
+        m_series(Boats::unknown),
         m_length(0) {
     static int track_id = 0;
     if (debugLevel & 1 << MODEL) std::cout << "new track " << this << std::endl;
@@ -52,7 +52,7 @@ void TrackModel::setColor(const QColor& theValue, bool update) {
     }
 }
 
-void TrackModel::setSeries(const Series theValue, bool update) {
+void TrackModel::setSeries(const Boats::Series theValue, bool update) {
     if (theValue != m_series) {
         m_series = theValue;
         m_length = m_situation->sizeForSeries(m_series);

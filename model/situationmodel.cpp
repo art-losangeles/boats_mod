@@ -25,29 +25,28 @@ SituationModel::SituationModel(QObject *parent)
         : QObject(parent),
         m_undoStack(new QUndoStack(this)),
         m_laylineAngle(40),
-        m_situationSeries(KEELBOAT),
+        m_situationSeries(Boats::keelboat),
         m_situationLength(3) {
     if (debugLevel & 1 << MODEL) std::cout << "new situation " << this << std::endl;
-    m_seriesNames << "keelboat" << "laser" << "optimist" << "tornado";
 }
 
 SituationModel::~SituationModel() {
     if (debugLevel & 1 << MODEL) std::cout << "end situation " << this << std::endl;
 }
 
-int SituationModel::sizeForSeries(const Series series) {
+int SituationModel::sizeForSeries(const Boats::Series series) {
     int size;
     switch (series) {
-        case KEELBOAT:
+        case Boats::keelboat:
             size = 100;
             break;
-        case LASER:
+        case Boats::laser:
             size = 40;
             break;
-        case OPTIMIST:
+        case Boats::optimist:
             size = 23;
             break;
-        case TORNADO:
+        case Boats::tornado:
             size = 61;
             break;
         default:
@@ -88,8 +87,8 @@ void SituationModel::setLaylineAngle(const int theValue, bool update) {
 void SituationModel::setSituationSeries(const int theValue, bool update) {
     if (theValue != m_situationSeries) {
         if (debugLevel & 1 << MODEL) std::cout << "Situation " << this
-        << " Series " << m_seriesNames[theValue].toStdString() << std::endl;
-        m_situationSeries = (Series) theValue;
+        << " Series " << ENUM_NAME(Boats, Series, theValue) << std::endl;
+        m_situationSeries = (Boats::Series) theValue;
         foreach(TrackModel *track, m_tracks) {
             track->setSeries(m_situationSeries, true);
         }

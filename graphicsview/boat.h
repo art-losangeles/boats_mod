@@ -16,7 +16,7 @@
 #include <QObject>
 #include <QColor>
 
-#include "commontypes.h"
+#include "boats.h"
 
 class BoatModel;
 
@@ -40,7 +40,7 @@ class BoatGraphicsItem : public QObject, public QGraphicsItem {
         void setPosition(QPointF position);
         void setOrder(int value);
         void setColor(QColor value);
-        void setSeries(Series value);
+        void setSeries(Boats::Series value);
         void deleteItem(BoatModel *boat);
 
     protected:
@@ -53,7 +53,7 @@ class BoatGraphicsItem : public QObject, public QGraphicsItem {
         qreal m_angle;
         qreal m_sailAngle;
         QColor m_color;
-        Series m_series;
+        Boats::Series m_series;
         bool m_selected;
         int m_order;
 };

@@ -50,8 +50,8 @@ BoatGraphicsItem::BoatGraphicsItem(BoatModel *boat, QGraphicsItem *parent)
             this, SLOT(setOrder(int)));
     connect(boat->track(), SIGNAL(colorChanged(QColor)),
             this, SLOT(setColor(QColor)));
-    connect(boat->track(), SIGNAL(seriesChanged(Series)),
-            this, SLOT(setSeries(Series)));
+    connect(boat->track(), SIGNAL(seriesChanged(Boats::Series)),
+            this, SLOT(setSeries(Boats::Series)));
     connect(boat->track()->situation(), SIGNAL(boatRemoved(BoatModel*)),
             this, SLOT(deleteItem(BoatModel*)));
 }
@@ -75,7 +75,7 @@ void BoatGraphicsItem::setSailAngle() {
         return;
     }
     switch (m_series) {
-    case TORNADO:
+    case Boats::tornado:
         if (m_angle<180) {
             m_sailAngle = -20;
         } else {
@@ -114,7 +114,7 @@ void BoatGraphicsItem::setColor(QColor value) {
     }
 }
 
-void BoatGraphicsItem::setSeries(Series value) {
+void BoatGraphicsItem::setSeries(Boats::Series value) {
     if (m_series != value) {
         prepareGeometryChange();
         m_series = value;
@@ -150,13 +150,13 @@ void BoatGraphicsItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
 
 QRectF BoatGraphicsItem::boundingRect() const {
     switch (m_series) {
-    case KEELBOAT:
+    case Boats::keelboat:
         return QRectF(-67, -54, 133, 108);
-    case LASER:
+    case Boats::laser:
         return QRectF(-27, -22, 54, 44);
-    case OPTIMIST:
+    case Boats::optimist:
         return QRectF(-15, -12, 31, 25);
-    case TORNADO:
+    case Boats::tornado:
         return QRectF(-40, -33, 81, 66);
     default:
         return QRectF(-50, -50, 100, 100);
@@ -181,7 +181,7 @@ void BoatGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *
     QString number = QString::number(m_order);
 
     switch (m_series) {
-    case KEELBOAT:
+    case Boats::keelboat:
         path.moveTo(0,-50);
         path.cubicTo(20, 0, 18, 13, 10, 48);
         path.lineTo(-10, 48);
@@ -192,7 +192,7 @@ void BoatGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *
             fpath.addText(-fm.width(number)/2.0, 25 ,f,number);
         }
         break;
-    case LASER:
+    case Boats::laser:
         path.moveTo(0,-20);
         path.cubicTo(0.3, -19.7, 0.3, -20.0, 0.7, -19.7);
         path.cubicTo(3.3, -14.3, 6.7, -3.3, 6.7, 4.7);
@@ -207,7 +207,7 @@ void BoatGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *
             fpath.addText(-fm.width(number)/2.0, 10 ,f,number);
         }
         break;
-    case OPTIMIST:
+    case Boats::optimist:
         path.moveTo(0,-11.5);
         path.cubicTo(1.5, -11.5, 1.7, -11.3, 2.9, -11.1);
         path.cubicTo(3.6, -9.4, 5.6, -4.0, 5.6, 1.5);
@@ -222,7 +222,7 @@ void BoatGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *
             fpath.addText(-fm.width(number)/2.0, 5 ,f,number);
         }
         break;
-    case TORNADO:
+    case Boats::tornado:
         path.moveTo(0,0);
         path.lineTo(10.7, 0);
         path.cubicTo(11.2, -11.7, 12.2, -19.8, 13.2, -30.5);
@@ -264,19 +264,19 @@ void BoatGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *
 
     qreal sailScale;
     switch (m_series) {
-    case KEELBOAT:
+    case Boats::keelboat:
         painter->translate(0,-8);
         sailScale = .83;
         break;
-    case LASER:
+    case Boats::laser:
         painter->translate(0, -8.7);
         sailScale = 0.57;
         break;
-    case OPTIMIST:
+    case Boats::optimist:
         painter->translate(0,-6.9);
         sailScale = 0.33;
         break;
-    case TORNADO:
+    case Boats::tornado:
         sailScale = 0.51;
         break;
     default:

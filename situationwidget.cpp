@@ -101,7 +101,7 @@ void SituationWidget::setSituation(SituationModel *situation) {
         connect (situation, SIGNAL(rulesChanged(QString)),
                 rulesEdit, SLOT(setText(QString)));
 
-        seriesCombo->addItems(situation->seriesNames());
+        seriesCombo->addItems(Boats::seriesList());
         connect (seriesCombo, SIGNAL(currentIndexChanged(int)),
                 this, SLOT(setSeries(int)));
         connect (situation, SIGNAL(seriesChanged(int)),

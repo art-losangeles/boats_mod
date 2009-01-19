@@ -14,7 +14,7 @@
 
 #include <QXmlStreamReader>
 
-#include "commontypes.h"
+#include "boats.h"
 
 class SituationModel;
 class TrackModel;
@@ -34,7 +34,7 @@ class XmlSituationReader : public QXmlStreamReader {
         void readBoat(SituationModel *situation, TrackModel *track);
         void readMark(SituationModel *situation);
 
-        Series series(const QString series);
+        Boats::Series series(const QString series);
 
         SituationModel *m_situation;
 };
