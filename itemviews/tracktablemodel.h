@@ -18,11 +18,6 @@
 
 #include "model/situationmodel.h"
 
-typedef enum {
-    TRACK_COLOR,
-    TRACK_SERIES
-} TrackTableItem;
-
 class TrackTableModel : public QAbstractTableModel {
         Q_OBJECT
     public:

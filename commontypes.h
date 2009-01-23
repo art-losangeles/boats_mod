@@ -18,7 +18,13 @@ enum DebugTraces {
     MODEL,
     VIEW,
     COMMAND,
-    ANIMATION
+    ANIMATION,
+    DELEGATE
 };
+
+typedef enum {
+    TRACK_COLOR,
+    TRACK_SERIES
+} TrackTableItem;
 
 #endif

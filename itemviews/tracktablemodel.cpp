@@ -14,6 +14,7 @@
 #include "tracktablemodel.h"
 
 #include "commontypes.h"
+#include "boats.h"
 #include "model/situationmodel.h"
 #include "model/trackmodel.h"
 
@@ -42,7 +43,7 @@ QVariant TrackTableModel::data(const QModelIndex &index, int role) const {
                 return m_situation->tracks()[index.row()]->color();
                 break;
             case TRACK_SERIES:
-                return m_situation->seriesNames()[m_situation->tracks()[index.row()]->series()];
+                return m_situation->tracks()[index.row()]->series();
                 break;
             default:
                 return QVariant();
@@ -95,10 +96,13 @@ bool TrackTableModel::setData(const QModelIndex &index, const QVariant &value, i
             break;
         case TRACK_SERIES:
             if (qVariantCanConvert<int>(value)) {
-                Series newValue = (Series)qVariantValue<int>(value);
-                m_situation->tracks()[index.row()]->setSeries(newValue, true);
-                emit dataChanged(index,index);
-                return true;
+                int newValue = qVariantValue<int>(value);
+                if (newValue >= 0 && newValue < Boats::unknown) {
+                    Boats::Series seriesValue = (Boats::Series)newValue;
+                    m_situation->tracks()[index.row()]->setSeries(seriesValue, true);
+                    emit dataChanged(index,index);
+                    return true;
+                }
             }
             break;
         default:

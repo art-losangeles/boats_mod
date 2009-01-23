@@ -14,6 +14,7 @@
 #include <QtGui>
 
 #include "situationwidget.h"
+#include "trackdelegate.h"
 
 #include "model/situationmodel.h"
 
@@ -47,6 +48,7 @@ SituationWidget::SituationWidget(QWidget *parent)
 
     trackTableModel = new TrackTableModel(m_situation);
     trackTableView = new QTableView(scenarioGroup);
+    trackTableView->setItemDelegate(new TrackDelegate);
     scenarioForm->addRow(new QLabel(tr("Tracks"),scenarioGroup),trackTableView);
 
     // Description layout
