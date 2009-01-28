@@ -29,6 +29,11 @@ SituationView::SituationView(QGraphicsScene *scene, QWidget *parent)
 SituationView::~SituationView() {
 }
 
+/**
+    Takes a picture of the current view and returns it as a QPixmap.
+    This method creates a QPixmap and calls render() on that pixmap
+    before returning it.
+*/
 QPixmap SituationView::screenShot() {
     QPixmap pixmap(size());
     pixmap.fill(Qt::white);
@@ -37,6 +42,11 @@ QPixmap SituationView::screenShot() {
     render(&painter);
     return pixmap;
 }
+
+/**
+    Handles mouse wheel event to zoom in or out.
+    This method will call setScale() with rotation side.
+*/
 
 void SituationView::wheelEvent(QWheelEvent *event) {
     if (debugLevel & 1 << VIEW) std::cout << "wheel event " << event->delta() << std::endl;
@@ -51,6 +61,12 @@ void SituationView::zoomOut() {
     setScale(false);
 }
 
+/**
+    Sets an acceptable scale that fits the whole scenario.
+    This method compares the matrix() before and after fitInView() and
+    possibly adopts the scale, rounded to the nearest .05
+*/
+
 void SituationView::zoomFit() {
     QMatrix old = matrix();
     fitInView(scene()->itemsBoundingRect(),Qt::KeepAspectRatio);
@@ -63,6 +79,11 @@ void SituationView::zoomFit() {
     QMatrix m(scaleValue, old.m21(), old.m21(), scaleValue, old.dx(), old.dy());
     setMatrix(m);
 }
+
+/**
+    Zoom in if \a in otherwise zoom out by .05 increments between
+    0.1 and 10
+*/
 
 void SituationView::setScale(bool in) {
     if (in) {

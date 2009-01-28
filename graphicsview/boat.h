@@ -20,6 +20,21 @@
 
 class BoatModel;
 
+/**
+    \class BoatGraphicsItem
+
+    \brief the QGraphicsItem for a boat
+
+    The class represents the Item according to the Graphics View Framework.
+
+    It inherits QGraphicsItem for Item framework and QObject for slot and
+    signal framework. It displays the representation of a BoatModel on a
+    SituationView.
+
+    \sa SituationView, SituationScene, SituationModel, BoatModel
+
+*/
+
 class BoatGraphicsItem : public QObject, public QGraphicsItem {
         Q_OBJECT
     public:
@@ -49,12 +64,25 @@ class BoatGraphicsItem : public QObject, public QGraphicsItem {
         void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 
     private:
+        /// \a m_boat holds the BoatModel being represented
         BoatModel *m_boat;
+
+        /// \a m_angle holds the heading of the boat
         qreal m_angle;
+
+        /// \a m_sailAngle holds the sail trimming angle
         qreal m_sailAngle;
+
+        /// \a m_color holds the color of the TrackModel
         QColor m_color;
+
+        /// \a m_series holds the series of the TrackModel
         Boats::Series m_series;
+
+        /// \a m_selected holds selection information
         bool m_selected;
+
+        /// \a m_order holds the stacking order in the TrackModel
         int m_order;
 };
 

@@ -18,6 +18,21 @@
 
 class TrackModel;
 
+/**
+    \class TrackGraphicsItem
+
+    \brief the QGraphicsItem for a track
+
+    The class represents the Item according to the Graphics View Framework.
+
+    It inherits QGraphicsItem for Item framework and QObject for slot and
+    signal framework. It displays the representation of a TrackModel on a
+    SituationView.
+
+    \sa SituationView, SituationScene, SituationModel, TrackModel
+
+*/
+
 class TrackGraphicsItem : public QObject, public QGraphicsPathItem {
         Q_OBJECT
     public:
@@ -31,6 +46,8 @@ class TrackGraphicsItem : public QObject, public QGraphicsPathItem {
         void deleteItem(TrackModel *track);
 
     private:
+
+        /// \a m_track holds the TrackModel being represented
         TrackModel *m_track;
 };
 

@@ -19,6 +19,17 @@
 #include "model/boatmodel.h"
 #include "boat.h"
 
+/**
+    Populates the internal lists of Positions and Headings function
+    of time
+
+    This method parses the path of the \a track, does some stalling
+    analysis and determines position and heading as a function of time.
+
+    It also gives the pale color to \a track boats, while keeping
+    original color for animation \a boat.
+*/
+
 BoatAnimation::BoatAnimation(TrackModel *track, BoatGraphicsItem *boat, int maxSize, QGraphicsItemAnimation *parent)
     : QGraphicsItemAnimation(parent),
     m_track(track),
@@ -67,6 +78,10 @@ BoatAnimation::BoatAnimation(TrackModel *track, BoatGraphicsItem *boat, int maxS
         m_rotationList = rotationList();
 }
 
+/**
+    Resets the color and List of BoatModels in the track
+*/
+
 BoatAnimation::~BoatAnimation() {
     QColor color = m_track->color();
     color.setAlpha(255);
@@ -76,6 +91,11 @@ BoatAnimation::~BoatAnimation() {
         m_boats.pop_back();
     }
 }
+
+/**
+    Calculates an intermediate heading value that makes the least
+    angle change between 2 values, unlike \m linearRotationForStep()
+*/
 
 qreal BoatAnimation::linearHeadingForStep(qreal step, qreal defaultValue) const {
     const QList<QPair<qreal, qreal> > *source = &m_rotationList;
@@ -117,11 +137,20 @@ qreal BoatAnimation::linearHeadingForStep(qreal step, qreal defaultValue) const 
     }
 }
 
+/**
+    Returns the interpolated value of heading at \a step
+*/
+
 qreal BoatAnimation::headingAt(qreal step) const {
     if (step < 0.0 || step > 1.0)
         qWarning("BoatAnimation::headingAt: invalid step = %f", step);
     return linearHeadingForStep(step);
 }
+
+/**
+    Updates TrackModel and animation boat position and heading
+    at \a step time, with a rate limit of one refresh every 40ms
+*/
 
 void BoatAnimation::afterAnimationStep(qreal step) {
     // limit update rate to 40ms

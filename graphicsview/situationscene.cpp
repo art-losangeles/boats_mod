@@ -103,6 +103,14 @@ void SituationScene::deleteMarkItem() {
     }
 }
 
+/**
+    Prepares the Scene for animation mode.
+    This method finds the maximum size of track, and sets the timer length
+    accordingly.
+    It then creates a BoatGraphicsItem for animation purpose, and associates
+    an BoatAnimation to move it along the \a timer values
+*/
+
 void SituationScene::setAnimation(QTimeLine *timer) {
     if (debugLevel & 1 << VIEW) std::cout << "preparing for Animation" << std::endl;
     int maxSize = 0;
@@ -122,6 +130,12 @@ void SituationScene::setAnimation(QTimeLine *timer) {
     }
 }
 
+/**
+    Restores the Scene out of animation mode.
+    This method brings the scene back to the normal drawing mode.
+    For this it removes all BoatAnimation objects created in setAnimation().
+*/
+
 void SituationScene::unSetAnimation() {
     if (debugLevel & 1 << VIEW) std::cout << "ending Animation" << std::endl;
     foreach(BoatAnimation *animation, m_animationItems) {
@@ -131,6 +145,15 @@ void SituationScene::unSetAnimation() {
         delete animation;
     }
 }
+
+/**
+    Reacts to user keyboard actions in the Scene
+    This method modifies the associated SituationModel through the
+    concerned Undo Framework class. Handled keys are for
+    - heading of selected boats (+,-)
+    - position of selected objects (H (left), L (right), J (down), K (up))
+    - toggling zone of marks (Z)
+*/
 
 void SituationScene::keyPressEvent(QKeyEvent *event) {
     // propagate key event first for focus items
@@ -169,6 +192,12 @@ void SituationScene::keyPressEvent(QKeyEvent *event) {
 
 }
 
+/**
+    Sets selection depending on modal status.
+    Selection happens with left button in NO_STATE, and right button in CREATE_BOAT
+    and CREATE_MARK modes.
+*/
+
 void SituationScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
     switch (m_state) {
         case NO_STATE:
@@ -187,6 +216,13 @@ void SituationScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
             break;
     }
 }
+
+/**
+    Handles a timer to limit user interaction
+    This method limits the move processing to one event handled per 40ms.
+    This is very noticeable on Windows platform, and the
+    culprit is the drawing, not the model setting.
+*/
 
 void SituationScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
     // limit update rate to 40ms
@@ -217,6 +253,14 @@ void SituationScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
     // trigger next update rate calculation
     m_time.start();
 }
+
+/**
+    Performs action depending of button and mode
+    This method will trigger performing of actions like:
+    - setting position of selected objects
+    - setting heading of selected BoatGraphicsItem
+    - creating new TrackModel, BoatModel or MarkModel according to mode.
+*/
 
 void SituationScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     QGraphicsScene::mouseReleaseEvent(event);

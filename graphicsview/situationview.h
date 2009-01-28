@@ -14,6 +14,19 @@
 
 #include <QtGui>
 
+/**
+    \class SituationView
+
+    \brief The View for a scenario
+
+    The class represents the View for a Scenario, according to the
+    Graphics View Framework.
+
+    It inherits QGraphicsView and manages zoom and screenshot capture.
+
+    \sa SituationScene, SituationModel
+*/
+
 class SituationView : public QGraphicsView {
     Q_OBJECT
     public:
@@ -32,6 +45,8 @@ class SituationView : public QGraphicsView {
 
     private:
         void setScale(bool in);
+
+        /// \a scaleValue holds the value for the viewing scale
         qreal scaleValue;
 };
 
