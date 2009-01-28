@@ -20,9 +20,9 @@ extern int debugLevel;
 
 MarkModel::MarkModel(SituationModel* situation, QObject *parent)
         : PositionModel(parent),
-        m_situation(situation),
         m_color(Qt::gray),
         m_zone(false),
+        m_situation(situation),
         m_length(situation->situationLength()) {
     if (debugLevel & 1 << MODEL) std::cout << "new Mark " << this << std::endl;
     setOrder(situation->markSize()+1);

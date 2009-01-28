@@ -21,8 +21,8 @@ extern int debugLevel;
 
 BoatModel::BoatModel(TrackModel* track, QObject *parent)
         : PositionModel(parent),
-        m_track(track),
-        m_heading(0) {
+        m_heading(0),
+        m_track(track) {
     if (debugLevel & 1 << MODEL) std::cout << "new Boat " << this << std::endl;
     setOrder(track->size()+1);
 }

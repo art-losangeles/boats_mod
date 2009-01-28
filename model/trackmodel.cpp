@@ -22,9 +22,9 @@ extern int debugLevel;
 
 TrackModel::TrackModel(SituationModel *situation, QObject *parent)
         : QObject(parent),
-        m_situation(situation),
         m_color(),
         m_series(Boats::unknown),
+        m_situation(situation),
         m_length(0) {
     static int track_id = 0;
     if (debugLevel & 1 << MODEL) std::cout << "new track " << this << std::endl;
