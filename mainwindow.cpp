@@ -132,6 +132,11 @@ void MainWindow::createActions() {
     connect(addMarkAction, SIGNAL(triggered()),
             this, SLOT(addMark()));
 
+    toggleMarkZoneAction = new QAction(QIcon(":/images/zone.png"), tr("Toggle Mark &Zone"), this);
+    toggleMarkZoneAction->setShortcut(tr("Z"));
+    connect(toggleMarkZoneAction, SIGNAL(triggered()),
+            this, SLOT(toggleMarkZone()));
+
     deleteTrackAction = new QAction(tr("Delete Track"), this);
     deleteTrackAction->setShortcut(tr("Ctrl+Del"));
     connect(deleteTrackAction, SIGNAL(triggered()),
@@ -283,6 +288,7 @@ void MainWindow::createMenus() {
     trackMenu->addSeparator();
     trackMenu->addAction(addBoatAction);
     trackMenu->addAction(addMarkAction);
+    trackMenu->addAction(toggleMarkZoneAction);
     trackMenu->addAction(deleteAction);
     trackMenu->addSeparator();
     trackMenu->addAction(animateAction);
@@ -574,6 +580,11 @@ void MainWindow::addMark() {
     } else {
         scene->setState(CREATE_MARK);
     }
+}
+
+void MainWindow::toggleMarkZone() {
+        QList<MarkModel *> boatList = scene->selectedMarkModels();
+        situation->undoStack()->push(new ZoneMarkUndoCommand(situation, boatList));
 }
 
 void MainWindow::animate(bool state) {

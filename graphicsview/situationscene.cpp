@@ -152,7 +152,6 @@ void SituationScene::unSetAnimation() {
     concerned Undo Framework class. Handled keys are for
     - heading of selected boats (+,-)
     - position of selected objects (H (left), L (right), J (down), K (up))
-    - toggling zone of marks (Z)
 */
 
 void SituationScene::keyPressEvent(QKeyEvent *event) {
@@ -185,11 +184,7 @@ void SituationScene::keyPressEvent(QKeyEvent *event) {
     } else if (event->key() == Qt::Key_J) { // Down
         QPointF pos(0,5);
         m_situation->undoStack()->push(new MoveModelUndoCommand(m_selectedModels, pos));
-
-    } else if (event->key() == Qt::Key_Z) { // toggle mark zone
-        m_situation->undoStack()->push(new ZoneMarkUndoCommand(m_situation, m_selectedMarkModels));
     }
-
 }
 
 /**

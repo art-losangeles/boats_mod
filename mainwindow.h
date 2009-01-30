@@ -57,6 +57,7 @@ class MainWindow : public QMainWindow {
         void addTrack();
         void addBoat();
         void addMark();
+        void toggleMarkZone();
         void deleteTrack();
         void deleteModels();
 
@@ -113,6 +114,7 @@ class MainWindow : public QMainWindow {
         QAction *addTrackAction;
         QAction *addBoatAction;
         QAction *addMarkAction;
+        QAction *toggleMarkZoneAction;
         QAction *deleteTrackAction;
         QAction *deleteAction;
 
