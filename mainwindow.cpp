@@ -290,14 +290,14 @@ void MainWindow::createMenus() {
     trackMenu->addAction(addMarkAction);
     trackMenu->addAction(toggleMarkZoneAction);
     trackMenu->addAction(deleteAction);
-    trackMenu->addSeparator();
-    trackMenu->addAction(animateAction);
 
     historyMenu = menubar->addMenu(tr("&History"));
     historyMenu->addAction(undoAction);
     historyMenu->addAction(redoAction);
 
     animationMenu = menubar->addMenu(tr("&Animation"));
+    animationMenu->addAction(animateAction);
+    animationMenu->addSeparator();
     animationMenu->addAction(startAction);
     animationMenu->addAction(pauseAction);
     animationMenu->addAction(stopAction);
