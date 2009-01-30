@@ -46,10 +46,14 @@ SituationWidget::SituationWidget(QWidget *parent)
     scenarioForm->addRow(new QLabel(tr("Zone Length"),scenarioGroup),lengthSpin);
     scenarioGroup->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Maximum);
 
+    // Track layout
+    trackGroup = new QGroupBox(tr("Tracks"),this);
+    trackLayout = new QGridLayout(trackGroup);
     trackTableModel = new TrackTableModel(m_situation);
-    trackTableView = new QTableView(scenarioGroup);
+    trackTableView = new QTableView(trackGroup);
     trackTableView->setItemDelegate(new TrackDelegate);
-    scenarioForm->addRow(new QLabel(tr("Tracks"),scenarioGroup),trackTableView);
+    trackTableView->verticalHeader()->hide();
+    trackLayout->addWidget(trackTableView);
 
     // Description layout
     descriptionGroup = new QGroupBox(tr("Description"),this);
@@ -74,6 +78,7 @@ SituationWidget::SituationWidget(QWidget *parent)
     // last bricks
     situationLayout = new QVBoxLayout(this);
     situationLayout->addWidget(scenarioGroup);
+    situationLayout->addWidget(trackGroup);
     situationLayout->addWidget(descriptionGroup);
     this->setLayout(situationLayout);
 }

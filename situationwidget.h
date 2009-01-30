@@ -52,9 +52,12 @@ class SituationWidget : public QWidget {
         QComboBox *seriesCombo;
         QSpinBox *laylineSpin;
         QSpinBox *lengthSpin;
+        QFormLayout *scenarioForm;
+
+        QGroupBox *trackGroup;
         TrackTableModel *trackTableModel;
         QTableView *trackTableView;
-        QFormLayout *scenarioForm;
+        QGridLayout *trackLayout;
 
         QGroupBox *descriptionGroup;
         QPlainTextEdit *abstractEdit;
