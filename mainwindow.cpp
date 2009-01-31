@@ -589,8 +589,10 @@ void MainWindow::addMark() {
 }
 
 void MainWindow::toggleMarkZone() {
-        QList<MarkModel *> boatList = scene->selectedMarkModels();
+    QList<MarkModel *> boatList = scene->selectedMarkModels();
+    if (! boatList.isEmpty()) {
         situation->undoStack()->push(new ZoneMarkUndoCommand(situation, boatList));
+    }
 }
 
 void MainWindow::animate(bool state) {
