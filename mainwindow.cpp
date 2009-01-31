@@ -368,8 +368,14 @@ void MainWindow::readSettings() {
     QSettings settings("Boats");
 
     settings.beginGroup("MainWindow");
-    resize(settings.value("size", QSize(400, 400)).toSize());
-    move(settings.value("pos", QPoint(200, 200)).toPoint());
+    QSize size = settings.value("size").toSize();
+    QPoint pos = settings.value("pos").toPoint();
+    if ( (size.isValid()) && (!pos.isNull()) ) {
+        resize(size);
+        move(pos);
+    } else {
+        showMaximized();
+    }
     settings.endGroup();
 }
 
