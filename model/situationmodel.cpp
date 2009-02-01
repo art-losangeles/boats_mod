@@ -89,9 +89,6 @@ void SituationModel::setSituationSeries(const int theValue, bool update) {
         if (debugLevel & 1 << MODEL) std::cout << "Situation " << this
         << " Series " << ENUM_NAME(Boats, Series, theValue) << std::endl;
         m_situationSeries = (Boats::Series) theValue;
-        foreach(TrackModel *track, m_tracks) {
-            track->setSeries(m_situationSeries, true);
-        }
         if (update) {
             emit seriesChanged(m_situationSeries);
             emit laylineChanged(m_laylineAngle);

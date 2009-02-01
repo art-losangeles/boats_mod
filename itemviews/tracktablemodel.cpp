@@ -17,6 +17,7 @@
 #include "boats.h"
 #include "model/situationmodel.h"
 #include "model/trackmodel.h"
+#include "undocommands.h"
 
 extern int debugLevel;
 
@@ -99,7 +100,10 @@ bool TrackTableModel::setData(const QModelIndex &index, const QVariant &value, i
                 int newValue = qVariantValue<int>(value);
                 if (newValue >= 0 && newValue < Boats::unknown) {
                     Boats::Series seriesValue = (Boats::Series)newValue;
-                    m_situation->tracks()[index.row()]->setSeries(seriesValue, true);
+                    TrackModel *track = m_situation->tracks()[index.row()];
+                    if (seriesValue != track->series()) {
+                        m_situation->undoStack()->push(new SetSeriesUndoCommand(track, seriesValue));
+                    }
                     emit dataChanged(index,index);
                     return true;
                 }

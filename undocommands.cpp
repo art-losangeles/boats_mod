@@ -15,6 +15,8 @@
 #include <cmath>
 
 #include "commontypes.h"
+#include "boats.h"
+
 #include "model/situationmodel.h"
 #include "model/trackmodel.h"
 #include "model/boatmodel.h"
@@ -119,30 +121,30 @@ bool SetLaylineUndoCommand::mergeWith(const QUndoCommand *command) {
 }
 
 // Set Series
-SetSeriesUndoCommand::SetSeriesUndoCommand(SituationModel* situation, const int series, QUndoCommand *parent)
+SetSituationSeriesUndoCommand::SetSituationSeriesUndoCommand(SituationModel* situation, const int series, QUndoCommand *parent)
         : QUndoCommand(parent),
         m_situation(situation),
         m_oldSeries(situation->situationSeries()),
         m_newSeries(series) {
-    if (debugLevel & 1 << COMMAND) std::cout << "new setseriesundocommand" << std::endl;
+    if (debugLevel & 1 << COMMAND) std::cout << "new SetSituationSeriesUndoCommand" << std::endl;
 }
 
-SetSeriesUndoCommand::~SetSeriesUndoCommand() {
-    if (debugLevel & 1 << COMMAND) std::cout << "end setseriesundocommand" << std::endl;
+SetSituationSeriesUndoCommand::~SetSituationSeriesUndoCommand() {
+    if (debugLevel & 1 << COMMAND) std::cout << "end SetSituationSeriesUndoCommand" << std::endl;
 }
 
-void SetSeriesUndoCommand::undo() {
-    if (debugLevel & 1 << COMMAND) std::cout << "undo setseriesundocommand" << std::endl;
+void SetSituationSeriesUndoCommand::undo() {
+    if (debugLevel & 1 << COMMAND) std::cout << "undo SetSituationSeriesUndoCommand" << std::endl;
     m_situation->setSituationSeries(m_oldSeries, true);
 }
 
-void SetSeriesUndoCommand::redo() {
-    if (debugLevel & 1 << COMMAND) std::cout << "redo setseriesundocommand" << std::endl;
+void SetSituationSeriesUndoCommand::redo() {
+    if (debugLevel & 1 << COMMAND) std::cout << "redo SetSituationSeriesUndoCommand" << std::endl;
     m_situation->setSituationSeries(m_newSeries, true);
 }
 
-bool SetSeriesUndoCommand::mergeWith(const QUndoCommand *command) {
-    const SetSeriesUndoCommand *setseriesCommand = static_cast<const SetSeriesUndoCommand*>(command);
+bool SetSituationSeriesUndoCommand::mergeWith(const QUndoCommand *command) {
+    const SetSituationSeriesUndoCommand *setseriesCommand = static_cast<const SetSituationSeriesUndoCommand*>(command);
     if (m_situation != setseriesCommand->m_situation)
         return false;
 
@@ -257,6 +259,38 @@ void DeleteTrackUndoCommand::redo() {
 void DeleteTrackUndoCommand::undo() {
     if (debugLevel & 1 << COMMAND) std::cout << "undo removetrackundocommand" << std::endl;
     m_situation->addTrack(m_track);
+}
+
+// Set Series
+SetSeriesUndoCommand::SetSeriesUndoCommand(TrackModel* track, const Boats::Series series, QUndoCommand *parent)
+    : QUndoCommand(parent),
+    m_track(track),
+    m_oldSeries(track->series()),
+    m_newSeries(series) {
+    if (debugLevel & 1 << COMMAND) std::cout << "new setseriesundocommand" << std::endl;
+}
+
+SetSeriesUndoCommand::~SetSeriesUndoCommand() {
+    if (debugLevel & 1 << COMMAND) std::cout << "end setseriesundocommand" << std::endl;
+}
+
+void SetSeriesUndoCommand::undo() {
+    if (debugLevel & 1 << COMMAND) std::cout << "undo setseriesundocommand" << std::endl;
+    m_track->setSeries(m_oldSeries, true);
+}
+
+void SetSeriesUndoCommand::redo() {
+    if (debugLevel & 1 << COMMAND) std::cout << "redo setseriesundocommand" << std::endl;
+    m_track->setSeries(m_newSeries, true);
+}
+
+bool SetSeriesUndoCommand::mergeWith(const QUndoCommand *command) {
+    const SetSeriesUndoCommand *seriesCommand = static_cast<const SetSeriesUndoCommand*>(command);
+    if (m_track != seriesCommand->m_track)
+        return false;
+
+    m_newSeries = seriesCommand->m_newSeries;
+    return true;
 }
 
 // Move Model

@@ -15,6 +15,8 @@
 #include <QUndoCommand>
 #include <QPointF>
 
+#include "boats.h"
+
 class SituationModel;
 class TrackModel;
 class PositionModel;
@@ -25,9 +27,10 @@ enum {
     SET_TITLE,
     SET_RULES,
     SET_LAYLINE,
-    SET_SERIES,
+    SET_SITUATIONSERIES,
     SET_ABSTRACT,
     SET_DESCRIPTION,
+    SET_SERIES,
     MOVE_MODEL,
     HEADING_BOAT,
     ZONE_MARK,
@@ -82,15 +85,15 @@ class SetLaylineUndoCommand : public QUndoCommand {
         int m_newAngle;
 };
 
-class SetSeriesUndoCommand : public QUndoCommand {
+class SetSituationSeriesUndoCommand : public QUndoCommand {
 
     public:
-        SetSeriesUndoCommand(SituationModel* situation, const int series, QUndoCommand *parent = 0);
-        ~SetSeriesUndoCommand();
+        SetSituationSeriesUndoCommand(SituationModel* situation, const int series, QUndoCommand *parent = 0);
+        ~SetSituationSeriesUndoCommand();
         void undo();
         void redo();
         bool mergeWith(const QUndoCommand *command);
-        int id() const { return SET_SERIES; }
+        int id() const { return SET_SITUATIONSERIES; }
 
     private:
         SituationModel *m_situation;
@@ -155,6 +158,22 @@ class DeleteTrackUndoCommand : public QUndoCommand {
     private:
         SituationModel *m_situation;
         TrackModel *m_track;
+};
+
+class SetSeriesUndoCommand : public QUndoCommand {
+
+    public:
+        SetSeriesUndoCommand(TrackModel* track, const Boats::Series series, QUndoCommand *parent = 0);
+        ~SetSeriesUndoCommand();
+        void undo();
+        void redo();
+        bool mergeWith(const QUndoCommand *command);
+        int id() const { return SET_SERIES; }
+
+    private:
+        TrackModel *m_track;
+        Boats::Series m_oldSeries;
+        Boats::Series m_newSeries;
 };
 
 class MoveModelUndoCommand : public QUndoCommand {

@@ -221,7 +221,7 @@ void SituationWidget::setLength(int length) {
 void SituationWidget::setSeries(int series) {
     if (m_situation) {
         if (series != m_situation->situationSeries()) {
-            m_situation->undoStack()->push(new SetSeriesUndoCommand(m_situation, series));
+            m_situation->undoStack()->push(new SetSituationSeriesUndoCommand(m_situation, series));
         }
     }
 }
