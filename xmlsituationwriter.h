@@ -27,9 +27,9 @@ class XmlSituationWriter : public QXmlStreamWriter {
         bool writeFile(QIODevice *device);
 
     private:
-        void writeTrack(TrackModel *track);
-        void writeBoat(BoatModel *boat);
-        void writeMark(MarkModel *mark);
+        void writeTrack(const TrackModel *track);
+        void writeBoat(const BoatModel *boat);
+        void writeMark(const MarkModel *mark);
         void writeUnknownElement(const QString &discarded);
 
         SituationModel *m_situation;

@@ -141,7 +141,7 @@ void XmlSituationReader::readBoat(SituationModel *situation, TrackModel *track) 
         situation->undoStack()->push(command);
         boat = command->boat();
     }
-    foreach (QString elem, discarded) {
+    foreach (const QString elem, discarded) {
         boat->appendDiscardedXml(elem);
     }
 }

@@ -86,7 +86,7 @@ void SituationScene::addBoatItem(BoatModel *boat) {
 }
 
 void SituationScene::deleteBoatItem() {
-    foreach(BoatModel *boat, m_selectedBoatModels) {
+    foreach (BoatModel *boat, m_selectedBoatModels) {
         boat->track()->deleteBoat(boat);
     }
 }
@@ -98,7 +98,7 @@ void SituationScene::addMarkItem(MarkModel *mark) {
 }
 
 void SituationScene::deleteMarkItem() {
-    foreach(MarkModel *mark, m_selectedMarkModels) {
+    foreach (MarkModel *mark, m_selectedMarkModels) {
         mark->situation()->deleteMark(mark);
     }
 }
@@ -114,7 +114,7 @@ void SituationScene::deleteMarkItem() {
 void SituationScene::setAnimation(QTimeLine *timer) {
     if (debugLevel & 1 << VIEW) std::cout << "preparing for Animation" << std::endl;
     int maxSize = 0;
-    foreach (TrackModel *track, m_situation->tracks()) {
+    foreach (const TrackModel *track, m_situation->tracks()) {
         if (track->boats().size() > maxSize)
             maxSize = track->boats().size() - 1;
     }
@@ -138,7 +138,7 @@ void SituationScene::setAnimation(QTimeLine *timer) {
 
 void SituationScene::unSetAnimation() {
     if (debugLevel & 1 << VIEW) std::cout << "ending Animation" << std::endl;
-    foreach(BoatAnimation *animation, m_animationItems) {
+    foreach (BoatAnimation *animation, m_animationItems) {
         removeItem(animation->boat());
         m_animationItems.removeOne(animation);
         delete animation->boat();
@@ -370,7 +370,7 @@ void SituationScene::setSelectedModels() {
     m_selectedModels.clear();
     m_selectedBoatModels.clear();
     m_selectedMarkModels.clear();
-    foreach(QGraphicsItem *item, selectedItems()) {
+    foreach (QGraphicsItem *item, selectedItems()) {
         switch(item->type()) {
             case BOAT_TYPE: {
                 BoatModel *boat = (qgraphicsitem_cast<BoatGraphicsItem*>(item))->boat();

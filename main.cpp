@@ -41,7 +41,7 @@ int main(int argc, char *argv[]) {
     MainWindow window;
     window.show();
 
-    foreach(QString fileName, arguments) {
+    foreach (const QString fileName, arguments) {
         std::cout << "opening " << fileName.toStdString() << std::endl;
         window.openFile(fileName);
     }

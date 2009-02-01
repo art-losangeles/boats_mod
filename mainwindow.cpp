@@ -429,7 +429,7 @@ void MainWindow::openFile() {
     openFile(fileName);
 }
 
-void MainWindow::openFile(QString &fileName) {
+void MainWindow::openFile(const QString &fileName) {
     // delete situation;
     newFile();
 
@@ -571,11 +571,11 @@ void MainWindow::addBoat() {
 }
 
 void MainWindow::deleteModels() {
-    foreach(BoatModel *boat, scene->selectedBoatModels()) {
+    foreach (BoatModel *boat, scene->selectedBoatModels()) {
         TrackModel* track = boat->track();
         situation->undoStack()->push(new DeleteBoatUndoCommand(track, boat));
     }
-    foreach(MarkModel *mark, scene->selectedMarkModels()) {
+    foreach (MarkModel *mark, scene->selectedMarkModels()) {
         situation->undoStack()->push(new DeleteMarkUndoCommand(situation, mark));
     }
 }

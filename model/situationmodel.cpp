@@ -104,7 +104,7 @@ void SituationModel::setSituationLength(const int theValue, bool update) {
         if (debugLevel & 1 << MODEL) std::cout << "Situation " << this
         << " Length " << theValue << std::endl;
         m_situationLength = theValue;
-        foreach(MarkModel *mark, m_marks) {
+        foreach (MarkModel *mark, m_marks) {
             mark->setLength(m_situationLength, true);
         }
         if (update)

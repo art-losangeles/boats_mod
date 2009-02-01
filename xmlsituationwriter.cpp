@@ -45,46 +45,46 @@ bool XmlSituationWriter::writeFile(QIODevice *device) {
     }
     writeTextElement("series",ENUM_NAME(Boats, Series, m_situation->situationSeries()));
     writeTextElement("layline",QString::number(m_situation->laylineAngle()));
-    foreach(QString discarded, m_situation->discardedXml())
+    foreach (const QString discarded, m_situation->discardedXml())
         writeUnknownElement(discarded);
-    foreach (MarkModel *mark, m_situation->marks())
+    foreach (const MarkModel *mark, m_situation->marks())
         writeMark(mark);
-    foreach (TrackModel *track, m_situation->tracks())
+    foreach (const TrackModel *track, m_situation->tracks())
         writeTrack(track);
 
     writeEndDocument();
     return true;
 }
 
-void XmlSituationWriter::writeTrack(TrackModel *track) {
+void XmlSituationWriter::writeTrack(const TrackModel *track) {
     writeStartElement("track");
     writeTextElement("color",track->color().name());
     writeTextElement("series",ENUM_NAME(Boats, Series, track->series()));
-    foreach(QString discarded, track->discardedXml())
+    foreach (const QString discarded, track->discardedXml())
         writeUnknownElement(discarded);
-    foreach (BoatModel *boat, track->boats())
+    foreach (const BoatModel *boat, track->boats())
         writeBoat(boat);
     writeEndElement();
 }
 
-void XmlSituationWriter::writeBoat(BoatModel *boat) {
+void XmlSituationWriter::writeBoat(const BoatModel *boat) {
     writeStartElement("boat");
     writeTextElement("x",QString::number(boat->position().x()));
     writeTextElement("y",QString::number(boat->position().y()));
     writeTextElement("heading",QString::number(boat->heading()));
-    foreach(QString discarded, boat->discardedXml())
+    foreach (const QString discarded, boat->discardedXml())
         writeUnknownElement(discarded);
     writeEndElement();
 }
 
-void XmlSituationWriter::writeMark(MarkModel *mark) {
+void XmlSituationWriter::writeMark(const MarkModel *mark) {
     writeStartElement("mark");
     writeTextElement("x",QString::number(mark->position().x()));
     writeTextElement("y",QString::number(mark->position().y()));
     writeTextElement("color",mark->color().name());
     writeTextElement("zone",QString::number(mark->zone()));
     writeTextElement("length",QString::number(mark->length()));
-    foreach(QString discarded, mark->discardedXml())
+    foreach (const QString discarded, mark->discardedXml())
         writeUnknownElement(discarded);
     writeEndElement();
 }

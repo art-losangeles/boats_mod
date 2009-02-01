@@ -48,7 +48,7 @@ class MainWindow : public QMainWindow {
         // File actions
         void newFile();
         void openFile();
-        void openFile(QString &fileName);
+        void openFile(const QString &fileName);
         bool saveFile();
         bool saveAs();
         void exportImage();
