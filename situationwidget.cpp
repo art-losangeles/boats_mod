@@ -28,7 +28,11 @@ SituationWidget::SituationWidget(QWidget *parent)
 
     // Scenario layout
     scenarioGroup = new QGroupBox(tr("Scenario"),this);
-    scenarioForm = new QFormLayout(scenarioGroup);
+    scenarioGroup->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Maximum);
+
+    scenarioGrid = new QGridLayout(scenarioGroup);
+    scenarioForm = new QFormLayout();
+    scenarioGrid->addLayout(scenarioForm,0,0);
 
     titleEdit = new QLineEdit(scenarioGroup);
     scenarioForm->addRow(new QLabel(tr("Title"),scenarioGroup),titleEdit);
@@ -44,7 +48,22 @@ SituationWidget::SituationWidget(QWidget *parent)
 
     lengthSpin = new QSpinBox(scenarioGroup);
     scenarioForm->addRow(new QLabel(tr("Zone Length"),scenarioGroup),lengthSpin);
-    scenarioGroup->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Maximum);
+
+    QLabel *abstractLabel = new QLabel(tr("Abstract"),scenarioGroup);
+    scenarioGrid->addWidget(abstractLabel,1,0);
+
+    abstractEdit = new QPlainTextEdit(scenarioGroup);
+    abstractEdit->setUndoRedoEnabled(false);
+    abstractEdit->setContextMenuPolicy(Qt::NoContextMenu);
+    scenarioGrid->addWidget(abstractEdit,2,0);
+
+    QLabel *descriptionLabel = new QLabel(tr("Description"),scenarioGroup);
+    scenarioGrid->addWidget(descriptionLabel,3,0);
+
+    descriptionEdit = new QPlainTextEdit(scenarioGroup);
+    descriptionEdit->setUndoRedoEnabled(false);
+    descriptionEdit->setContextMenuPolicy(Qt::NoContextMenu);
+    scenarioGrid->addWidget(descriptionEdit,4,0);
 
     // Track layout
     trackGroup = new QGroupBox(tr("Tracks"),this);
@@ -53,33 +72,16 @@ SituationWidget::SituationWidget(QWidget *parent)
     trackTableView = new QTableView(trackGroup);
     trackTableView->setItemDelegate(new TrackDelegate);
     trackTableView->verticalHeader()->hide();
+    trackTableView->horizontalHeader()->setResizeMode(0, QHeaderView::Fixed);
+    trackTableView->horizontalHeader()->setDefaultSectionSize(40);
+    trackTableView->horizontalHeader()->setStretchLastSection(true);
+    trackTableView->horizontalHeader()->setClickable(false);
     trackLayout->addWidget(trackTableView);
-
-    // Description layout
-    descriptionGroup = new QGroupBox(tr("Description"),this);
-    descriptionLayout = new QGridLayout(descriptionGroup);
-
-    QLabel *abstractLabel = new QLabel(tr("Abstract"),descriptionGroup);
-    descriptionLayout->addWidget(abstractLabel,0,0);
-
-    abstractEdit = new QPlainTextEdit(descriptionGroup);
-    abstractEdit->setUndoRedoEnabled(false);
-    abstractEdit->setContextMenuPolicy(Qt::NoContextMenu);
-    descriptionLayout->addWidget(abstractEdit,1,0);
-
-    QLabel *descriptionLabel = new QLabel(tr("Description"),descriptionGroup);
-    descriptionLayout->addWidget(descriptionLabel,2,0);
-
-    descriptionEdit = new QPlainTextEdit(descriptionGroup);
-    descriptionEdit->setUndoRedoEnabled(false);
-    descriptionEdit->setContextMenuPolicy(Qt::NoContextMenu);
-    descriptionLayout->addWidget(descriptionEdit,3,0);
 
     // last bricks
     situationLayout = new QVBoxLayout(this);
     situationLayout->addWidget(scenarioGroup);
     situationLayout->addWidget(trackGroup);
-    situationLayout->addWidget(descriptionGroup);
     this->setLayout(situationLayout);
 }
 
@@ -131,14 +133,6 @@ void SituationWidget::setSituation(SituationModel *situation) {
         connect (situation, SIGNAL(lengthChanged(const int)),
                 lengthSpin, SLOT(setValue(int)));
 
-        trackTableModel->setSituation(m_situation);
-        connect(situation, SIGNAL(trackAdded(TrackModel*)),
-                trackTableModel, SLOT(addTrack(TrackModel*)));
-        connect(situation, SIGNAL(trackRemoved(TrackModel*)),
-                trackTableModel, SLOT(deleteTrack(TrackModel*)));
-        trackTableView->setModel(trackTableModel);
-
-        // Description Group
         connect(abstractEdit->document(), SIGNAL(contentsChanged()),
                 this, SLOT(setAbstract()));
         connect(situation, SIGNAL(abstractChanged(const QString)),
@@ -148,6 +142,15 @@ void SituationWidget::setSituation(SituationModel *situation) {
                 this, SLOT(setDescription()));
         connect(situation, SIGNAL(descriptionChanged(const QString)),
                 this, SLOT(updateDescription(const QString)));
+
+        // Track group
+        trackTableModel->setSituation(m_situation);
+        connect(situation, SIGNAL(trackAdded(TrackModel*)),
+                trackTableModel, SLOT(addTrack(TrackModel*)));
+        connect(situation, SIGNAL(trackRemoved(TrackModel*)),
+                trackTableModel, SLOT(deleteTrack(TrackModel*)));
+        trackTableView->setModel(trackTableModel);
+
     }
 }
 
@@ -173,14 +176,14 @@ void SituationWidget::unSetSituation() {
     disconnect(m_situation, 0, lengthSpin, 0);
     lengthSpin->setValue(3);
 
-    disconnect(m_situation, 0, trackTableModel, 0);
-
-    // Description Group
     disconnect(m_situation, 0, this, 0);
     disconnect(abstractEdit->document(), 0, 0, 0);
     abstractEdit->clear();
     disconnect(descriptionEdit->document(), 0, 0, 0);
     descriptionEdit->clear();
+
+    // Track Group
+    disconnect(m_situation, 0, trackTableModel, 0);
 
     m_situation = 0;
 }
