@@ -25,6 +25,18 @@ void TrackDelegate::paint(QPainter *painter,
     const QModelIndex &index) const {
 
     painter->save();
+
+    drawBackground(painter, option, index);
+
+    QRect checkRect;
+    Qt::CheckState checkState = Qt::Unchecked;
+    QVariant value = index.data(Qt::CheckStateRole);
+    if (value.isValid()) {
+        checkState = static_cast<Qt::CheckState>(value.toInt());
+        checkRect = check(option, option.rect, value);
+    }
+    drawCheck(painter, option, checkRect, checkState);
+
     switch (index.column()) {
         case TRACK_COLOR: {
             QColor trackColor = qVariantValue<QColor>(index.data());
@@ -39,15 +51,15 @@ void TrackDelegate::paint(QPainter *painter,
             break;
         case TRACK_SERIES: {
             int series = qVariantValue<int>(index.data());
-            painter->drawText(option.rect, Qt::AlignVCenter, ENUM_NAME(Boats, Series, series));
+            drawDisplay(painter, option, option.rect, ENUM_NAME(Boats, Series, series));
             }
             break;
         default:
             QItemDelegate::paint(painter, option, index);
             break;
     }
-    if (option.state & QStyle::State_Selected)
-        painter->fillRect(option.rect, option.palette.highlight());
+
+    drawFocus(painter, option, option.rect);
     painter->restore();
 }
 
