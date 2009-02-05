@@ -118,12 +118,26 @@ bool TrackTableModel::setData(const QModelIndex &index, const QVariant &value, i
 
 void TrackTableModel::addTrack(TrackModel *track) {
     int order = track->order();
+    connect(track, SIGNAL(colorChanged(QColor)),
+            this, SLOT(updateTrack()));
+    connect(track, SIGNAL(seriesChanged(Boats::Series)),
+            this, SLOT(updateTrack()));
     beginInsertRows(QModelIndex(), order, order);
     endInsertRows();
 }
 
+void TrackTableModel::updateTrack() {
+    TrackModel *track = (TrackModel*) sender();
+    int order = track->order();
+    for (int i = TRACK_COLOR; i <= TRACK_SERIES; i++) {
+        QModelIndex ind = index(i, order);
+        emit dataChanged(ind, ind);
+    }
+}
+
 void TrackTableModel::deleteTrack(TrackModel *track) {
     int order = track->order();
+    disconnect(track,0,this,0);
     beginRemoveRows(QModelIndex(), order, order);
     endRemoveRows();
 }

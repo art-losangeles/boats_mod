@@ -34,6 +34,7 @@ class TrackTableModel : public QAbstractTableModel {
 
     public slots:
         void addTrack(TrackModel *track);
+        void updateTrack();
         void deleteTrack(TrackModel *track);
 
     private:
