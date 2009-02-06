@@ -573,7 +573,11 @@ void MainWindow::addBoat() {
 void MainWindow::deleteModels() {
     foreach (BoatModel *boat, scene->selectedBoatModels()) {
         TrackModel* track = boat->track();
-        situation->undoStack()->push(new DeleteBoatUndoCommand(track, boat));
+        if (track->size() > 1) {
+            situation->undoStack()->push(new DeleteBoatUndoCommand(track, boat));
+        } else {
+            situation->undoStack()->push(new DeleteTrackUndoCommand(situation, track));
+        }
     }
     foreach (MarkModel *mark, scene->selectedMarkModels()) {
         situation->undoStack()->push(new DeleteMarkUndoCommand(situation, mark));
