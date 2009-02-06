@@ -293,6 +293,38 @@ bool SetSeriesUndoCommand::mergeWith(const QUndoCommand *command) {
     return true;
 }
 
+// Set Color
+SetColorUndoCommand::SetColorUndoCommand(TrackModel* track, const QColor color, QUndoCommand *parent)
+    : QUndoCommand(parent),
+    m_track(track),
+    m_oldColor(track->color()),
+    m_newColor(color) {
+    if (debugLevel & 1 << COMMAND) std::cout << "new setcolorundocommand" << std::endl;
+}
+
+SetColorUndoCommand::~SetColorUndoCommand() {
+    if (debugLevel & 1 << COMMAND) std::cout << "end setcolorundocommand" << std::endl;
+}
+
+void SetColorUndoCommand::undo() {
+    if (debugLevel & 1 << COMMAND) std::cout << "undo setcolorundocommand" << std::endl;
+    m_track->setColor(m_oldColor, true);
+}
+
+void SetColorUndoCommand::redo() {
+    if (debugLevel & 1 << COMMAND) std::cout << "redo setcolorundocommand" << std::endl;
+    m_track->setColor(m_newColor, true);
+}
+
+bool SetColorUndoCommand::mergeWith(const QUndoCommand *command) {
+    const SetColorUndoCommand *colorCommand = static_cast<const SetColorUndoCommand*>(command);
+    if (m_track != colorCommand->m_track)
+        return false;
+
+    m_newColor = colorCommand->m_newColor;
+    return true;
+}
+
 // Move Model
 MoveModelUndoCommand::MoveModelUndoCommand(QList<PositionModel*> &modelList, const QPointF &deltaPosition, QUndoCommand *parent)
         : QUndoCommand(parent),

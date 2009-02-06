@@ -90,7 +90,10 @@ bool TrackTableModel::setData(const QModelIndex &index, const QVariant &value, i
         case TRACK_COLOR:
             if (qVariantCanConvert<QColor>(value)) {
                 QColor newValue = qVariantValue<QColor>(value);
-                m_situation->tracks()[index.row()]->setColor(newValue, true);
+                TrackModel *track = m_situation->tracks()[index.row()];
+                if (newValue != track->color()) {
+                    m_situation->undoStack()->push(new SetColorUndoCommand(track, newValue));
+                }
                 emit dataChanged(index,index);
                 return true;
             }

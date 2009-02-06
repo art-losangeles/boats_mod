@@ -31,6 +31,7 @@ enum {
     SET_ABSTRACT,
     SET_DESCRIPTION,
     SET_SERIES,
+    SET_COLOR,
     MOVE_MODEL,
     HEADING_BOAT,
     ZONE_MARK,
@@ -174,6 +175,22 @@ class SetSeriesUndoCommand : public QUndoCommand {
         TrackModel *m_track;
         Boats::Series m_oldSeries;
         Boats::Series m_newSeries;
+};
+
+class SetColorUndoCommand : public QUndoCommand {
+
+    public:
+        SetColorUndoCommand(TrackModel* track, const QColor color, QUndoCommand *parent = 0);
+        ~SetColorUndoCommand();
+        void undo();
+        void redo();
+        bool mergeWith(const QUndoCommand *command);
+        int id() const { return SET_COLOR; }
+
+    private:
+        TrackModel *m_track;
+        QColor m_oldColor;
+        QColor m_newColor;
 };
 
 class MoveModelUndoCommand : public QUndoCommand {
