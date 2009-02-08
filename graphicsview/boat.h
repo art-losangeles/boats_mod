@@ -64,6 +64,10 @@ class BoatGraphicsItem : public QObject, public QGraphicsItem {
         void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 
     private:
+
+        /// draw a sail with size sailScale from point attach
+        void paintSail(QPainter *painter, qreal sailSize, QPointF attach);
+
         /// \a m_boat holds the BoatModel being represented
         BoatModel *m_boat;
 

@@ -263,41 +263,47 @@ void BoatGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *
     painter->setBrush(Qt::black);
     painter->drawPath(fpath);
 
-    qreal sailScale;
     switch (m_series) {
     case Boats::keelboat:
-        painter->translate(0,-8);
-        sailScale = .83;
+        paintSail(painter, 41.5, QPointF(0,-8));
         break;
     case Boats::laser:
-        painter->translate(0, -8.7);
-        sailScale = 0.57;
+        paintSail(painter, 28.5, QPointF(0, -8.7));
         break;
     case Boats::optimist:
-        painter->translate(0,-6.9);
-        sailScale = 0.33;
+        paintSail(painter, 16.5, QPointF(0,-6.9));
         break;
     case Boats::tornado:
-        sailScale = 0.51;
+        paintSail(painter, 25.5, QPointF(0,0));
         break;
     default:
         break;
     }
+
+}
+
+void BoatGraphicsItem::paintSail(QPainter *painter, qreal sailSize, QPointF attach) {
+    painter->save();
+    painter->translate(attach);
     QPainterPath sailPath(QPointF(0,0));
     qreal layline = m_boat->track()->situation()->laylineAngle() -10;
     if (m_angle< layline || m_angle>360-layline) {
-        sailPath.lineTo(2 * sailScale, 10 * sailScale);
-        sailPath.lineTo(-2 * sailScale, 20 * sailScale);
-        sailPath.lineTo(2 * sailScale, 30 * sailScale);
-        sailPath.lineTo(-2 * sailScale, 40 * sailScale);
-        sailPath.lineTo(0 * sailScale, 50 * sailScale);
+        sailPath.lineTo(.04 * sailSize, .2 * sailSize);
+        sailPath.lineTo(-.04 * sailSize, .4 * sailSize);
+        sailPath.lineTo(.04 * sailSize, .6 * sailSize);
+        sailPath.lineTo(-.04 * sailSize, .8 * sailSize);
+        sailPath.lineTo(0, sailSize);
     } else if (m_angle<180) {
-        sailPath.cubicTo(5 * sailScale, 10 * sailScale, 5 * sailScale, 40 * sailScale, 0 * sailScale, 50 * sailScale);
+        sailPath.cubicTo(.1 * sailSize, .2 * sailSize, .1 * sailSize, .8 * sailSize, 0, sailSize);
+        sailPath.lineTo(0, 0);
     } else {
-        sailPath.cubicTo(-5 * sailScale, 10 * sailScale, -5 * sailScale, 40 * sailScale, 0 * sailScale, 50 * sailScale);
+        sailPath.cubicTo(-.1 * sailSize, .2 * sailSize, -.1 * sailSize, .8 * sailSize, 0, sailSize);
+        sailPath.lineTo(0, 0);
     }
     painter->rotate(m_sailAngle);
     painter->strokePath(sailPath,painter->pen());
+
+    painter->restore();
 }
 
 int BoatGraphicsItem::type() const {
