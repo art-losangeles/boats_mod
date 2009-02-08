@@ -177,9 +177,16 @@ void BoatGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *
     Q_UNUSED(widget);
 
     QPainterPath path;
-    QPainterPath fpath;
-    QFont f(painter->font());
-    QString number = QString::number(m_order);
+    int numberSize = 0;
+    qreal posY = 0;
+
+    painter->rotate(m_angle);
+
+    if (isSelected())
+        painter->setPen(Qt::red);
+    else
+        painter->setPen(Qt::black);
+    painter->setBrush(m_color);
 
     switch (m_series) {
     case Boats::keelboat:
@@ -187,11 +194,8 @@ void BoatGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *
         path.cubicTo(20, 0, 18, 13, 10, 48);
         path.lineTo(-10, 48);
         path.cubicTo(-18, 13, -20, 0, 0, -50);
-        if (m_order) {
-            f.setPointSize(12);
-            QFontMetrics fm(f);
-            fpath.addText(-fm.width(number)/2.0, 25 ,f,number);
-        }
+        numberSize = 12;
+        posY = 25;
         break;
     case Boats::laser:
         path.moveTo(0,-20);
@@ -202,11 +206,8 @@ void BoatGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *
         path.cubicTo(-6.7, 14.3, -6.7, 11.0, -6.7, 4.7);
         path.cubicTo(-6.7, -3.3, -3.3, -14.3, -0.7, -19.7);
         path.cubicTo(-0.3, -20.0, -0.3, -19.7, 0, -20);
-        if (m_order) {
-            f.setPointSize(7);
-            QFontMetrics fm(f);
-            fpath.addText(-fm.width(number)/2.0, 10 ,f,number);
-        }
+        numberSize = 7;
+        posY = 10;
         break;
     case Boats::optimist:
         path.moveTo(0,-11.5);
@@ -217,11 +218,8 @@ void BoatGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *
         path.cubicTo(-5.0, 9.0, -5.6, 5.4, -5.6, 1.5);
         path.cubicTo(-5.6, -4.0, -3.6, -9.4, -2.9, -11.1);
         path.cubicTo(-1.7, -11.3, -1.5, -11.5, 0, -11.5);
-        if (m_order) {
-            f.setPointSize(6);
-            QFontMetrics fm(f);
-            fpath.addText(-fm.width(number)/2.0, 5 ,f,number);
-        }
+        numberSize = 6;
+        posY = 5;
         break;
     case Boats::tornado:
         path.moveTo(0,0);
@@ -241,27 +239,18 @@ void BoatGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *
         path.cubicTo(-15.3, -6.1, -14.7, -20.3, -13.2, -30.5);
         path.cubicTo(-12.2, -19.8, -11.2, -11.7, -10.7, 0);
         path.lineTo(0, 0);
-        if (m_order) {
-            f.setPointSize(10);
-            QFontMetrics fm(f);
-            fpath.addText(-fm.width(number)/2.0, 17 ,f,number);
-        }
+        numberSize = 10;
+        posY = 17;
         break;
     default:
         break;
     }
 
-    painter->rotate(m_angle);
-
-    if (isSelected())
-        painter->setPen(Qt::red);
-    else
-        painter->setPen(Qt::black);
-    painter->setBrush(m_color);
     painter->drawPath(path);
 
-    painter->setBrush(Qt::black);
-    painter->drawPath(fpath);
+    if (m_order) {
+        paintNumber(painter, numberSize, posY);
+    }
 
     switch (m_series) {
     case Boats::keelboat:
@@ -280,6 +269,16 @@ void BoatGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *
         break;
     }
 
+}
+
+void BoatGraphicsItem::paintNumber(QPainter *painter, int numberSize, qreal posY) {
+    QPainterPath fpath;
+    QFont f(painter->font());
+    QString number = QString::number(m_order);
+    f.setPointSize(numberSize);
+    QFontMetrics fm(f);
+    fpath.addText(-fm.width(number)/2.0, posY ,f,number);
+    painter->fillPath(fpath, QBrush(Qt::black));
 }
 
 void BoatGraphicsItem::paintSail(QPainter *painter, qreal sailSize, QPointF attach) {

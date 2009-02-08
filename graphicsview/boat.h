@@ -65,6 +65,9 @@ class BoatGraphicsItem : public QObject, public QGraphicsItem {
 
     private:
 
+        /// draw a number with font size numberSize at posY alongside boat
+        void paintNumber(QPainter *painter, int numberSize, qreal posY);
+
         /// draw a sail with size sailScale from point attach
         void paintSail(QPainter *painter, qreal sailSize, QPointF attach);
 
