@@ -118,6 +118,7 @@ void BoatGraphicsItem::setSeries(Boats::Series value) {
     if (m_series != value) {
         prepareGeometryChange();
         m_series = value;
+        setSailAngle();
         update();
     }
 }
