@@ -284,23 +284,24 @@ void BoatGraphicsItem::paintNumber(QPainter *painter, int numberSize, qreal posY
 void BoatGraphicsItem::paintSail(QPainter *painter, qreal sailSize, QPointF attach) {
     painter->save();
     painter->translate(attach);
-    QPainterPath sailPath(QPointF(0,0));
+    QPainterPath sailPath;
     qreal layline = m_boat->track()->situation()->laylineAngle() -10;
     if (m_angle< layline || m_angle>360-layline) {
-        sailPath.lineTo(.04 * sailSize, .2 * sailSize);
-        sailPath.lineTo(-.04 * sailSize, .4 * sailSize);
-        sailPath.lineTo(.04 * sailSize, .6 * sailSize);
-        sailPath.lineTo(-.04 * sailSize, .8 * sailSize);
-        sailPath.lineTo(0, sailSize);
+        sailPath.cubicTo(.1 * sailSize, .2 * sailSize, .1 * sailSize, .2 * sailSize, 0, .3 * sailSize);
+        sailPath.cubicTo(-.1 * sailSize, .4 * sailSize, -.1 * sailSize, .4 * sailSize, 0, .5 * sailSize);
+        sailPath.cubicTo(.1 * sailSize, .6 * sailSize, .1 * sailSize, .6 * sailSize, 0, .7 * sailSize);
+        sailPath.cubicTo(-.1 * sailSize, .8 * sailSize, -.1 * sailSize, .8 * sailSize, 0, sailSize);
+        sailPath.lineTo(0, 0);
     } else if (m_angle<180) {
-        sailPath.cubicTo(.1 * sailSize, .2 * sailSize, .1 * sailSize, .8 * sailSize, 0, sailSize);
+        sailPath.cubicTo(.1 * sailSize, .4 * sailSize, .1 * sailSize, .6 * sailSize, 0, sailSize);
         sailPath.lineTo(0, 0);
     } else {
-        sailPath.cubicTo(-.1 * sailSize, .2 * sailSize, -.1 * sailSize, .8 * sailSize, 0, sailSize);
+        sailPath.cubicTo(-.1 * sailSize, .4 * sailSize, -.1 * sailSize, .6 * sailSize, 0, sailSize);
         sailPath.lineTo(0, 0);
     }
-    painter->rotate(m_sailAngle);
-    painter->strokePath(sailPath,painter->pen());
+    painter->rotate(m_sailAngle);    
+    painter->fillPath(sailPath, QBrush(Qt::white));
+    painter->strokePath(sailPath, painter->pen());
 
     painter->restore();
 }
