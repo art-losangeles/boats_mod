@@ -12,7 +12,7 @@
 #ifndef COMMONTYPES_H
 #define COMMONTYPES_H
 
-#define VERSION "200811"
+#define VERSION "200902"
 
 enum DebugTraces {
     MODEL,
