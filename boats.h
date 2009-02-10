@@ -29,6 +29,7 @@ public:
         laser,
         optimist,
         tornado,
+        startboat,
         unknown
     };
     Q_ENUMS (Series);
