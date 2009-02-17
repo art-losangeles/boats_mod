@@ -72,7 +72,7 @@ SituationWidget::SituationWidget(QWidget *parent)
     trackTableView = new QTableView(trackGroup);
     trackTableView->setItemDelegate(new TrackDelegate);
     trackTableView->verticalHeader()->hide();
-    trackTableView->horizontalHeader()->setResizeMode(0, QHeaderView::Fixed);
+    trackTableView->horizontalHeader()->setResizeMode(QHeaderView::Fixed);
     trackTableView->horizontalHeader()->setDefaultSectionSize(60);
     trackTableView->horizontalHeader()->setStretchLastSection(true);
     trackTableView->horizontalHeader()->setClickable(false);
