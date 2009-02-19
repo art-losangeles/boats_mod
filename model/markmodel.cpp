@@ -32,30 +32,27 @@ MarkModel::~MarkModel() {
     if (debugLevel & 1 << MODEL) std::cout << "delete Mark " << this << std::endl;
 }
 
-void MarkModel::setColor(const QColor& theValue, bool update) {
+void MarkModel::setColor(const QColor& theValue) {
     if (theValue != m_color) {
         m_color = theValue;
-        if (update)
-            emit colorChanged(m_color);
+        emit colorChanged(m_color);
     }
 }
 
-void MarkModel::setZone(const bool theValue, bool update) {
+void MarkModel::setZone(const bool theValue) {
     if (theValue != m_zone) {
         if (debugLevel & 1 << MODEL) std::cout << "Mark " << this
         << " zone " << theValue << std::endl;
         m_zone = theValue;
-        if (update)
-            emit zoneChanged(m_zone);
+        emit zoneChanged(m_zone);
     }
 }
 
-void MarkModel::setLength(const int theValue, bool update) {
+void MarkModel::setLength(const int theValue) {
     if (theValue != m_length) {
         if (debugLevel & 1 << MODEL) std::cout << "Mark " << this
         << " length " << theValue << std::endl;
         m_length = theValue;
-        if (update)
-            emit lengthChanged(m_length);
+        emit lengthChanged(m_length);
     }
 }

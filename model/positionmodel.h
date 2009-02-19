@@ -37,13 +37,13 @@ class PositionModel : public QObject {
 
         // Setters and Getters for Model Data
         QPointF position() const { return m_position; }
-        virtual void setPosition(const QPointF& theValue, bool update = false);
+        virtual void setPosition(const QPointF& theValue);
 
         int order() const { return m_order; }
-        void setOrder(const int theValue, bool update = false);
+        void setOrder(const int theValue);
 
         // Setters and Getters for Non model Data
-        QStringList discardedXml() const { return m_discardedXml; };
+        QStringList discardedXml() const { return m_discardedXml; }
         void appendDiscardedXml(const QString& theValue);
 
     signals:

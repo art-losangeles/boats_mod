@@ -48,45 +48,45 @@ class SituationModel : public QObject {
         int sizeForSeries(const Boats::Series series);
 
         // Setters and Getters for Model Data
-        Boats::Series situationSeries() const { return m_situationSeries; };
-        void setSituationSeries(const int theValue, bool update = false);
+        QString title() const { return m_title; }
+        void setTitle(const QString theValue);
 
-        int situationLength() const { return m_situationLength; };
-        void setSituationLength(const int theValue, bool update = false);
+        QString rules() const { return m_rules; }
+        void setRules(const QString theValue);
 
-        QString title() const { return m_title; };
-        void setTitle(const QString theValue, bool update = false);
+        int laylineAngle() const { return m_laylineAngle; }
+        void setLaylineAngle(const int theValue);
 
-        QString rules() const { return m_rules; };
-        void setRules(const QString theValue, bool update = false);
+        Boats::Series situationSeries() const { return m_situationSeries; }
+        void setSituationSeries(const int theValue);
 
-        QString abstract() const { return m_abstract; };
-        void setAbstract(const QString theValue, bool update = false);
+        int situationLength() const { return m_situationLength; }
+        void setSituationLength(const int theValue);
 
-        QString description() const { return m_description; };
-        void setDescription(const QString theValue, bool update = false);
+        QString abstract() const { return m_abstract; }
+        void setAbstract(const QString theValue);
 
-        int size() const { return m_tracks.size();};
-        const QList<TrackModel*> tracks() const { return m_tracks; };
+        QString description() const { return m_description; }
+        void setDescription(const QString theValue);
 
-        int markSize() const { return m_marks.size();};
-        const QList<MarkModel*> marks() const { return m_marks; };
+        int size() const { return m_tracks.size();}
+        const QList<TrackModel*> tracks() const { return m_tracks; }
 
-        int laylineAngle() const { return m_laylineAngle; };
-        void setLaylineAngle(const int theValue, bool update = false);
+        int markSize() const { return m_marks.size();}
+        const QList<MarkModel*> marks() const { return m_marks; }
 
         // Setters and Getters for Non model Data
-        QUndoStack * undoStack() const { return m_undoStack;};
+        QUndoStack * undoStack() const { return m_undoStack;}
 
-        QStringList discardedXml() const { return m_discardedXml; };
+        QStringList discardedXml() const { return m_discardedXml; }
         void appendDiscardedXml(const QString& theValue);
 
-        QString fileName() const { return m_fileName; };
-        void setFileName(const QString theValue) {m_fileName = theValue; };
+        QString fileName() const { return m_fileName; }
+        void setFileName(const QString theValue) {m_fileName = theValue; }
 
         // Helper to remotely trigger boat signals from elsewhere
-        void addingBoat(BoatModel *boat) {emit boatAdded(boat);};
-        void removingBoat(BoatModel *boat) {emit boatRemoved(boat);};
+        void addingBoat(BoatModel *boat) {emit boatAdded(boat);}
+        void removingBoat(BoatModel *boat) {emit boatRemoved(boat);}
 
     signals:
         // Signals for Track

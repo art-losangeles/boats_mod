@@ -31,19 +31,15 @@ BoatModel::~BoatModel() {
     if (debugLevel & 1 << MODEL) std::cout << "delete Boat " << this << std::endl;
 }
 
-void BoatModel::setHeading(const qreal& theValue, bool update) {
+void BoatModel::setHeading(const qreal& theValue) {
     if (theValue != m_heading) {
         m_heading = fmod(theValue+360.0,360.0);
-        if (update) {
-            emit headingChanged(m_heading);
-            m_track->changingTrack(m_track);
-        }
+        emit headingChanged(m_heading);
+        m_track->changingTrack(m_track);
     }
 }
 
-void BoatModel::setPosition(const QPointF& theValue, bool update) {
-    PositionModel::setPosition(theValue, update);
-    if (update) {
-        m_track->changingTrack(m_track);
-    }
+void BoatModel::setPosition(const QPointF& theValue) {
+    PositionModel::setPosition(theValue);
+    m_track->changingTrack(m_track);
 }

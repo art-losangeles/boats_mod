@@ -30,16 +30,16 @@ class MarkModel : public PositionModel {
 
         // Setters and Getters for Model Data
         QColor color() const { return m_color; }
-        void setColor(const QColor& theValue, bool update = false);
+        void setColor(const QColor& theValue);
 
         bool zone() const { return m_zone; }
-        void setZone(const bool theValue, bool update = false);
+        void setZone(const bool theValue);
 
         // Setters and Getters for Non model Data
         SituationModel* situation() const { return m_situation; }
 
         int length() const { return m_length; }
-        void setLength(const int theValue, bool update = false);
+        void setLength(const int theValue);
 
     signals:
         void colorChanged(QColor color);

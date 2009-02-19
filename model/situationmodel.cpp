@@ -56,74 +56,66 @@ int SituationModel::sizeForSeries(const Boats::Series series) {
     return size;
 }
 
-void SituationModel::setTitle(const QString theValue, bool update) {
+void SituationModel::setTitle(const QString theValue) {
     if (theValue != m_title) {
         if (debugLevel & 1 << MODEL) std::cout << "Setting Title " << theValue.toStdString() << std::endl;
         m_title = theValue;
-        if (update)
-            emit titleChanged(m_title);
+        emit titleChanged(m_title);
     }
 }
 
-void SituationModel::setRules(const QString theValue, bool update) {
+void SituationModel::setRules(const QString theValue) {
     if (theValue != m_rules) {
         if (debugLevel & 1 << MODEL) std::cout << "Setting Rules " << theValue.toStdString() << std::endl;
        m_rules = theValue;
-        if (update)
-            emit rulesChanged(m_rules);
+       emit rulesChanged(m_rules);
     }
 }
 
-void SituationModel::setLaylineAngle(const int theValue, bool update) {
+void SituationModel::setLaylineAngle(const int theValue) {
     if (theValue != m_laylineAngle) {
         if (debugLevel & 1 << MODEL) std::cout << "Situation " << this
         << " Layline Angle " << theValue << std::endl;
         m_laylineAngle = theValue;
-        if (update)
-            emit laylineChanged(m_laylineAngle);
+        emit laylineChanged(m_laylineAngle);
     }
 }
 
-void SituationModel::setSituationSeries(const int theValue, bool update) {
+void SituationModel::setSituationSeries(const int theValue) {
     if (theValue != m_situationSeries) {
         if (debugLevel & 1 << MODEL) std::cout << "Situation " << this
         << " Series " << ENUM_NAME(Boats, Series, theValue) << std::endl;
         m_situationSeries = (Boats::Series) theValue;
-        if (update) {
-            emit seriesChanged(m_situationSeries);
-            emit laylineChanged(m_laylineAngle);
-        }
+        emit seriesChanged(m_situationSeries);
+        emit laylineChanged(m_laylineAngle);
     }
 }
 
-void SituationModel::setSituationLength(const int theValue, bool update) {
+void SituationModel::setSituationLength(const int theValue) {
     if (theValue != m_situationLength) {
         if (debugLevel & 1 << MODEL) std::cout << "Situation " << this
         << " Length " << theValue << std::endl;
         m_situationLength = theValue;
         foreach (MarkModel *mark, m_marks) {
-            mark->setLength(m_situationLength, true);
+            mark->setLength(m_situationLength);
         }
-        if (update)
-            emit lengthChanged(m_situationLength);
+        emit lengthChanged(m_situationLength);
     }
 }
 
-void SituationModel::setAbstract(const QString theValue, bool update) {
+void SituationModel::setAbstract(const QString theValue) {
     if (theValue != m_abstract) {
         if (debugLevel & 1 << MODEL) std::cout << "Setting Abstract " << theValue.toStdString() << std::endl;
         m_abstract = theValue;
-        if (update)
-            emit abstractChanged(m_abstract);
+        emit abstractChanged(m_abstract);
     }
 }
 
-void SituationModel::setDescription(const QString theValue, bool update) {
+void SituationModel::setDescription(const QString theValue) {
     if (theValue != m_description) {
         if (debugLevel & 1 << MODEL) std::cout << "Setting Description " << theValue.toStdString() << std::endl;
         m_description = theValue;
-        if (update)
-            emit descriptionChanged(m_description);
+        emit descriptionChanged(m_description);
     }
 }
 
@@ -140,7 +132,7 @@ void SituationModel::addTrack(TrackModel *track, int order) {
     m_tracks.insert(order,track);
     if (debugLevel & 1 << MODEL) std::cout << "Adding Track " << order+1 <<  std::endl;
     for (int i=order+1; i<m_tracks.size(); i++) {
-        m_tracks[i]->setOrder(i+1, true);
+        m_tracks[i]->setOrder(i+1);
     }
     track->displayBoats();
     emit trackAdded(track);
@@ -153,7 +145,7 @@ void SituationModel::deleteTrack(TrackModel *track) {
     track->hideBoats();
     m_tracks.removeOne(track);
     for (int i=index; i<m_tracks.size(); i++) {
-        m_tracks[i]->setOrder(i+1, true);
+        m_tracks[i]->setOrder(i+1);
     }
     emit trackRemoved(track);
 }
@@ -165,7 +157,7 @@ void SituationModel::addMark(MarkModel *mark, int order) {
     m_marks.insert(order, mark);
     if (debugLevel & 1 << MODEL) std::cout << "Adding Mark " << order+1 << std::endl;
     for (int i=order+1; i<m_marks.size(); i++) {
-        m_marks[i]->setOrder(i+1, true);
+        m_marks[i]->setOrder(i+1);
     }
     emit markAdded(mark);
 }
@@ -175,7 +167,7 @@ int SituationModel::deleteMark(MarkModel *mark) {
     if (debugLevel & 1 << MODEL) std::cout << "Removing Mark " << index+1 << std::endl;
     m_marks.removeOne(mark);
     for (int i=index; i<m_marks.size(); i++) {
-        m_marks[i]->setOrder(i+1, true);
+        m_marks[i]->setOrder(i+1);
     }
     emit markRemoved(mark);
     return index;

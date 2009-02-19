@@ -26,25 +26,22 @@ PositionModel::~PositionModel() {
     if (debugLevel & 1 << MODEL) std::cout << "delete Position " << this << std::endl;
 }
 
-void PositionModel::setPosition(const QPointF& theValue, bool update) {
+void PositionModel::setPosition(const QPointF& theValue) {
     if (theValue != m_position) {
         if (debugLevel & 1 << MODEL) std::cout << "Position " << this
         << " position " << theValue.x()
         << ", " << theValue.y() << std::endl;
         m_position = theValue;
-        if (update) {
-            emit positionChanged(m_position);
-        }
+        emit positionChanged(m_position);
     }
 }
 
-void PositionModel::setOrder(const int theValue, bool update) {
+void PositionModel::setOrder(const int theValue) {
     if (theValue != m_order) {
         if (debugLevel & 1 << MODEL) std::cout << "Position " << this
         << " order " << theValue << std::endl;
         m_order = theValue;
-        if (update)
-            emit orderChanged(m_order);
+        emit orderChanged(m_order);
     }
 }
 

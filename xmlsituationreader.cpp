@@ -77,9 +77,9 @@ void XmlSituationReader::readSituation() {
             else if (name() == "description")
                 m_situation->setDescription(readElementText());
             else if (name() == "series")
-                m_situation->setSituationSeries(series(readElementText()), true);
+                m_situation->setSituationSeries(series(readElementText()));
             else if (name() == "layline")
-                m_situation->setLaylineAngle(readElementText().toInt(), true);
+                m_situation->setLaylineAngle(readElementText().toInt());
             else if (name() == "mark")
                 readMark(m_situation);
             else if (name() == "track")
@@ -102,7 +102,7 @@ void XmlSituationReader::readTrack(SituationModel *situation) {
             if (name() == "color")
                 track->setColor(QColor(readElementText()));
             else if (name() == "series")
-                track->setSeries(series(readElementText()), true);
+                track->setSeries(series(readElementText()));
             else if (name() == "boat")
                 readBoat(situation, track);
             else
@@ -174,10 +174,10 @@ void XmlSituationReader::readMark(SituationModel *situation) {
     AddMarkUndoCommand *command = new AddMarkUndoCommand(situation, pos);
     situation->undoStack()->push(command);
     MarkModel *mark = command->mark();
-    mark->setColor(color,true);
-    mark->setZone(zone,true);
+    mark->setColor(color);
+    mark->setZone(zone);
     if (length != 0) {
-        mark->setLength(length, true);
+        mark->setLength(length);
     }
 }
 

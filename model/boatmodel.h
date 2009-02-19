@@ -44,10 +44,10 @@ class BoatModel : public PositionModel {
         ~BoatModel();
 
         // Setters and Getters for Model Data
-        void setPosition(const QPointF& theValue, bool update = false);
+        virtual void setPosition(const QPointF& theValue);
 
         qreal heading() const { return m_heading; }
-        void setHeading(const qreal& theValue, bool update = false);
+        void setHeading(const qreal& theValue);
 
         // Setters and Getters for Non model Data
         TrackModel* track() const { return m_track; }
