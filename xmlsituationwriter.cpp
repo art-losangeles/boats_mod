@@ -12,20 +12,27 @@
 
 #include "xmlsituationwriter.h"
 
+#include <iostream>
+
+#include "commontypes.h"
 #include "model/situationmodel.h"
 #include "model/trackmodel.h"
 #include "model/boatmodel.h"
 #include "model/markmodel.h"
 
+extern int debugLevel;
+
 XmlSituationWriter::XmlSituationWriter(SituationModel *situation)
         : m_situation(situation) {
     setAutoFormatting(true);
+    if (debugLevel & 1 << XML) std::cout << "new XmlSituationWriter" << std::endl;
 }
 
 XmlSituationWriter::~XmlSituationWriter() {}
 
 bool XmlSituationWriter::writeFile(QIODevice *device) {
     setDevice(device);
+    if (debugLevel & 1 << XML) std::cout << "WriteFile" << std::endl;
 
     writeStartDocument();
     writeDTD("<!DOCTYPE xmlscenario>");
@@ -53,10 +60,16 @@ bool XmlSituationWriter::writeFile(QIODevice *device) {
         writeTrack(track);
 
     writeEndDocument();
+    if (debugLevel & 1 << XML) std::cout << "done WriteFile" << std::endl;
     return true;
 }
 
 void XmlSituationWriter::writeTrack(const TrackModel *track) {
+    if (debugLevel & 1 << XML) {
+        std::cout << "WriteTrack" << std::endl;
+        std::cout << " color=" << track->color().name().toStdString() << std::endl;
+        std::cout << " series=" << ENUM_NAME(Boats, Series, track->series()) << std::endl;
+    }
     writeStartElement("track");
     writeTextElement("color",track->color().name());
     writeTextElement("series",ENUM_NAME(Boats, Series, track->series()));
@@ -68,6 +81,12 @@ void XmlSituationWriter::writeTrack(const TrackModel *track) {
 }
 
 void XmlSituationWriter::writeBoat(const BoatModel *boat) {
+    if (debugLevel & 1 << XML) {
+        std::cout << "WriteBoat" << std::endl;
+        std::cout << " x=" << boat->position().x() << std::endl;
+        std::cout << " y=" << boat->position().y() << std::endl;
+        std::cout << " heading=" << boat->heading() << std::endl;
+    }
     writeStartElement("boat");
     writeTextElement("x",QString::number(boat->position().x()));
     writeTextElement("y",QString::number(boat->position().y()));
@@ -78,6 +97,14 @@ void XmlSituationWriter::writeBoat(const BoatModel *boat) {
 }
 
 void XmlSituationWriter::writeMark(const MarkModel *mark) {
+    if (debugLevel & 1 << XML) {
+        std::cout << "WriteMark" << std::endl;
+        std::cout << " x=" << mark->position().x() << std::endl;
+        std::cout << " y=" << mark->position().y() << std::endl;
+        std::cout << " color=" << mark->color().name().toStdString() << std::endl;
+        std::cout << " zone=" << mark->zone() << std::endl;
+        std::cout << " length=" << mark->length() << std::endl;
+    }
     writeStartElement("mark");
     writeTextElement("x",QString::number(mark->position().x()));
     writeTextElement("y",QString::number(mark->position().y()));
@@ -90,6 +117,7 @@ void XmlSituationWriter::writeMark(const MarkModel *mark) {
 }
 
 void XmlSituationWriter::writeUnknownElement(const QString &discarded) {
+    if (debugLevel & 1 << XML) std::cout << "WriteUnknownElement" << std::endl;
     if (!discarded.isEmpty()) {
         QXmlStreamReader reader(discarded);
         while (!reader.atEnd()) {
