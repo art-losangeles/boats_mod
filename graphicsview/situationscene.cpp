@@ -403,6 +403,11 @@ void SituationScene::setSelectedModels() {
 
 
 void SituationScene::setLaylines(const int angle) {
+    if (!m_situation->showLayline()) {
+        if (debugLevel & 1 << VIEW) std::cout << "reseting empty Background" << std::endl;
+        setBackgroundBrush(Qt::NoBrush);
+        return;
+    }
     if (debugLevel & 1 << VIEW) std::cout << "creating layline Background for " << angle << std::endl;
     qreal theta = angle * M_PI /180;
     int length = m_situation->sizeForSeries(m_situation->situationSeries());

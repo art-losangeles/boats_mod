@@ -54,6 +54,9 @@ class SituationModel : public QObject {
         QString rules() const { return m_rules; }
         void setRules(const QString theValue);
 
+        bool showLayline() const { return m_showLayline; }
+        void setShowLayline(const bool theValue);
+
         int laylineAngle() const { return m_laylineAngle; }
         void setLaylineAngle(const int theValue);
 
@@ -100,6 +103,7 @@ class SituationModel : public QObject {
         // Signals for Scenario Parameters
         void titleChanged(const QString title);
         void rulesChanged(const QString rules);
+        void showLaylineChanged(const bool show);
         void laylineChanged(const int angle);
         void seriesChanged(const int series);
         void lengthChanged(const int length);
@@ -132,6 +136,9 @@ class SituationModel : public QObject {
 
         /// \a m_description holds the Description of the Scenario
         QString m_description;
+
+        /// \a m_showLayline holds whether the Laylines will be displayed
+        bool m_showLayline;
 
         /// \a m_laylineAngle holds the Layline Angle of the Scenario
         int m_laylineAngle;

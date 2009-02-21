@@ -88,6 +88,36 @@ bool SetRulesUndoCommand::mergeWith(const QUndoCommand *command) {
     return true;
 }
 
+// Show Layline
+SetShowLaylineUndoCommand::SetShowLaylineUndoCommand(SituationModel *situation, QUndoCommand *parent)
+        : QUndoCommand(parent),
+        m_situation(situation) {
+    if (debugLevel & 1 << COMMAND) std::cout << "new showlaylineundocommand" << std::endl;
+}
+
+SetShowLaylineUndoCommand::~SetShowLaylineUndoCommand() {
+    if (debugLevel & 1 << COMMAND) std::cout << "end showlaylineundocommand" << std::endl;
+}
+
+void SetShowLaylineUndoCommand::undo() {
+    if (debugLevel & 1 << COMMAND) std::cout << "undo showlaylineundocommand" << std::endl;
+    m_situation->setShowLayline(!m_situation->showLayline());
+}
+
+void SetShowLaylineUndoCommand::redo() {
+    if (debugLevel & 1 << COMMAND) std::cout << "redo showlaylineundocommand" << std::endl;
+    m_situation->setShowLayline(!m_situation->showLayline());
+}
+
+bool SetShowLaylineUndoCommand::mergeWith(const QUndoCommand *command) {
+    const SetShowLaylineUndoCommand *zoneCommand = static_cast<const SetShowLaylineUndoCommand*>(command);
+    if (m_situation != zoneCommand->m_situation)
+        return false;
+    undo();
+    m_situation->undoStack()->setIndex(m_situation->undoStack()->index()-1);
+    return true;
+}
+
 // Set Layline
 SetLaylineUndoCommand::SetLaylineUndoCommand(SituationModel* situation, const int angle, QUndoCommand *parent)
         : QUndoCommand(parent),

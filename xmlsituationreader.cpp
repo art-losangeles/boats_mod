@@ -78,6 +78,8 @@ void XmlSituationReader::readSituation() {
                 m_situation->setDescription(readElementText());
             else if (name() == "series")
                 m_situation->setSituationSeries(series(readElementText()));
+            else if (name() == "showlayline")
+                m_situation->setShowLayline(readElementText() == "1");
             else if (name() == "layline")
                 m_situation->setLaylineAngle(readElementText().toInt());
             else if (name() == "mark")

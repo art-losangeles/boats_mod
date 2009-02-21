@@ -23,6 +23,7 @@ extern int debugLevel;
 
 SituationModel::SituationModel(QObject *parent)
         : QObject(parent),
+        m_showLayline(true),
         m_laylineAngle(40),
         m_situationSeries(Boats::keelboat),
         m_situationLength(3),
@@ -69,6 +70,15 @@ void SituationModel::setRules(const QString theValue) {
         if (debugLevel & 1 << MODEL) std::cout << "Setting Rules " << theValue.toStdString() << std::endl;
        m_rules = theValue;
        emit rulesChanged(m_rules);
+    }
+}
+
+void SituationModel::setShowLayline(const bool theValue) {
+    if (theValue != m_showLayline) {
+        if (debugLevel & 1 << MODEL) std::cout << "Show Layline " << theValue << std::endl;
+        m_showLayline = theValue;
+        emit showLaylineChanged(m_showLayline);
+        emit laylineChanged(m_laylineAngle);
     }
 }
 

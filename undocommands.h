@@ -26,6 +26,7 @@ class MarkModel;
 enum {
     SET_TITLE,
     SET_RULES,
+    SET_SHOWLAYLINE,
     SET_LAYLINE,
     SET_SITUATIONSERIES,
     SET_ABSTRACT,
@@ -68,6 +69,20 @@ class SetRulesUndoCommand : public QUndoCommand {
         SituationModel *m_situation;
         QString m_oldRules;
         QString m_newRules;
+};
+
+class SetShowLaylineUndoCommand : public QUndoCommand {
+
+    public:
+        SetShowLaylineUndoCommand(SituationModel* situation, QUndoCommand *parent = 0);
+        ~SetShowLaylineUndoCommand();
+        void undo();
+        void redo();
+        bool mergeWith(const QUndoCommand *command);
+        int id() const { return SET_SHOWLAYLINE; }
+
+    private:
+        SituationModel *m_situation;
 };
 
 class SetLaylineUndoCommand : public QUndoCommand {

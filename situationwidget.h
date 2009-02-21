@@ -33,6 +33,7 @@ class SituationWidget : public QWidget {
         // set the model from widgets
         void setTitle(QString title);
         void setRules(QString rules);
+        void setShowLayline(bool);
         void setLayline(int angle);
         void setSeries(int series);
         void setLength(int length);
@@ -50,6 +51,7 @@ class SituationWidget : public QWidget {
         QLineEdit *titleEdit;
         QLineEdit *rulesEdit;
         QComboBox *seriesCombo;
+        QCheckBox *laylineCheck;
         QSpinBox *laylineSpin;
         QSpinBox *lengthSpin;
         QPlainTextEdit *abstractEdit;

@@ -43,6 +43,9 @@ SituationWidget::SituationWidget(QWidget *parent)
     seriesCombo = new QComboBox(scenarioGroup);
     scenarioForm->addRow(new QLabel(tr("Series"),scenarioGroup),seriesCombo);
 
+    laylineCheck = new QCheckBox(scenarioGroup);
+    scenarioForm->addRow(new QLabel(tr("Show Laylines"),scenarioGroup),laylineCheck);
+
     laylineSpin = new QSpinBox(scenarioGroup);
     scenarioForm->addRow(new QLabel(tr("Laylines"),scenarioGroup),laylineSpin);
 
@@ -90,6 +93,7 @@ void SituationWidget::update() {
         titleEdit->setText(m_situation->title());
         rulesEdit->setText(m_situation->rules());
         seriesCombo->setCurrentIndex(m_situation->situationSeries());
+        laylineCheck->setChecked(m_situation->showLayline());
         laylineSpin->setValue(m_situation->laylineAngle());
         lengthSpin->setValue(m_situation->situationLength());
         abstractEdit->setPlainText(m_situation->abstract());
@@ -119,6 +123,11 @@ void SituationWidget::setSituation(SituationModel *situation) {
                 this, SLOT(setSeries(int)));
         connect (situation, SIGNAL(seriesChanged(int)),
                 seriesCombo, SLOT(setCurrentIndex(int)));
+
+        connect(laylineCheck, SIGNAL(toggled(bool)),
+                this, SLOT(setShowLayline(bool)));
+        connect(situation, SIGNAL(showLaylineChanged(bool)),
+                laylineCheck, SLOT(setChecked(bool)));
 
         laylineSpin->setRange(0, 359);
         laylineSpin->setWrapping(true);
@@ -168,6 +177,10 @@ void SituationWidget::unSetSituation() {
     seriesCombo->clear();
     seriesCombo->setCurrentIndex(0);
 
+    disconnect(laylineCheck, 0, 0, 0);
+    disconnect(m_situation, 0, laylineCheck, 0);
+    laylineCheck->setChecked(true);
+
     disconnect(laylineSpin,  0, 0, 0);
     disconnect(m_situation, 0, laylineSpin, 0);
     laylineSpin->setValue(40);
@@ -201,6 +214,13 @@ void SituationWidget::setRules(QString rules) {
         if (rules != m_situation->rules()) {
             m_situation->undoStack()->push(new SetRulesUndoCommand(m_situation, rules));
         }
+    }
+}
+
+void SituationWidget::setShowLayline(bool show) {
+    if (m_situation) {
+        if (show != m_situation->showLayline())
+            m_situation->undoStack()->push(new SetShowLaylineUndoCommand(m_situation));
     }
 }
 
