@@ -31,6 +31,13 @@ TrackTableModel::~TrackTableModel() {
     if (debugLevel & 1 << MODEL) std::cout << "end tracktable " << this << std::endl;
 }
 
+void TrackTableModel::setSituation(SituationModel *situation)  {
+    if (m_situation != situation) {
+        m_situation = situation;
+        reset();
+    }
+}
+
 QVariant TrackTableModel::data(const QModelIndex &index, int role) const {
     if (!index.isValid())
         return QVariant();
