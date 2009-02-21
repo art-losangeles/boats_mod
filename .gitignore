@@ -1,6 +1,9 @@
 # kdevelop
 *kdev*
 
+# qt-creator
+qtc-*
+
 # windows
 *.dll
 
@@ -16,7 +19,12 @@ doxygen/*
 tags
 .obj
 
+# release
+Changelog*
+diffstat*
+
 # project
 boats
 boats.exe
 *xbs
+
