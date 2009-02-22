@@ -46,6 +46,9 @@ class MainWindow : public QMainWindow {
         void cleanState(bool state);
 
         // File actions
+        void newTab();
+        void setTab(int index);
+        void removeTab();
         void newFile();
         void openFile();
         void openFile(const QString &fileName);
@@ -80,22 +83,25 @@ class MainWindow : public QMainWindow {
         void createDocks();
 
         // Configuration methods
+        void unsetTab();
         void writeSettings();
         void readSettings();
-        bool maybeSave();
+        bool maybeSave(SituationModel *situation);
 
         // File methods
-        bool saveFile(QString &fileName);
-        void setCurrentFile(const QString &fileName);
+        bool saveSituation(SituationModel *situation, QString name);
+        void setCurrentFile(SituationModel *situation, const QString &fileName);
 
         // GraphicsView Framework
-        SituationModel *situation;
-        SituationScene *scene;
-        SituationView *view;
+        QList<SituationModel *> situationList;
+        QList<SituationScene *> sceneList;
+        QList<SituationView *> viewList;
+        int currentSituation;
 
         // Widgets on the window
         QMenuBar *menubar;
         QToolBar *toolbar;
+        QTabWidget *tabWidget;
         QToolBar *animationBar;
         QDockWidget *situationDock;
         SituationWidget *situationWidget;
@@ -108,6 +114,8 @@ class MainWindow : public QMainWindow {
         QAction *openFileAction;
         QAction *saveFileAction;
         QAction *saveAsAction;
+        QAction *newTabAction;
+        QAction *removeTabAction;
         QAction *exportImageAction;
         QAction *exitAction;
 

@@ -25,8 +25,8 @@ class TrackTableModel : public QAbstractTableModel {
         ~TrackTableModel();
 
         void setSituation(SituationModel *situation);
-        int rowCount(const QModelIndex &parent) const { Q_UNUSED(parent); return m_situation->size(); };
-        int columnCount(const QModelIndex &parent) const { Q_UNUSED(parent); return 2;};
+        int rowCount(const QModelIndex &parent) const { Q_UNUSED(parent); return m_situation->size(); }
+        int columnCount(const QModelIndex &parent) const { Q_UNUSED(parent); return 2;}
         QVariant data(const QModelIndex &index, int role) const;
         QVariant headerData(int section, Qt::Orientation orientation, int role) const;
         Qt::ItemFlags flags(const QModelIndex &index) const;

@@ -24,6 +24,9 @@ SituationView::SituationView(QWidget *parent)
 SituationView::SituationView(QGraphicsScene *scene, QWidget *parent)
     : QGraphicsView(scene, parent),
     scaleValue(1) {
+    setRenderHints( QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
+    setViewportUpdateMode(QGraphicsView::SmartViewportUpdate);
+    setResizeAnchor(QGraphicsView::AnchorViewCenter);
 }
 
 SituationView::~SituationView() {

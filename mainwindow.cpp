@@ -32,11 +32,9 @@ extern int debugLevel;
 
 MainWindow::MainWindow(QWidget *parent)
         : QMainWindow(parent),
-        situation(new SituationModel(this)),
-        scene(new SituationScene(situation)),
-        view(new SituationView(scene)),
         menubar(new QMenuBar(this)),
         toolbar(new QToolBar(this)),
+        tabWidget(new QTabWidget(this)),
         animationBar(new QToolBar(this)),
         situationDock(new QDockWidget(this)),
         situationWidget(new SituationWidget(situationDock)),
@@ -45,10 +43,6 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Actions
     createActions();
-
-    // Scene
-    connect(scene, SIGNAL(stateChanged(SceneState)),
-            this, SLOT(changeState(SceneState)));
 
     // Timeline
     timeline->setCurveShape(QTimeLine::LinearCurve);
@@ -68,14 +62,12 @@ MainWindow::MainWindow(QWidget *parent)
     addDockWidget(Qt::LeftDockWidgetArea, situationDock);
 
     // View
-    view->setRenderHints( QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
-    view->setViewportUpdateMode(QGraphicsView::SmartViewportUpdate);
-    view->setResizeAnchor(QGraphicsView::AnchorViewCenter);
-    setCentralWidget(view);
-    view->setFocus();
+    connect(tabWidget, SIGNAL(currentChanged(int)),
+            this, SLOT(setTab(int)));
+    newTab();
+    setCentralWidget(tabWidget);
 
     readSettings();
-    setCurrentFile("");
 }
 
 MainWindow::~MainWindow() {}
@@ -102,6 +94,16 @@ void MainWindow::createActions() {
     saveAsAction->setEnabled(false);
     connect(saveAsAction, SIGNAL(triggered()),
             this, SLOT(saveAs()));
+
+    newTabAction = new QAction(QIcon(":/images/tab_new.png"), tr("New &Tab"), this);
+    newTabAction->setShortcut(tr("Ctrl+T"));
+    connect(newTabAction, SIGNAL(triggered()),
+            this, SLOT(newTab()));
+
+    removeTabAction = new QAction(QIcon(":/images/tab_remove.png"), tr("&Close Tab"), this);
+    removeTabAction->setShortcut(tr("Ctrl+Shift+T"));
+    connect(removeTabAction, SIGNAL(triggered()),
+            this, SLOT(removeTab()));
 
     exportImageAction = new QAction(QIcon(":/images/export.png"), tr("Export &Image..."), this);
     exportImageAction->setShortcut(tr("Ctrl+E"));
@@ -182,37 +184,21 @@ void MainWindow::createActions() {
     undoAction = new QAction(QIcon(":/images/undo.png"), tr("&Undo"), this);
     undoAction->setShortcut(tr("Ctrl+Z"));
     undoAction->setEnabled(false);
-    connect(undoAction, SIGNAL(triggered()),
-            situation->undoStack(), SLOT(undo()));
-    connect(situation->undoStack(), SIGNAL(canUndoChanged(bool)),
-            undoAction, SLOT(setEnabled(bool)));
 
     redoAction = new QAction(QIcon(":/images/redo.png"), tr("&Redo"), this);
     QList<QKeySequence> redoShortcuts;
     redoShortcuts << tr("Ctrl+Y") << tr("Shift+Ctrl+Z");
     redoAction->setShortcuts(redoShortcuts);
     redoAction->setEnabled(false);
-    connect(redoAction, SIGNAL(triggered()),
-            situation->undoStack(), SLOT(redo()));
-    connect(situation->undoStack(), SIGNAL(canRedoChanged(bool)),
-            redoAction, SLOT(setEnabled(bool)));
-    connect(situation->undoStack(), SIGNAL(cleanChanged(bool)),
-            this, SLOT(cleanState(bool)));
 
     zoomInAction = new QAction(QIcon(":/images/zoomin.png"), tr("Zoom &In"), this);
     zoomInAction->setShortcut(tr("Ctrl++"));
-    connect(zoomInAction, SIGNAL(triggered()),
-            view, SLOT(zoomIn()));
 
     zoomOutAction = new QAction(QIcon(":/images/zoomout.png"), tr("Zoom &Out"), this);
     zoomOutAction->setShortcut(tr("Ctrl+-"));
-    connect(zoomOutAction, SIGNAL(triggered()),
-            view, SLOT(zoomOut()));
 
     zoomFitAction = new QAction(QIcon(":/images/zoomfit.png"), tr("Zoom &Fit"), this);
     zoomFitAction->setShortcut(tr("Ctrl+F"));
-    connect(zoomFitAction, SIGNAL(triggered()),
-            view, SLOT(zoomFit()));
 
     aboutAction = new QAction(tr("&About"), this);
     connect(aboutAction, SIGNAL(triggered()),
@@ -220,6 +206,8 @@ void MainWindow::createActions() {
 }
 
 void MainWindow::changeState(SceneState newState) {
+    SituationView *view = viewList.at(tabWidget->currentIndex());
+
     switch(newState) {
         case CREATE_TRACK:
             view->setCursor(Qt::CrossCursor);
@@ -263,11 +251,19 @@ void MainWindow::changeState(SceneState newState) {
 }
 
 void MainWindow::cleanState(bool state) {
+    SituationModel *situation = situationList.at(tabWidget->currentIndex());
     if (situation->fileName().isEmpty())
         saveFileAction->setEnabled(false);
     else
         saveFileAction->setEnabled(!state);
     saveAsAction->setEnabled(!state);
+    QString shownName = QFileInfo(situation->fileName()).fileName();
+    setWindowTitle(tr("%1 - %2 [*]").arg(tr("Boat Scenario")).arg(shownName));
+    if (!state) {
+        tabWidget->setTabText(tabWidget->currentIndex(),shownName.append(" *"));
+    } else {
+        tabWidget->setTabText(tabWidget->currentIndex(),shownName);
+    }
     setWindowModified(!state);
 }
 
@@ -277,6 +273,9 @@ void MainWindow::createMenus() {
     fileMenu->addAction(openFileAction);
     fileMenu->addAction(saveFileAction);
     fileMenu->addAction(saveAsAction);
+    fileMenu->addSeparator();
+    fileMenu->addAction(newTabAction);
+    fileMenu->addAction(removeTabAction);
     fileMenu->addSeparator();
     fileMenu->addAction(exportImageAction);
     fileMenu->addSeparator();
@@ -316,6 +315,9 @@ void MainWindow::createMenus() {
     toolbar->addAction(saveAsAction);
     toolbar->addAction(exportImageAction);
     toolbar->addSeparator();
+    toolbar->addAction(newTabAction);
+    toolbar->addAction(removeTabAction);
+    toolbar->addSeparator();
     toolbar->addAction(undoAction);
     toolbar->addAction(redoAction);
     toolbar->addSeparator();
@@ -350,9 +352,100 @@ void MainWindow::createMenus() {
 }
 
 void MainWindow::createDocks() {
-    situationWidget->setSituation(situation);
     situationDock->setWidget(situationWidget);
     situationDock->setFeatures(QDockWidget::NoDockWidgetFeatures);
+}
+
+void MainWindow::newTab() {
+    SituationModel *situation = new SituationModel(this);
+    SituationScene *scene = new SituationScene(situation);
+    SituationView *view =new SituationView(scene);
+
+    situationList.append(situation);
+    sceneList.append(scene);
+    viewList.append(view);
+    tabWidget->addTab(view, "");
+
+    view->setFocus();
+}
+
+void MainWindow::unsetTab() {
+    if (situationList.size() == 1) {
+        return;
+    }
+
+    SituationModel *situation = situationList.at(currentSituation);
+    SituationScene *scene = sceneList.at(currentSituation);
+    if (scene->state() == ANIMATE) {
+        scene->setState(NO_STATE);
+    }
+
+    disconnect(situation->undoStack(), 0, 0, 0);
+    disconnect(scene, 0, this, 0);
+
+    disconnect(undoAction, 0, 0, 0);
+    disconnect(redoAction, 0, 0, 0);
+
+    disconnect(zoomInAction, 0, 0, 0);
+    disconnect(zoomOutAction, 0, 0, 0);
+    disconnect(zoomFitAction, 0, 0, 0);
+
+    situationWidget->unSetSituation();
+}
+
+void MainWindow::setTab(int index) {
+    unsetTab();
+    currentSituation = index;
+    SituationModel *situation = situationList.at(index);
+    SituationScene *scene = sceneList.at(index);
+    SituationView *view = viewList.at(index);
+
+    connect(undoAction, SIGNAL(triggered()),
+            situation->undoStack(), SLOT(undo()));
+    connect(situation->undoStack(), SIGNAL(canUndoChanged(bool)),
+            undoAction, SLOT(setEnabled(bool)));
+    undoAction->setEnabled(situation->undoStack()->canUndo()),
+
+    connect(redoAction, SIGNAL(triggered()),
+            situation->undoStack(), SLOT(redo()));
+    connect(situation->undoStack(), SIGNAL(canRedoChanged(bool)),
+            redoAction, SLOT(setEnabled(bool)));
+    redoAction->setEnabled(situation->undoStack()->canRedo());
+
+    connect(situation->undoStack(), SIGNAL(cleanChanged(bool)),
+            this, SLOT(cleanState(bool)));
+    cleanState(situation->undoStack()->isClean());
+
+    connect(zoomInAction, SIGNAL(triggered()),
+            view, SLOT(zoomIn()));
+    connect(zoomOutAction, SIGNAL(triggered()),
+            view, SLOT(zoomOut()));
+    connect(zoomFitAction, SIGNAL(triggered()),
+            view, SLOT(zoomFit()));
+
+    situationWidget->setSituation(situation);
+    connect(scene, SIGNAL(stateChanged(SceneState)),
+            this, SLOT(changeState(SceneState)));
+    changeState(scene->state());
+}
+
+void MainWindow::removeTab() {
+    if (situationList.size() == 1) {
+        return;
+    }
+    int index = tabWidget->currentIndex();
+    SituationModel *situation = situationList.at(index);
+    SituationScene *scene = sceneList.at(index);
+    SituationView *view = viewList.at(index);
+
+    situationList.removeAt(index);
+    sceneList.removeAt(index);
+    viewList.removeAt(index);
+    tabWidget->removeTab(index);
+
+    delete view;
+    delete scene;
+    delete situation;
 }
 
 void MainWindow::writeSettings() {
@@ -379,15 +472,16 @@ void MainWindow::readSettings() {
     settings.endGroup();
 }
 
-bool MainWindow::maybeSave() {
+bool MainWindow::maybeSave(SituationModel *situation) {
     if (!situation->undoStack()->isClean()) {
+        QString shownName = QFileInfo(situation->fileName()).fileName();
         QMessageBox::StandardButton ret;
-        ret = QMessageBox::warning(this, tr("Application"),
+        ret = QMessageBox::warning(this, shownName,
                     tr("The document has been modified.\n"
                         "Do you want to save your changes?"),
                     QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
         if (ret == QMessageBox::Save) {
-            return saveAs();
+            return saveSituation(situation, "");
         } else if (ret == QMessageBox::Cancel) {
             return false;
         }
@@ -396,23 +490,34 @@ bool MainWindow::maybeSave() {
 }
 
 void MainWindow::closeEvent(QCloseEvent *event) {
-    if (maybeSave()) {
-        writeSettings();
-        event->accept();
-    } else
-        event->ignore();
+    SituationScene *scene = sceneList.at(tabWidget->currentIndex());
+
+    bool animated = (scene->state() == ANIMATE);
+    if (animated) {
+        scene->setState(NO_STATE);
+    }
+    foreach(SituationModel *situation, situationList) {
+        if (!maybeSave(situation)) {
+            event->ignore();
+            return;
+        }
+    }
+    writeSettings();
+    event->accept();
 }
 
 void MainWindow::newFile() {
-    if (maybeSave()) {
+    SituationModel *situation = situationList.at(tabWidget->currentIndex());
+    SituationScene *scene = sceneList.at(tabWidget->currentIndex());
+    SituationView *view = viewList.at(tabWidget->currentIndex());
+
+    if (maybeSave(situation)) {
         scene->setState(NO_STATE);
         situation->undoStack()->setIndex(0);
         situation->undoStack()->clear();
-        situation->setTitle("");
-        situation->setRules("");
         situationWidget->unSetSituation();
         situationWidget->setSituation(situation);
-        setCurrentFile("");
+        setCurrentFile(situation, "");
         view->centerOn(0,0);
         view->resetMatrix();
     }
@@ -430,6 +535,10 @@ void MainWindow::openFile() {
 }
 
 void MainWindow::openFile(const QString &fileName) {
+    SituationModel *situation = situationList.at(tabWidget->currentIndex());
+    SituationScene *scene = sceneList.at(tabWidget->currentIndex());
+    SituationView *view = viewList.at(tabWidget->currentIndex());
+
     // delete situation;
     newFile();
 
@@ -450,16 +559,32 @@ void MainWindow::openFile(const QString &fileName) {
                              .arg(reader.lineNumber())
                              .arg(reader.columnNumber())
                              .arg(reader.errorString()));
-    } else {
-        situationWidget->update();
-        setCurrentFile(fileName);
-        view->centerOn(scene->itemsBoundingRect().center());
-        statusbar->showMessage(tr("File loaded"), 2000);
+        return;
     }
+    situationWidget->update();
+    setCurrentFile(situation, fileName);
+    view->centerOn(scene->itemsBoundingRect().center());
+    statusbar->showMessage(tr("File loaded"), 2000);
 }
 
-bool MainWindow::saveFile(QString &fileName) {
-    QFile file(fileName);
+bool MainWindow::saveSituation(SituationModel *situation, QString fileName) {
+    QString name = fileName;
+    if (name.isEmpty()) {
+        QString defaultFile;
+        if (situation->fileName().isEmpty()) {
+            defaultFile = QDateTime::currentDateTime().toString("yyMMdd") + ".xbs";
+        } else {
+            defaultFile = situation->fileName();
+        }
+        name = QFileDialog::getSaveFileName(this, tr("Save Scenario"),
+                                            defaultFile,
+                                            tr("xmlscenario Files (*.xbs)"));
+        if (name.isEmpty()) {
+            return false;
+        }
+    }
+
+    QFile file(name);
     if (!file.open(QFile::WriteOnly | QFile::Text)) {
         QMessageBox::warning(this, tr("Save Scenario"),
                             tr("Cannot write file %1:\n%2.")
@@ -467,41 +592,47 @@ bool MainWindow::saveFile(QString &fileName) {
                             .arg(file.errorString()));
         return false;
     }
-    bool animated = (scene->state() == ANIMATE);
-    if (animated) {
-        scene->setState(NO_STATE);
-    }
     XmlSituationWriter writer(situation);
     writer.writeFile(&file);
-    setCurrentFile(fileName);
-    if (animated) {
-        animate(true);
-    }
+    setCurrentFile(situation, name);
     statusbar->showMessage(tr("File saved"), 2000);
     return true;
 }
 
 bool MainWindow::saveFile() {
-    QString fileName = situation->fileName();
-    if (fileName.isEmpty()) {
-        return saveAs();
+    SituationModel *situation = situationList.at(tabWidget->currentIndex());
+    SituationScene *scene = sceneList.at(tabWidget->currentIndex());
+
+    bool animated = (scene->state() == ANIMATE);
+    if (animated) {
+        scene->setState(NO_STATE);
     }
-    return saveFile(fileName);
+    bool saved = saveSituation(situation, situation->fileName());
+    if (animated) {
+        animate(true);
+    }
+    return saved;
 }
 
 bool MainWindow::saveAs() {
-    QString defaultFile = QDateTime::currentDateTime().toString("yyMMdd") + ".xbs";
-    QString fileName =
-            QFileDialog::getSaveFileName(this, tr("Save Scenario"),
-                                         defaultFile,
-                                         tr("xmlscenario Files (*.xbs)"));
-    if (fileName.isEmpty()) {
-        return false;
+    SituationModel *situation = situationList.at(tabWidget->currentIndex());
+    SituationScene *scene = sceneList.at(tabWidget->currentIndex());
+
+    bool animated = (scene->state() == ANIMATE);
+    if (animated) {
+        scene->setState(NO_STATE);
     }
-    return saveFile(fileName);
+    bool saved = saveSituation(situation, "");
+    if (animated) {
+        animate(true);
+    }
+    return saved;
 }
 
 void MainWindow::exportImage() {
+    SituationModel *situation = situationList.at(tabWidget->currentIndex());
+    SituationView *view = viewList.at(tabWidget->currentIndex());
+
     QString defaultName(situation->fileName());
     defaultName.chop(4);
     QList<QByteArray> formatsList = QImageWriter::supportedImageFormats();
@@ -537,15 +668,14 @@ void MainWindow::exportImage() {
     pixmap.save(fileName);
 }
 
-void MainWindow::setCurrentFile(const QString &fileName) {
+void MainWindow::setCurrentFile(SituationModel *situation, const QString &fileName) {
     situation->setFileName(fileName);
     situation->undoStack()->setClean();
-
-    QString shownName = QFileInfo(fileName).fileName();
-    setWindowTitle(tr("%1 - %2 [*]").arg(tr("Boat Scenario")).arg(shownName));
 }
 
 void MainWindow::addTrack() {
+    SituationScene *scene = sceneList.at(tabWidget->currentIndex());
+
     if(scene->state() == CREATE_TRACK) {
         scene->setState(NO_STATE);
     } else {
@@ -554,6 +684,9 @@ void MainWindow::addTrack() {
 }
 
 void MainWindow::deleteTrack() {
+    SituationModel *situation = situationList.at(tabWidget->currentIndex());
+    SituationScene *scene = sceneList.at(tabWidget->currentIndex());
+
     // TODO trick to delete first selected track
     if (!scene->selectedBoatModels().isEmpty()) {
         BoatModel *boat = scene->selectedBoatModels()[0];
@@ -563,6 +696,8 @@ void MainWindow::deleteTrack() {
 }
 
 void MainWindow::addBoat() {
+    SituationScene *scene = sceneList.at(tabWidget->currentIndex());
+
     if (scene->state() == CREATE_BOAT) {
         scene->setState(NO_STATE);
     } else {
@@ -571,6 +706,9 @@ void MainWindow::addBoat() {
 }
 
 void MainWindow::deleteModels() {
+    SituationModel *situation = situationList.at(tabWidget->currentIndex());
+    SituationScene *scene = sceneList.at(tabWidget->currentIndex());
+
     foreach (BoatModel *boat, scene->selectedBoatModels()) {
         TrackModel* track = boat->track();
         if (track->size() > 1) {
@@ -585,6 +723,8 @@ void MainWindow::deleteModels() {
 }
 
 void MainWindow::addMark() {
+    SituationScene *scene = sceneList.at(tabWidget->currentIndex());
+
     if (scene->state() == CREATE_MARK) {
         scene->setState(NO_STATE);
     } else {
@@ -593,6 +733,9 @@ void MainWindow::addMark() {
 }
 
 void MainWindow::toggleMarkZone() {
+    SituationModel *situation = situationList.at(tabWidget->currentIndex());
+    SituationScene *scene = sceneList.at(tabWidget->currentIndex());
+
     QList<MarkModel *> boatList = scene->selectedMarkModels();
     if (! boatList.isEmpty()) {
         situation->undoStack()->push(new ZoneMarkUndoCommand(situation, boatList));
@@ -600,6 +743,8 @@ void MainWindow::toggleMarkZone() {
 }
 
 void MainWindow::animate(bool state) {
+    SituationScene *scene = sceneList.at(tabWidget->currentIndex());
+
     if (state) {
         if (scene->state() != ANIMATE) {
             scene->setState(ANIMATE);
