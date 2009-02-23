@@ -101,7 +101,8 @@ void MainWindow::createActions() {
             this, SLOT(newTab()));
 
     removeTabAction = new QAction(QIcon(":/images/tab_remove.png"), tr("&Close Tab"), this);
-    removeTabAction->setShortcut(tr("Ctrl+Shift+T"));
+    removeTabAction->setShortcut(tr("Ctrl+W"));
+    removeTabAction->setEnabled(false);
     connect(removeTabAction, SIGNAL(triggered()),
             this, SLOT(removeTab()));
 
@@ -367,6 +368,9 @@ void MainWindow::newTab() {
     tabWidget->addTab(view, "");
 
     view->setFocus();
+    if (situationList.size() > 1) {
+        removeTabAction->setEnabled(true);
+    }
 }
 
 void MainWindow::unsetTab() {
@@ -430,9 +434,6 @@ void MainWindow::setTab(int index) {
 }
 
 void MainWindow::removeTab() {
-    if (situationList.size() == 1) {
-        return;
-    }
     int index = tabWidget->currentIndex();
     SituationModel *situation = situationList.at(index);
     SituationScene *scene = sceneList.at(index);
@@ -446,6 +447,9 @@ void MainWindow::removeTab() {
     delete view;
     delete scene;
     delete situation;
+    if (situationList.size() == 1) {
+        removeTabAction->setEnabled(false);
+    }
 }
 
 void MainWindow::writeSettings() {
