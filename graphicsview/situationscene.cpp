@@ -155,35 +155,36 @@ void SituationScene::unSetAnimation() {
 */
 
 void SituationScene::keyPressEvent(QKeyEvent *event) {
-    // propagate key event first for focus items
-    QGraphicsScene::keyPressEvent(event);
 
-    if (m_selectedModels.isEmpty()) {
-        return;
-    }
-    if (event->key() == Qt::Key_Plus) {
-        qreal theta = fmod(m_selectedBoatModels[0]->heading() + 5 + 360.0, 360.0);
-        m_situation->undoStack()->push(new HeadingBoatUndoCommand(m_selectedBoatModels, theta));
+    if (!m_selectedModels.isEmpty()) {
+        if (event->key() == Qt::Key_Plus) {
+            qreal theta = fmod(m_selectedBoatModels[0]->heading() + 5 + 360.0, 360.0);
+            m_situation->undoStack()->push(new HeadingBoatUndoCommand(m_selectedBoatModels, theta));
 
-    } else if (event->key() == Qt::Key_Minus) {
-        qreal theta = fmod(m_selectedBoatModels[0]->heading() - 5 + 360.0, 360.0);
-        m_situation->undoStack()->push(new HeadingBoatUndoCommand(m_selectedBoatModels, theta));
+        } else if (event->key() == Qt::Key_Minus) {
+            qreal theta = fmod(m_selectedBoatModels[0]->heading() - 5 + 360.0, 360.0);
+            m_situation->undoStack()->push(new HeadingBoatUndoCommand(m_selectedBoatModels, theta));
 
-    } else if (event->key() == Qt::Key_H) { // Left
-        QPointF pos(-5,0);
-        m_situation->undoStack()->push(new MoveModelUndoCommand(m_selectedModels, pos));
+        } else if (event->key() == Qt::Key_Left) {
+            QPointF pos(-5,0);
+            m_situation->undoStack()->push(new MoveModelUndoCommand(m_selectedModels, pos));
 
-    } else if (event->key() == Qt::Key_L) { // Right
-        QPointF pos(5,0);
-        m_situation->undoStack()->push(new MoveModelUndoCommand(m_selectedModels, pos));
+        } else if (event->key() == Qt::Key_Right) {
+            QPointF pos(5,0);
+            m_situation->undoStack()->push(new MoveModelUndoCommand(m_selectedModels, pos));
 
-    } else if (event->key() == Qt::Key_K) { // Up
-        QPointF pos(0,-5);
-        m_situation->undoStack()->push(new MoveModelUndoCommand(m_selectedModels, pos));
+        } else if (event->key() == Qt::Key_Up) {
+            QPointF pos(0,-5);
+            m_situation->undoStack()->push(new MoveModelUndoCommand(m_selectedModels, pos));
 
-    } else if (event->key() == Qt::Key_J) { // Down
-        QPointF pos(0,5);
-        m_situation->undoStack()->push(new MoveModelUndoCommand(m_selectedModels, pos));
+        } else if (event->key() == Qt::Key_Down) {
+            QPointF pos(0,5);
+            m_situation->undoStack()->push(new MoveModelUndoCommand(m_selectedModels, pos));
+        } else {
+            QGraphicsScene::keyPressEvent(event);
+        }
+    } else {
+        QGraphicsScene::keyPressEvent(event);
     }
 }
 
