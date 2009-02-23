@@ -82,6 +82,8 @@ void XmlSituationReader::readSituation() {
                 m_situation->setShowLayline(readElementText() == "1");
             else if (name() == "layline")
                 m_situation->setLaylineAngle(readElementText().toInt());
+            else if (name() == "length")
+                m_situation->setSituationLength(readElementText().toInt());
             else if (name() == "mark")
                 readMark(m_situation);
             else if (name() == "track")
