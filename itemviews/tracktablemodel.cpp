@@ -94,7 +94,6 @@ bool TrackTableModel::setData(const QModelIndex &index, const QVariant &value, i
                 if (newValue != track->color()) {
                     m_situation->undoStack()->push(new SetColorUndoCommand(track, newValue));
                 }
-                emit dataChanged(index,index);
                 return true;
             }
             break;
@@ -107,7 +106,6 @@ bool TrackTableModel::setData(const QModelIndex &index, const QVariant &value, i
                     if (seriesValue != track->series()) {
                         m_situation->undoStack()->push(new SetSeriesUndoCommand(track, seriesValue));
                     }
-                    emit dataChanged(index,index);
                     return true;
                 }
             }

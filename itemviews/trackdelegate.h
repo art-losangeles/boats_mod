@@ -14,7 +14,7 @@
 
 #include <QtGui>
 
-#include "colorpickerwidget.h"
+class ColorPickerWidget;
 
 class TrackDelegate : public QItemDelegate
 {
