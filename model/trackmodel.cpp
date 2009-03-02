@@ -27,9 +27,8 @@ TrackModel::TrackModel(SituationModel *situation, QObject *parent)
         m_situation(situation),
         m_length(0) {
     m_order = situation->size();
-    static int track_id = 0;
     if (debugLevel & 1 << MODEL) std::cout << "new track " << this << std::endl;
-    switch (track_id % 6) {
+    switch (situation->size() % 6) {
         case 0: m_color = QColor(Qt::yellow); break;
         case 1: m_color = QColor(Qt::blue); break;
         case 2: m_color = QColor(Qt::green); break;
@@ -37,7 +36,6 @@ TrackModel::TrackModel(SituationModel *situation, QObject *parent)
         case 4: m_color = QColor(Qt::cyan); break;
         case 5: m_color = QColor(Qt::magenta); break;
     }
-    track_id++;
     setSeries(situation->situationSeries());
 }
 
