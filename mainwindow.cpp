@@ -518,10 +518,10 @@ void MainWindow::newFile() {
     if (maybeSave(situation)) {
         scene->setState(NO_STATE);
         situation->undoStack()->setIndex(0);
+        setCurrentFile(situation, "");
         situation->undoStack()->clear();
         situationWidget->unSetSituation();
         situationWidget->setSituation(situation);
-        setCurrentFile(situation, "");
         view->centerOn(0,0);
         view->resetMatrix();
     }

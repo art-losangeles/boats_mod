@@ -68,28 +68,54 @@ void XmlSituationReader::readSituation() {
         if (isEndElement())
             break;
         if (isStartElement()) {
-            if (name() == "title")
-                m_situation->setTitle(readElementText());
-            else if (name() == "rules")
-                m_situation->setRules(readElementText());
-            else if (name() == "abstract")
-                m_situation->setAbstract(readElementText());
-            else if (name() == "description")
-                m_situation->setDescription(readElementText());
-            else if (name() == "series")
-                m_situation->setSituationSeries(series(readElementText()));
-            else if (name() == "showlayline")
-                m_situation->setShowLayline(readElementText() == "1");
-            else if (name() == "layline")
-                m_situation->setLaylineAngle(readElementText().toInt());
-            else if (name() == "length")
+            if (name() == "title") {
+                m_situation->undoStack()->push(
+                        new SetTitleUndoCommand(m_situation,
+                                                readElementText()));
+
+            } else if (name() == "rules") {
+                m_situation->undoStack()->push(
+                        new SetRulesUndoCommand(m_situation,
+                                                readElementText()));
+
+            } else if (name() == "abstract") {
+                m_situation->undoStack()->push(
+                        new SetAbstractUndoCommand(m_situation,
+                                                   readElementText()));
+
+            } else if (name() == "description") {
+                m_situation->undoStack()->push(
+                        new SetDescriptionUndoCommand(m_situation,
+                                                      readElementText()));
+
+            } else if (name() == "series") {
+                m_situation->undoStack()->push(
+                        new SetSituationSeriesUndoCommand(m_situation,
+                                                          series(readElementText())));
+
+            } else if (name() == "showlayline") {
+                if (readElementText() == "1") {
+                    m_situation->undoStack()->push(
+                            new SetShowLaylineUndoCommand(m_situation));
+                }
+
+            } else if (name() == "layline") {
+                m_situation->undoStack()->push(
+                        new SetLaylineUndoCommand(m_situation,
+                                                  readElementText().toInt()));
+
+            } else if (name() == "length") {
                 m_situation->setSituationLength(readElementText().toInt());
-            else if (name() == "mark")
+
+            } else if (name() == "mark") {
                 readMark(m_situation);
-            else if (name() == "track")
+
+            } else if (name() == "track") {
                 readTrack(m_situation);
-            else
+
+            } else {
                 m_situation->appendDiscardedXml(readUnknownElement());
+            }
         }
     }
 }
