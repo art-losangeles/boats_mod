@@ -1,43 +1,18 @@
-Necessary:
-- track table
-- optimise mousemove
+Important:
 - overlap line
-- zone at marks
+- adjust sail angle
+- umpire boat
+- flags
+
+Normal:
+- toggle all marks zones when none selected
+- Mac open file(s)
+- MRU files
+- toggle track display
+- toggle number display
 - more boat shapes
 
 Wishlist:
 - track line to mouse position
 - insert between boats
 - contextual menus
-- tabs for multiple situations
-
-Done:
-- french translation
-- zone toggle at marks
-- export situationview to image
-- undo for texts
-- animation replay
-- better stall detection
-- zoom in view
-- case description with rule & comments
-- playable animation
-- undocommand for layline and boat series
-- configurable traces
-- new and save as
-- widget and menus
-- multiple boat series
-- animation
-- movemark undo
-- save mark to file
-- keyboard move for boats
-- sail
-- undocommand for heading
-- marks
-- keep nonused xml tags
-- background grid
-- insert boats & tracks with position through mouse
-- input state
-- read from file
-- save to file
-- track line between boats
-- set heading
