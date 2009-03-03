@@ -40,6 +40,7 @@ class MainWindow : public QMainWindow {
     public:
         MainWindow(QWidget *parent = 0);
         ~MainWindow();
+
     public slots:
         // State management
         void changeState(SceneState newState);
@@ -51,7 +52,7 @@ class MainWindow : public QMainWindow {
         void removeTab();
         void newFile();
         void openFile();
-        void openFile(const QString &fileName);
+        void openFiles(QStringList fileList);
         bool saveFile();
         bool saveAs();
         void exportImage();
@@ -89,6 +90,7 @@ class MainWindow : public QMainWindow {
         bool maybeSave(SituationModel *situation);
 
         // File methods
+        void openFile(const QString &fileName, bool inNewTab = false);
         bool saveSituation(SituationModel *situation, QString name);
         void setCurrentFile(SituationModel *situation, const QString &fileName);
 

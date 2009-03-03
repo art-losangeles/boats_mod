@@ -538,13 +538,26 @@ void MainWindow::openFile() {
     openFile(fileName);
 }
 
-void MainWindow::openFile(const QString &fileName) {
+void MainWindow::openFiles(QStringList fileList) {
+    foreach (const QString fileName, fileList) {
+        std::cout << "opening " << fileName.toStdString() << std::endl;
+        openFile(fileName, fileList.first() != fileName);
+    }
+}
+
+void MainWindow::openFile(const QString &fileName, bool inNewTab) {
+    if (inNewTab) {
+        // create new tab
+        newTab();
+        tabWidget->setCurrentIndex(situationList.size() - 1);
+    } else {
+        // delete situation;
+        newFile();
+    }
+
     SituationModel *situation = situationList.at(tabWidget->currentIndex());
     SituationScene *scene = sceneList.at(tabWidget->currentIndex());
     SituationView *view = viewList.at(tabWidget->currentIndex());
-
-    // delete situation;
-    newFile();
 
     QFile file(fileName);
     if (!file.open(QFile::ReadOnly | QFile::Text)) {

@@ -40,11 +40,7 @@ int main(int argc, char *argv[]) {
     // MainWindow
     MainWindow window;
     window.show();
-
-    foreach (const QString fileName, arguments) {
-        std::cout << "opening " << fileName.toStdString() << std::endl;
-        window.openFile(fileName);
-    }
+    window.openFiles(arguments);
 
     return app.exec();
 }
