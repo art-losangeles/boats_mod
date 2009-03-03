@@ -26,13 +26,10 @@ class ColorPickerWidget : public QWidget
         const QColor color() const { return m_color; }
 
     signals:
-        void pickColor();
         void editingFinished();
 
-    public slots:
-        void pick();
-
     private:
+        void pick();
         QColor m_color;
 };
 

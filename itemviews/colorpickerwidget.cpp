@@ -19,15 +19,13 @@ extern int debugLevel;
 
 ColorPickerWidget::ColorPickerWidget(QWidget *parent)
     : QWidget(parent) {
-    connect(this, SIGNAL(pickColor()),
-            this, SLOT(pick()), Qt::QueuedConnection);
 }
 
 void ColorPickerWidget::setColor(QColor color) {
     if (color != m_color) {
         m_color = color;
         QColorDialog::setCustomColor(0, color.rgb());
-        emit pickColor();
+        pick();
     }
 }
 

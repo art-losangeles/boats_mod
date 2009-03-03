@@ -77,7 +77,7 @@ QWidget * TrackDelegate::createEditor(QWidget *parent,
         case TRACK_COLOR: {
             ColorPickerWidget *editor = new ColorPickerWidget(parent);
             connect(editor, SIGNAL(editingFinished()),
-                    this, SLOT(commitAndCloseColor()));
+                    this, SLOT(commitAndCloseColor()), Qt::QueuedConnection);
             return editor;
             }
             break;
