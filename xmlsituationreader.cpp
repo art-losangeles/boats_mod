@@ -94,7 +94,7 @@ void XmlSituationReader::readSituation() {
                                                           series(readElementText())));
 
             } else if (name() == "showlayline") {
-                if (readElementText() == "1") {
+                if (readElementText() == "0") {
                     m_situation->undoStack()->push(
                             new SetShowLaylineUndoCommand(m_situation));
                 }
