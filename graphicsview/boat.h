@@ -54,6 +54,7 @@ class BoatGraphicsItem : public QObject, public QGraphicsItem {
         void setHeading(qreal value);
         void setPosition(QPointF position);
         void setOrder(int value);
+        void setTrim(qreal value);
         void setColor(QColor value);
         void setSeries(Boats::Series value);
         void deleteItem(BoatModel *boat);
@@ -77,8 +78,11 @@ class BoatGraphicsItem : public QObject, public QGraphicsItem {
         /// \a m_angle holds the heading of the boat
         qreal m_angle;
 
-        /// \a m_sailAngle holds the sail trimming angle
+        /// \a m_sailAngle holds the ideal sail trimming angle
         qreal m_sailAngle;
+
+        /// \a m_trim holds the manual trimming angle override
+        qreal m_trim;
 
         /// \a m_color holds the color of the TrackModel
         QColor m_color;

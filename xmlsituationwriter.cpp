@@ -93,6 +93,7 @@ void XmlSituationWriter::writeBoat(const BoatModel *boat) {
     writeTextElement("x",QString::number(boat->position().x()));
     writeTextElement("y",QString::number(boat->position().y()));
     writeTextElement("heading",QString::number(boat->heading()));
+    writeTextElement("trim",QString::number(boat->trim()));
     foreach (const QString discarded, boat->discardedXml())
         writeUnknownElement(discarded);
     writeEndElement();

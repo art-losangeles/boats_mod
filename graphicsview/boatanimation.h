@@ -36,22 +36,32 @@ class BoatModel;
     \sa SituationScene, SituationModel
 */
 
+typedef QPair<qreal, qreal> Pair;
+typedef QList<Pair> PairList;
+
+
 class BoatAnimation : public QGraphicsItemAnimation {
     public:
         BoatAnimation(TrackModel *track, BoatGraphicsItem *boat, int maxSize,  QGraphicsItemAnimation *parent = 0);
         ~BoatAnimation();
-        BoatGraphicsItem *boat() const {return m_boat; };
+        BoatGraphicsItem *boat() const {return m_boat; }
 
         qreal headingAt(qreal step) const;
+        qreal trimAt(qreal step) const;
+        void setTrimAt(qreal step, qreal trim) { m_trimList.append(Pair(step,trim)); }
 
     protected:
         virtual void afterAnimationStep(qreal step);
 
     private:
-        qreal linearHeadingForStep(qreal step, qreal defaultValue = 0) const;
+
+        qreal linearAngleForStep (PairList pairList, qreal step, qreal defaultValue = 0) const;
 
         /// \a m_rotationList holds the list of (step,heading) pair values
-        QList<QPair<qreal, qreal> > m_rotationList;
+        PairList m_rotationList;
+
+        /// \a m_trimList holds the list of (step,trim) pair values
+        PairList m_trimList;
 
         /// \a m_track holds the reference to the track
         TrackModel *m_track;

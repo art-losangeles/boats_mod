@@ -144,6 +144,7 @@ void XmlSituationReader::readTrack(SituationModel *situation) {
 void XmlSituationReader::readBoat(SituationModel *situation, TrackModel *track) {
     QPointF pos;
     qreal heading = 0;
+    qreal trim = 0;
     QStringList discarded;
     while (!atEnd()) {
         readNext();
@@ -156,6 +157,8 @@ void XmlSituationReader::readBoat(SituationModel *situation, TrackModel *track) 
                 pos.setY(readElementText().toFloat());
             else if (name() == "heading")
                 heading = readElementText().toFloat();
+            else if (name() == "trim")
+                trim = readElementText().toFloat();
             else
                 discarded.append(readUnknownElement());
         }
@@ -171,6 +174,7 @@ void XmlSituationReader::readBoat(SituationModel *situation, TrackModel *track) 
         situation->undoStack()->push(command);
         boat = command->boat();
     }
+    boat->setTrim(trim);
     foreach (const QString elem, discarded) {
         boat->appendDiscardedXml(elem);
     }

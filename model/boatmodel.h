@@ -49,16 +49,23 @@ class BoatModel : public PositionModel {
         qreal heading() const { return m_heading; }
         void setHeading(const qreal& theValue);
 
+        qreal trim() const { return m_trim; }
+        void setTrim(const qreal& theValue);
+
         // Setters and Getters for Non model Data
         TrackModel* track() const { return m_track; }
 
     signals:
         void headingChanged(qreal heading);
+        void trimChanged(qreal trim);
 
     private:
         // Model Data
         /// \a m_heading holds the heading of a Boat
         qreal  m_heading;
+
+        /// \a m_trim holds the sailing trim of a Boat
+        qreal m_trim;
 
         // Non model Data
         /// \a m_track keeps a pointer to the TrackModel to which

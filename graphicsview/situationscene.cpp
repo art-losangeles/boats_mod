@@ -156,7 +156,7 @@ void SituationScene::unSetAnimation() {
 
 void SituationScene::keyPressEvent(QKeyEvent *event) {
 
-    if (!m_selectedModels.isEmpty()) {
+    if (!m_selectedBoatModels.isEmpty()) {
         if (event->key() == Qt::Key_Plus) {
             qreal theta = fmod(m_selectedBoatModels[0]->heading() + 5 + 360.0, 360.0);
             m_situation->undoStack()->push(new HeadingBoatUndoCommand(m_selectedBoatModels, theta));
@@ -165,7 +165,19 @@ void SituationScene::keyPressEvent(QKeyEvent *event) {
             qreal theta = fmod(m_selectedBoatModels[0]->heading() - 5 + 360.0, 360.0);
             m_situation->undoStack()->push(new HeadingBoatUndoCommand(m_selectedBoatModels, theta));
 
-        } else if (event->key() == Qt::Key_Left) {
+        } else if (event->key() == Qt::Key_Less) {
+            m_situation->undoStack()->push(new TrimBoatUndoCommand(m_selectedBoatModels, m_selectedBoatModels[0]->trim() - 5));
+
+        } else if (event->key() == Qt::Key_Greater) {
+            m_situation->undoStack()->push(new TrimBoatUndoCommand(m_selectedBoatModels, m_selectedBoatModels[0]->trim() + 5));
+
+        } else if (event->key() == Qt::Key_Equal) {
+            m_situation->undoStack()->push(new TrimBoatUndoCommand(m_selectedBoatModels, 0));
+        }
+    }
+
+    if (!m_selectedModels.isEmpty()) {
+        if (event->key() == Qt::Key_Left) {
             QPointF pos(-5,0);
             m_situation->undoStack()->push(new MoveModelUndoCommand(m_selectedModels, pos));
 

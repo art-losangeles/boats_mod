@@ -29,6 +29,7 @@ BoatGraphicsItem::BoatGraphicsItem(BoatModel *boat, QGraphicsItem *parent)
         : QGraphicsItem(parent),
         m_boat(boat),
         m_angle(boat->heading()),
+        m_trim(boat->trim()),
         m_color(boat->track()->color()),
         m_series(boat->track()->series()),
         m_selected(false),
@@ -48,6 +49,8 @@ BoatGraphicsItem::BoatGraphicsItem(BoatModel *boat, QGraphicsItem *parent)
             this, SLOT(setPosition(QPointF)));
     connect(boat, SIGNAL(orderChanged(int)),
             this, SLOT(setOrder(int)));
+    connect(boat, SIGNAL(trimChanged(qreal)),
+            this, SLOT(setTrim(qreal)));
     connect(boat->track(), SIGNAL(colorChanged(QColor)),
             this, SLOT(setColor(QColor)));
     connect(boat->track(), SIGNAL(seriesChanged(Boats::Series)),
@@ -68,28 +71,48 @@ void BoatGraphicsItem::setHeading(qreal value) {
     }
 }
 
+/// calculate a sail incidence angle, corrected with user trimming
 void BoatGraphicsItem::setSailAngle() {
-    qreal layline = m_boat->track()->situation()->laylineAngle() -10;
-    if (m_angle< layline || m_angle>360-layline) {
-        m_sailAngle = -m_angle;
+    qreal layline = m_boat->track()->situation()->laylineAngle();
+
+    // within 10° inside layline angle, the sail is headed
+    if (m_angle < layline-10) {
+        m_sailAngle =  m_angle + m_trim;
+        return;
+    } else if (m_angle > 360 - (layline-10)) {
+        m_sailAngle =  m_angle - m_trim;
         return;
     }
+
+
     switch (m_series) {
+    // tornado has fixed 20° incidence
     case Boats::tornado:
         if (m_angle<180) {
-            m_sailAngle = -20;
+            m_sailAngle = 20 + m_trim;
         } else {
-            m_sailAngle = 20;
+            m_sailAngle = - 20  + m_trim;
         }
         break;
     default:
+        // linear incidence variation
+        // incidence is 15° at layline angle and 90° downwind
+        qreal a = (180 - layline) / 75;
+        qreal b = layline / a - 15;
         if (m_angle<180) {
-            m_sailAngle = -m_angle/1.86 + 6;
+            m_sailAngle = m_angle/a - b + m_trim;
         } else {
-            m_sailAngle = 180-m_angle/1.86 + 6;
+            m_sailAngle = m_angle/a - b - 180 - m_trim;
         }
         break;
     }
+
+    if (debugLevel & 1 << VIEW) std::cout
+            << "angle = " << m_angle
+            << " trim = " << m_trim
+            << " sail = " << m_sailAngle
+            << " the = "  << fmod(m_angle - m_sailAngle + 360, 360)
+            << std::endl;
 }
 
 void BoatGraphicsItem::setPosition(QPointF position) {
@@ -103,6 +126,14 @@ void BoatGraphicsItem::setOrder(int value) {
     if (m_order != value) {
         m_order = value;
         setZValue(m_order);
+        update();
+    }
+}
+
+void BoatGraphicsItem::setTrim(qreal value) {
+    if (m_trim != value) {
+        m_trim = value;
+        setSailAngle();
         update();
     }
 }
@@ -294,21 +325,21 @@ void BoatGraphicsItem::paintSail(QPainter *painter, qreal sailSize, QPointF atta
     painter->save();
     painter->translate(attach);
     QPainterPath sailPath;
-    qreal layline = m_boat->track()->situation()->laylineAngle() -10;
-    if (m_angle< layline || m_angle>360-layline) {
+    qreal angle = fmod(m_angle - m_sailAngle +360, 360);
+    if (angle < 10 || angle > 350 || (angle > 170 && angle < 190)) {
         sailPath.cubicTo(.1 * sailSize, .2 * sailSize, .1 * sailSize, .2 * sailSize, 0, .3 * sailSize);
         sailPath.cubicTo(-.1 * sailSize, .4 * sailSize, -.1 * sailSize, .4 * sailSize, 0, .5 * sailSize);
         sailPath.cubicTo(.1 * sailSize, .6 * sailSize, .1 * sailSize, .6 * sailSize, 0, .7 * sailSize);
         sailPath.cubicTo(-.1 * sailSize, .8 * sailSize, -.1 * sailSize, .8 * sailSize, 0, sailSize);
         sailPath.lineTo(0, 0);
-    } else if (m_angle<180) {
+    } else if (angle<180) {
         sailPath.cubicTo(.1 * sailSize, .4 * sailSize, .1 * sailSize, .6 * sailSize, 0, sailSize);
         sailPath.lineTo(0, 0);
     } else {
         sailPath.cubicTo(-.1 * sailSize, .4 * sailSize, -.1 * sailSize, .6 * sailSize, 0, sailSize);
         sailPath.lineTo(0, 0);
     }
-    painter->rotate(m_sailAngle);    
+    painter->rotate(- m_sailAngle);
     painter->fillPath(sailPath, QBrush(Qt::white));
     painter->strokePath(sailPath, painter->pen());
 

@@ -43,6 +43,7 @@ BoatAnimation::BoatAnimation(TrackModel *track, BoatGraphicsItem *boat, int maxS
     QPointF point = path.elementAt(0);
     setPosAt(0,point);
     setRotationAt(0,m_track->boats()[0]->heading());
+    setTrimAt(0, m_track->boats()[0]->trim());
 
     for (int i=0; i< size; i++) {
         qreal index;
@@ -64,6 +65,7 @@ BoatAnimation::BoatAnimation(TrackModel *track, BoatGraphicsItem *boat, int maxS
         if (stalled) {
             setRotationAt(index, fmod(m_track->boats()[i+1]->heading(),360.0));
         }
+        setTrimAt(index, m_track->boats()[i+1]->trim());
         point = end;
     }
 
@@ -97,8 +99,8 @@ BoatAnimation::~BoatAnimation() {
     angle change between 2 values, unlike \m linearRotationForStep()
 */
 
-qreal BoatAnimation::linearHeadingForStep(qreal step, qreal defaultValue) const {
-    const QList<QPair<qreal, qreal> > *source = &m_rotationList;
+qreal BoatAnimation::linearAngleForStep(PairList pairList, qreal step, qreal defaultValue) const {
+    const PairList *source = &pairList;
     step = qMin<qreal>(qMax<qreal>(step, 0), 1);
 
     if (step == 1)
@@ -144,7 +146,14 @@ qreal BoatAnimation::linearHeadingForStep(qreal step, qreal defaultValue) const 
 qreal BoatAnimation::headingAt(qreal step) const {
     if (step < 0.0 || step > 1.0)
         qWarning("BoatAnimation::headingAt: invalid step = %f", step);
-    return linearHeadingForStep(step);
+    return linearAngleForStep(m_rotationList, step);
+}
+
+
+qreal BoatAnimation::trimAt(qreal step) const {
+    if (step < 0.0 || step > 1.0)
+        qWarning("BoatAnimation::trimAt: invalid step = %f", step);
+    return linearAngleForStep(m_trimList, step);
 }
 
 /**
@@ -160,6 +169,7 @@ void BoatAnimation::afterAnimationStep(qreal step) {
 
     m_boat->setPosition(posAt(step));
     m_boat->setHeading(headingAt(step));
+    m_boat->setTrim(trimAt(step));
 
     int index = (int)(step * m_maxSize);
     for (int i=m_track->size()-1; i > index; i--) {

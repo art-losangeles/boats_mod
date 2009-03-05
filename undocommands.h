@@ -35,6 +35,7 @@ enum {
     SET_COLOR,
     MOVE_MODEL,
     HEADING_BOAT,
+    TRIM_BOAT,
     ZONE_MARK,
     LENGTH_MARK
 };
@@ -250,6 +251,21 @@ class HeadingBoatUndoCommand : public QUndoCommand {
         QList<BoatModel*> m_boatList;
         QList<qreal> m_headingList;
         qreal m_heading;
+};
+
+class TrimBoatUndoCommand : public QUndoCommand {
+
+    public:
+        TrimBoatUndoCommand(QList<BoatModel*> &boatList, const qreal &trim, QUndoCommand *parent = 0);
+        ~TrimBoatUndoCommand();
+        void undo();
+        void redo();
+        bool mergeWith(const QUndoCommand *command);
+        int id() const { return TRIM_BOAT; }
+    private:
+        QList<BoatModel*> m_boatList;
+        QList<qreal> m_trimList;
+        qreal m_trim;
 };
 
 class DeleteBoatUndoCommand : public QUndoCommand {
