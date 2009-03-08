@@ -11,10 +11,10 @@
 //
 #include <iostream>
 
-#include "model/markmodel.h"
+#include "markmodel.h"
 
 #include "commontypes.h"
-#include "model/situationmodel.h"
+#include "situationmodel.h"
 
 extern int debugLevel;
 

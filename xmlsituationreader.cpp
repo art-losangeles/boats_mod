@@ -14,10 +14,10 @@
 #include "xmlsituationreader.h"
 
 #include "commontypes.h"
-#include "model/situationmodel.h"
-#include "model/trackmodel.h"
-#include "model/boatmodel.h"
-#include "model/markmodel.h"
+#include "situationmodel.h"
+#include "trackmodel.h"
+#include "boatmodel.h"
+#include "markmodel.h"
 
 #include "undocommands.h"
 

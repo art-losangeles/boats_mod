@@ -15,8 +15,8 @@
 #include <QtGui>
 
 #include "boatanimation.h"
-#include "model/trackmodel.h"
-#include "model/boatmodel.h"
+#include "trackmodel.h"
+#include "boatmodel.h"
 #include "boat.h"
 
 /**

@@ -16,7 +16,8 @@
 
 #include "commontypes.h"
 
-#include "model/situationmodel.h"
+#include "situationmodel.h"
+class TrackModel;
 
 class TrackTableModel : public QAbstractTableModel {
         Q_OBJECT

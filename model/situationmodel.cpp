@@ -12,12 +12,11 @@
 
 #include <iostream>
 
-#include "model/situationmodel.h"
+#include "situationmodel.h"
 
 #include "commontypes.h"
-#include "model/trackmodel.h"
-#include "model/boatmodel.h"
-#include "model/markmodel.h"
+#include "trackmodel.h"
+#include "markmodel.h"
 
 extern int debugLevel;
 

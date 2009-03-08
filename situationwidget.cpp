@@ -16,7 +16,7 @@
 #include "situationwidget.h"
 #include "trackdelegate.h"
 
-#include "model/situationmodel.h"
+#include "situationmodel.h"
 
 #include "undocommands.h"
 

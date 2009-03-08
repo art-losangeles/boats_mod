@@ -15,8 +15,8 @@
 
 #include "commontypes.h"
 #include "boats.h"
-#include "model/situationmodel.h"
-#include "model/trackmodel.h"
+#include "situationmodel.h"
+#include "trackmodel.h"
 #include "undocommands.h"
 
 extern int debugLevel;

@@ -12,10 +12,10 @@
 #include <iostream>
 #include <cmath>
 
-#include "model/boatmodel.h"
+#include "boatmodel.h"
 
 #include "commontypes.h"
-#include "model/trackmodel.h"
+#include "trackmodel.h"
 
 extern int debugLevel;
 

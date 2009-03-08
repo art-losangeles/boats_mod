@@ -14,7 +14,7 @@
 
 #include <QtGui>
 
-#include "model/positionmodel.h"
+#include "positionmodel.h"
 
 class TrackModel;
 

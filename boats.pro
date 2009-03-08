@@ -3,7 +3,7 @@ TARGET = boats
 
 CONFIG += qt warn_on
 
-INCLUDEPATH += graphicsview; itemviews
+INCLUDEPATH += model graphicsview itemviews
 
 HEADERS = \
 	model/boatmodel.h \

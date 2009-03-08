@@ -18,8 +18,8 @@
 
 #include "commontypes.h"
 #include "situationscene.h"
-#include "model/situationmodel.h"
-#include "model/markmodel.h"
+#include "situationmodel.h"
+#include "markmodel.h"
 
 extern int debugLevel;
 

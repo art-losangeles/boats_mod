@@ -11,7 +11,7 @@
 //
 #include <iostream>
 
-#include "model/positionmodel.h"
+#include "positionmodel.h"
 #include "commontypes.h"
 
 extern int debugLevel;
