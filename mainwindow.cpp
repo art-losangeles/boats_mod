@@ -106,8 +106,23 @@ void MainWindow::createActions() {
     connect(removeTabAction, SIGNAL(triggered()),
             this, SLOT(removeTab()));
 
+    printAction = new QAction(QIcon(":images/fileprint.png"), tr("&Print..."), this);
+    printAction->setShortcut(tr("Ctrl+p"));
+    connect(printAction, SIGNAL(triggered()),
+            this, SLOT(print()));
+
+    printPreviewAction = new QAction(QIcon(":images/filequickprint.png"), tr("Print P&review..."), this);
+    printPreviewAction->setShortcut(tr("Ctrl+r"));
+    connect(printPreviewAction, SIGNAL(triggered()),
+            this, SLOT(printPreview()));
+
+    exportPdfAction = new QAction(QIcon(":/images/pdf.png"), tr("&Export Pdf..."), this);
+    exportPdfAction->setShortcut(tr("Ctrl+E"));
+    connect(exportPdfAction, SIGNAL(triggered()),
+            this, SLOT(exportPdf()));
+
     exportImageAction = new QAction(QIcon(":/images/export.png"), tr("Export &Image..."), this);
-    exportImageAction->setShortcut(tr("Ctrl+E"));
+    exportImageAction->setShortcut(tr("Ctrl+I"));
     connect(exportImageAction, SIGNAL(triggered()),
             this, SLOT(exportImage()));
 
@@ -275,10 +290,13 @@ void MainWindow::createMenus() {
     fileMenu->addAction(saveFileAction);
     fileMenu->addAction(saveAsAction);
     fileMenu->addSeparator();
+    fileMenu->addAction(printAction);
+    fileMenu->addAction(printPreviewAction);
+    fileMenu->addAction(exportPdfAction);
+    fileMenu->addAction(exportImageAction);
+    fileMenu->addSeparator();
     fileMenu->addAction(newTabAction);
     fileMenu->addAction(removeTabAction);
-    fileMenu->addSeparator();
-    fileMenu->addAction(exportImageAction);
     fileMenu->addSeparator();
     fileMenu->addAction(exitAction);
 
@@ -644,6 +662,56 @@ bool MainWindow::saveAs() {
         animate(true);
     }
     return saved;
+}
+
+void MainWindow::print() {
+    SituationModel *situation = situationList.at(tabWidget->currentIndex());
+    SituationView *view = viewList.at(tabWidget->currentIndex());
+    QPrinter printer;
+
+    QPrintDialog *dialog = new QPrintDialog(&printer, this);
+    dialog->setWindowTitle(tr("Print Document"));
+    if (dialog->exec() != QDialog::Accepted) {
+        return;
+    }
+
+    SituationPrint printSituation(situation, view);
+    printSituation.render();
+    printSituation.print(&printer);
+}
+
+void MainWindow::printPreview() {
+    SituationModel *situation = situationList.at(tabWidget->currentIndex());
+    SituationView *view = viewList.at(tabWidget->currentIndex());
+    SituationPrint printSituation(situation, view);
+    printSituation.render();
+
+    QPrintPreviewDialog dialog;
+    connect(&dialog, SIGNAL(paintRequested(QPrinter*)),
+            &printSituation, SLOT(print(QPrinter*)));
+    dialog.exec();
+}
+
+void MainWindow::exportPdf() {
+    SituationModel *situation = situationList.at(tabWidget->currentIndex());
+    SituationView *view = viewList.at(tabWidget->currentIndex());
+
+    QString defaultName(situation->fileName());
+    defaultName.chop(4);
+    QString fileName = QFileDialog::getSaveFileName(this, "Export to PDF",
+                                                    defaultName, "PDF Files (*.pdf)");
+    if (fileName.isEmpty()) {
+        return;
+    }
+    if (QFileInfo(fileName).suffix().isEmpty())
+        fileName.append(".pdf");
+    QPrinter printer(QPrinter::HighResolution);
+    printer.setOutputFormat(QPrinter::PdfFormat);
+    printer.setOutputFileName(fileName);
+
+    SituationPrint printSituation(situation, view);
+    printSituation.render();
+    printSituation.print(&printer);
 }
 
 void MainWindow::exportImage() {

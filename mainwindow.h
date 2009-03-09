@@ -17,6 +17,7 @@
 #include "situationwidget.h"
 #include "situationscene.h"
 #include "situationview.h"
+#include "situationprint.h"
 
 class SituationModel;
 class TrackWidget;
@@ -55,6 +56,9 @@ class MainWindow : public QMainWindow {
         void openFiles(QStringList fileList);
         bool saveFile();
         bool saveAs();
+        void print();
+        void printPreview();
+        void exportPdf();
         void exportImage();
 
         // Track actions
@@ -118,6 +122,9 @@ class MainWindow : public QMainWindow {
         QAction *saveAsAction;
         QAction *newTabAction;
         QAction *removeTabAction;
+        QAction *printAction;
+        QAction *printPreviewAction;
+        QAction *exportPdfAction;
         QAction *exportImageAction;
         QAction *exitAction;
 

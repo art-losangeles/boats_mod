@@ -23,6 +23,7 @@ HEADERS = \
 	boats.h \
 	commontypes.h \
 	mainwindow.h \
+	situationprint.h \
 	situationwidget.h \
 	trace.h \
 	undocommands.h \
@@ -47,6 +48,7 @@ SOURCES = \
 	boats.cpp \
 	main.cpp \
 	mainwindow.cpp \
+	situationprint.cpp \
 	situationwidget.cpp \
 	trace.cpp \
 	undocommands.cpp \
