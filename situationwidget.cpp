@@ -23,53 +23,33 @@
 extern int debugLevel;
 
 SituationWidget::SituationWidget(QWidget *parent)
-    : QWidget(parent),
+    : QTabWidget(parent),
     m_situation(0) {
 
     // Scenario layout
-    scenarioGroup = new QGroupBox(tr("Scenario"),this);
-    scenarioGroup->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Maximum);
+    scenarioFrame = new QFrame();
+    scenarioLayout = new QVBoxLayout(scenarioFrame);
 
-    scenarioGrid = new QGridLayout(scenarioGroup);
-    scenarioForm = new QFormLayout();
-    scenarioGrid->addLayout(scenarioForm,0,0);
+    // Options layout
+    optionsGroup = new QGroupBox(tr("Options"),scenarioFrame);
+    optionsGroup->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Maximum);
 
-    titleEdit = new QLineEdit(scenarioGroup);
-    scenarioForm->addRow(new QLabel(tr("Title"),scenarioGroup),titleEdit);
+    optionsForm = new QFormLayout(optionsGroup);
 
-    rulesEdit = new QLineEdit(scenarioGroup);
-    scenarioForm->addRow(new QLabel(tr("Rules"),scenarioGroup),rulesEdit);
+    seriesCombo = new QComboBox(optionsGroup);
+    optionsForm->addRow(new QLabel(tr("Series"),optionsGroup),seriesCombo);
 
-    seriesCombo = new QComboBox(scenarioGroup);
-    scenarioForm->addRow(new QLabel(tr("Series"),scenarioGroup),seriesCombo);
+    laylineCheck = new QCheckBox(optionsGroup);
+    optionsForm->addRow(new QLabel(tr("Show Laylines"),optionsGroup),laylineCheck);
 
-    laylineCheck = new QCheckBox(scenarioGroup);
-    scenarioForm->addRow(new QLabel(tr("Show Laylines"),scenarioGroup),laylineCheck);
+    laylineSpin = new QSpinBox(optionsGroup);
+    optionsForm->addRow(new QLabel(tr("Laylines"),optionsGroup),laylineSpin);
 
-    laylineSpin = new QSpinBox(scenarioGroup);
-    scenarioForm->addRow(new QLabel(tr("Laylines"),scenarioGroup),laylineSpin);
-
-    lengthSpin = new QSpinBox(scenarioGroup);
-    scenarioForm->addRow(new QLabel(tr("Zone Length"),scenarioGroup),lengthSpin);
-
-    QLabel *abstractLabel = new QLabel(tr("Abstract"),scenarioGroup);
-    scenarioGrid->addWidget(abstractLabel,1,0);
-
-    abstractEdit = new QPlainTextEdit(scenarioGroup);
-    abstractEdit->setUndoRedoEnabled(false);
-    abstractEdit->setContextMenuPolicy(Qt::NoContextMenu);
-    scenarioGrid->addWidget(abstractEdit,2,0);
-
-    QLabel *descriptionLabel = new QLabel(tr("Description"),scenarioGroup);
-    scenarioGrid->addWidget(descriptionLabel,3,0);
-
-    descriptionEdit = new QPlainTextEdit(scenarioGroup);
-    descriptionEdit->setUndoRedoEnabled(false);
-    descriptionEdit->setContextMenuPolicy(Qt::NoContextMenu);
-    scenarioGrid->addWidget(descriptionEdit,4,0);
+    lengthSpin = new QSpinBox(optionsGroup);
+    optionsForm->addRow(new QLabel(tr("Zone Length"),optionsGroup),lengthSpin);
 
     // Track layout
-    trackGroup = new QGroupBox(tr("Tracks"),this);
+    trackGroup = new QGroupBox(tr("Tracks"),scenarioFrame);
     trackLayout = new QGridLayout(trackGroup);
     trackTableModel = new TrackTableModel(m_situation);
     trackTableView = new QTableView(trackGroup);
@@ -82,10 +62,43 @@ SituationWidget::SituationWidget(QWidget *parent)
     trackLayout->addWidget(trackTableView);
 
     // last bricks
-    situationLayout = new QVBoxLayout(this);
-    situationLayout->addWidget(scenarioGroup);
-    situationLayout->addWidget(trackGroup);
-    this->setLayout(situationLayout);
+    scenarioLayout->addWidget(optionsGroup);
+    scenarioLayout->addWidget(trackGroup);
+
+    addTab(scenarioFrame,tr("Scenario"));
+
+
+    // description group
+    descriptionFrame = new QFrame();
+
+    descriptionGrid = new QGridLayout(descriptionFrame);
+    descriptionForm = new QFormLayout();
+    descriptionGrid->addLayout(descriptionForm, 0, 0);
+
+    titleEdit = new QLineEdit(descriptionFrame);
+    descriptionForm->addRow(new QLabel(tr("Title"),descriptionFrame),titleEdit);
+
+    rulesEdit = new QLineEdit(descriptionFrame);
+    descriptionForm->addRow(new QLabel(tr("Rules"),descriptionFrame),rulesEdit);
+
+    QLabel *abstractLabel = new QLabel(tr("Abstract"),descriptionFrame);
+    descriptionGrid->addWidget(abstractLabel,1,0);
+
+    abstractEdit = new QPlainTextEdit(descriptionFrame);
+    abstractEdit->setUndoRedoEnabled(false);
+    abstractEdit->setContextMenuPolicy(Qt::NoContextMenu);
+    descriptionGrid->addWidget(abstractEdit,2,0);
+
+    QLabel *descriptionLabel = new QLabel(tr("Description"),descriptionFrame);
+    descriptionGrid->addWidget(descriptionLabel,3,0);
+
+    descriptionEdit = new QPlainTextEdit(descriptionFrame);
+    descriptionEdit->setUndoRedoEnabled(false);
+    descriptionEdit->setContextMenuPolicy(Qt::NoContextMenu);
+    descriptionGrid->addWidget(descriptionEdit,4,0);
+
+    addTab(descriptionFrame,tr("Description"));
+
 }
 
 void SituationWidget::update() {

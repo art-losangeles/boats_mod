@@ -18,7 +18,7 @@
 
 class SituationModel;
 
-class SituationWidget : public QWidget {
+class SituationWidget : public QTabWidget {
     Q_OBJECT
     public:
         SituationWidget(QWidget *parent = 0);
@@ -47,24 +47,29 @@ class SituationWidget : public QWidget {
     private:
         SituationModel *m_situation;
 
-        QGroupBox *scenarioGroup;
-        QLineEdit *titleEdit;
-        QLineEdit *rulesEdit;
+        QFrame *scenarioFrame;
+        QVBoxLayout *scenarioLayout;
+
+        QGroupBox *optionsGroup;
         QComboBox *seriesCombo;
         QCheckBox *laylineCheck;
         QSpinBox *laylineSpin;
         QSpinBox *lengthSpin;
-        QPlainTextEdit *abstractEdit;
-        QPlainTextEdit *descriptionEdit;
-        QGridLayout *scenarioGrid;
-        QFormLayout *scenarioForm;
+        QFormLayout *optionsForm;
 
         QGroupBox *trackGroup;
         TrackTableModel *trackTableModel;
         QTableView *trackTableView;
         QGridLayout *trackLayout;
 
-        QVBoxLayout *situationLayout;
+        QFrame *descriptionFrame;
+        QLineEdit *titleEdit;
+        QLineEdit *rulesEdit;
+        QPlainTextEdit *abstractEdit;
+        QPlainTextEdit *descriptionEdit;
+        QGridLayout *descriptionGrid;
+        QFormLayout *descriptionForm;
+
 };
 
 #endif

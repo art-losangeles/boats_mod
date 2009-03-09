@@ -371,7 +371,11 @@ void MainWindow::createMenus() {
 }
 
 void MainWindow::createDocks() {
-    situationDock->setWidget(situationWidget);
+    QScrollArea *area = new QScrollArea;
+    area->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    area->setWidgetResizable(true);
+    area->setWidget(situationWidget);
+    situationDock->setWidget(area);
     situationDock->setFeatures(QDockWidget::NoDockWidgetFeatures);
 }
 
