@@ -739,9 +739,7 @@ void MainWindow::exportImage() {
     }
 
     // if no provided extension or incorrect extension, use selected filter
-    int dotIndex = fileName.lastIndexOf(".");
-    QString newExt = fileName.right(fileName.size()-dotIndex-1);
-    if (!formatsList.contains(newExt.toAscii())) {
+    if (!formatsList.contains(QFileInfo(fileName).suffix().toAscii())) {
         fileName.append(".").append(ext.left(ext.indexOf(' ')).toLower());
     }
 
