@@ -544,7 +544,7 @@ void AddMarkUndoCommand::undo() {
 }
 
 // Zone Mark
-ZoneMarkUndoCommand::ZoneMarkUndoCommand(SituationModel *situation, QList<MarkModel*> &markList, QUndoCommand *parent)
+ZoneMarkUndoCommand::ZoneMarkUndoCommand(SituationModel *situation, const QList<MarkModel*> &markList, QUndoCommand *parent)
         : QUndoCommand(parent),
         m_situation(situation),
         m_markList(markList) {

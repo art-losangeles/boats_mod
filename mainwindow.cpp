@@ -827,9 +827,11 @@ void MainWindow::toggleMarkZone() {
     SituationModel *situation = situationList.at(tabWidget->currentIndex());
     SituationScene *scene = sceneList.at(tabWidget->currentIndex());
 
-    QList<MarkModel *> boatList = scene->selectedMarkModels();
-    if (! boatList.isEmpty()) {
-        situation->undoStack()->push(new ZoneMarkUndoCommand(situation, boatList));
+    QList<MarkModel *> markList = scene->selectedMarkModels();
+    if (! markList.isEmpty()) {
+        situation->undoStack()->push(new ZoneMarkUndoCommand(situation, markList));
+    } else {
+        situation->undoStack()->push(new ZoneMarkUndoCommand(situation, situation->marks()));
     }
 }
 

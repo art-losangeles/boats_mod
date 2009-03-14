@@ -299,7 +299,7 @@ class AddMarkUndoCommand : public QUndoCommand {
 class ZoneMarkUndoCommand : public QUndoCommand {
 
     public:
-        ZoneMarkUndoCommand(SituationModel* situation, QList<MarkModel*> &markList, QUndoCommand *parent = 0);
+        ZoneMarkUndoCommand(SituationModel* situation, const QList<MarkModel*> &markList, QUndoCommand *parent = 0);
         ~ZoneMarkUndoCommand();
         void undo();
         void redo();
