@@ -73,46 +73,7 @@ void BoatGraphicsItem::setHeading(qreal value) {
 
 /// calculate a sail incidence angle, corrected with user trimming
 void BoatGraphicsItem::setSailAngle() {
-    qreal layline = m_boat->track()->situation()->laylineAngle();
-
-    // within 10° inside layline angle, the sail is headed
-    if (m_angle < layline-10) {
-        m_sailAngle =  m_angle + m_trim;
-        return;
-    } else if (m_angle > 360 - (layline-10)) {
-        m_sailAngle =  m_angle - m_trim;
-        return;
-    }
-
-
-    switch (m_series) {
-    // tornado has fixed 20° incidence
-    case Boats::tornado:
-        if (m_angle<180) {
-            m_sailAngle = 20 + m_trim;
-        } else {
-            m_sailAngle = - 20  + m_trim;
-        }
-        break;
-    default:
-        // linear incidence variation
-        // incidence is 15° at layline angle and 90° downwind
-        qreal a = (180 - layline) / 75;
-        qreal b = layline / a - 15;
-        if (m_angle<180) {
-            m_sailAngle = m_angle/a - b + m_trim;
-        } else {
-            m_sailAngle = m_angle/a - b - 180 - m_trim;
-        }
-        break;
-    }
-
-    if (debugLevel & 1 << VIEW) std::cout
-            << "angle = " << m_angle
-            << " trim = " << m_trim
-            << " sail = " << m_sailAngle
-            << " the = "  << fmod(m_angle - m_sailAngle + 360, 360)
-            << std::endl;
+    m_sailAngle = m_boat->getSailAngle(m_boat->track()->situation()->laylineAngle(), m_angle, m_series, m_trim);
 }
 
 void BoatGraphicsItem::setPosition(QPointF position) {

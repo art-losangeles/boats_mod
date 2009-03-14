@@ -47,8 +47,8 @@ class BoatAnimation : public QGraphicsItemAnimation {
         BoatGraphicsItem *boat() const {return m_boat; }
 
         qreal headingAt(qreal step) const;
-        qreal trimAt(qreal step) const;
-        void setTrimAt(qreal step, qreal trim) { m_trimList.append(Pair(step,trim)); }
+        qreal sailAt(qreal step) const;
+        void setsailAt(qreal step, qreal sail) { m_sailList.append(Pair(step,sail)); }
 
     protected:
         virtual void afterAnimationStep(qreal step);
@@ -60,8 +60,8 @@ class BoatAnimation : public QGraphicsItemAnimation {
         /// \a m_rotationList holds the list of (step,heading) pair values
         PairList m_rotationList;
 
-        /// \a m_trimList holds the list of (step,trim) pair values
-        PairList m_trimList;
+        /// \a m_sailList holds the list of (step,sail) pair values
+        PairList m_sailList;
 
         /// \a m_track holds the reference to the track
         TrackModel *m_track;

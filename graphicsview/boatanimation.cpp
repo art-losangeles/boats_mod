@@ -15,6 +15,7 @@
 #include <QtGui>
 
 #include "boatanimation.h"
+#include "situationmodel.h"
 #include "trackmodel.h"
 #include "boatmodel.h"
 #include "boat.h"
@@ -42,8 +43,11 @@ BoatAnimation::BoatAnimation(TrackModel *track, BoatGraphicsItem *boat, int maxS
 
     QPointF point = path.elementAt(0);
     setPosAt(0,point);
-    setRotationAt(0,m_track->boats()[0]->heading());
-    setTrimAt(0, m_track->boats()[0]->trim());
+    BoatModel *model = m_track->boats()[0];
+    qreal layline = m_track->situation()->laylineAngle();
+    Boats::Series series = m_track->series();
+    setRotationAt(0,model->heading());
+    setsailAt(0, model->getSailAngle(layline, model->heading(), series, model->trim()));
 
     for (int i=0; i< size; i++) {
         qreal index;
@@ -62,10 +66,11 @@ BoatAnimation::BoatAnimation(TrackModel *track, BoatGraphicsItem *boat, int maxS
                 setRotationAt(index, fmod(360+90-curve.angleAtPercent(percent),360.0));
             }
         }
+        model = m_track->boats()[i+1];
         if (stalled) {
-            setRotationAt(index, fmod(m_track->boats()[i+1]->heading(),360.0));
+            setRotationAt(index, fmod(model->heading(),360.0));
         }
-        setTrimAt(index, m_track->boats()[i+1]->trim());
+        setsailAt(index, model->getSailAngle(layline, model->heading(), series, model->trim()));
         point = end;
     }
 
@@ -150,10 +155,10 @@ qreal BoatAnimation::headingAt(qreal step) const {
 }
 
 
-qreal BoatAnimation::trimAt(qreal step) const {
+qreal BoatAnimation::sailAt(qreal step) const {
     if (step < 0.0 || step > 1.0)
-        qWarning("BoatAnimation::trimAt: invalid step = %f", step);
-    return linearAngleForStep(m_trimList, step);
+        qWarning("BoatAnimation::sailAt: invalid step = %f", step);
+    return linearAngleForStep(m_sailList, step);
 }
 
 /**
@@ -168,8 +173,10 @@ void BoatAnimation::afterAnimationStep(qreal step) {
     }
 
     m_boat->setPosition(posAt(step));
-    m_boat->setHeading(headingAt(step));
-    m_boat->setTrim(trimAt(step));
+    qreal heading = headingAt(step);
+    m_boat->setHeading(heading);
+    qreal sailAngle = BoatModel::getSailAngle(m_track->situation()->laylineAngle(), heading, m_track->series(), 0);
+    m_boat->setTrim(sailAt(step)- sailAngle);
 
     int index = (int)(step * m_maxSize);
     for (int i=m_track->size()-1; i > index; i--) {

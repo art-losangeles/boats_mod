@@ -48,7 +48,6 @@ class BoatGraphicsItem : public QObject, public QGraphicsItem {
         void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
                    QWidget *widget);
         int type() const;
-        void setSailAngle();
 
     public slots:
         void setHeading(qreal value);
@@ -65,6 +64,7 @@ class BoatGraphicsItem : public QObject, public QGraphicsItem {
         void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 
     private:
+        void setSailAngle();
 
         /// draw a number with font size numberSize at posY alongside boat
         void paintNumber(QPainter *painter, int numberSize, qreal posY);

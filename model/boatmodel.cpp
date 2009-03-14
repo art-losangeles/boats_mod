@@ -15,6 +15,7 @@
 #include "boatmodel.h"
 
 #include "commontypes.h"
+#include "situationmodel.h"
 #include "trackmodel.h"
 
 extern int debugLevel;
@@ -46,10 +47,55 @@ void BoatModel::setPosition(const QPointF& theValue) {
 }
 
 void BoatModel::setTrim(const qreal& theValue) {
+    qreal layline = m_track->situation()->laylineAngle();
+    qreal sailAngle = getSailAngle(layline, m_heading, m_track->series(), 0);
+    qreal newAngle = sailAngle + theValue;
     if (theValue != m_trim
-        && theValue < 180
-        && theValue > -180) {
+        && newAngle < 180
+        && newAngle > -180) {
         m_trim = theValue;
         emit trimChanged(m_trim);
     }
 }
+
+qreal BoatModel::getSailAngle(qreal layline, qreal heading, Boats::Series series, qreal trim) {
+    qreal sailAngle;
+
+    // within 10° inside layline angle, the sail is headed
+    if (heading < layline-10) {
+        sailAngle =  heading + trim;
+    } else if (heading > 360 - (layline-10)) {
+        sailAngle =  heading - 360 + trim;
+    } else {
+
+        switch (series) {
+            // tornado has fixed 20° incidence
+        case Boats::tornado:
+            if (heading<180) {
+                sailAngle = 20 + trim;
+            } else {
+                sailAngle = - 20  + trim;
+            }
+            break;
+        default:
+            // linear incidence variation
+            // incidence is 15° at layline angle and 90° downwind
+            qreal a = (180 - layline) / 75;
+            qreal b = layline / a - 15;
+            if (heading<180) {
+                sailAngle = heading/a - b + trim;
+            } else {
+                sailAngle = heading/a - b - 180 + trim;
+            }
+            break;
+        }
+    }
+
+    if (debugLevel & 1 << MODEL) std::cout
+            << "heading = " << heading
+            << " trim = " << trim
+            << " sail = " << sailAngle
+            << std::endl;
+    return sailAngle;
+}
+

@@ -14,6 +14,7 @@
 
 #include <QtGui>
 
+#include "boats.h"
 #include "positionmodel.h"
 
 class TrackModel;
@@ -54,6 +55,8 @@ class BoatModel : public PositionModel {
 
         // Setters and Getters for Non model Data
         TrackModel* track() const { return m_track; }
+
+        static qreal getSailAngle(qreal layline, qreal heading, Boats::Series series, qreal trim);
 
     signals:
         void headingChanged(qreal heading);
