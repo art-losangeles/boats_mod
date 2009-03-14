@@ -389,6 +389,7 @@ void MainWindow::newTab() {
     viewList.append(view);
     tabWidget->addTab(view, "");
 
+    tabWidget->setCurrentIndex(situationList.size()-1);
     view->setFocus();
     if (situationList.size() > 1) {
         removeTabAction->setEnabled(true);
@@ -461,6 +462,9 @@ void MainWindow::removeTab() {
     SituationScene *scene = sceneList.at(index);
     SituationView *view = viewList.at(index);
 
+    if (!maybeSave(situation)) {
+        return;
+    }
     situationList.removeAt(index);
     sceneList.removeAt(index);
     viewList.removeAt(index);
