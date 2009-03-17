@@ -465,14 +465,20 @@ void MainWindow::removeTab() {
     if (!maybeSave(situation)) {
         return;
     }
+
+    if (index == situationList.size() - 1) {
+        tabWidget->setCurrentIndex(index - 1);
+    } else if (index != situationList.size() - 2) {
+        tabWidget->setCurrentIndex(index + 1);
+    }
     situationList.removeAt(index);
     sceneList.removeAt(index);
     viewList.removeAt(index);
-    tabWidget->removeTab(index);
 
-    delete view;
-    delete scene;
-    delete situation;
+    tabWidget->removeTab(index);
+    view->deleteLater();
+    scene->deleteLater();
+    situation->deleteLater();
     if (situationList.size() == 1) {
         removeTabAction->setEnabled(false);
     }
