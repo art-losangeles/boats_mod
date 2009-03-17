@@ -484,6 +484,13 @@ void MainWindow::writeSettings() {
     settings.beginGroup("MainWindow");
     settings.setValue("size", size());
     settings.setValue("pos", pos());
+    QStringList fileList;
+    foreach(SituationModel *situation, situationList) {
+        if (!situation->fileName().isEmpty()) {
+            fileList.append(situation->fileName());
+        }
+    }
+    settings.setValue("fileList",fileList);
     settings.endGroup();
 }
 
@@ -499,6 +506,8 @@ void MainWindow::readSettings() {
     } else {
         showMaximized();
     }
+    QStringList fileList = settings.value("fileList").toStringList();
+    openFiles(fileList);
     settings.endGroup();
 }
 
@@ -565,6 +574,11 @@ void MainWindow::openFile() {
 }
 
 void MainWindow::openFiles(QStringList fileList) {
+    foreach(SituationModel *situation, situationList) {
+        if (!maybeSave(situation)) {
+            return;
+        }
+    }
     foreach (const QString fileName, fileList) {
         std::cout << "opening " << fileName.toStdString() << std::endl;
         openFile(fileName, fileList.first() != fileName);
