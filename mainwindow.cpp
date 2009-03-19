@@ -62,11 +62,11 @@ MainWindow::MainWindow(QWidget *parent)
     addDockWidget(Qt::LeftDockWidgetArea, situationDock);
 
     // View
-    newTabButton = new QPushButton(QIcon(":/images/tab_new.png"),QString(""));
+    newTabButton = new QPushButton(QIcon(":/images/tab_new.png"),QString(""), this);
     connect(newTabButton, SIGNAL(clicked()),
             newTabAction, SLOT(trigger()));
     tabWidget->setCornerWidget(newTabButton, Qt::TopLeftCorner);
-    removeTabButton = new QPushButton(QIcon(":/images/tab_remove.png"),QString(""));
+    removeTabButton = new QPushButton(QIcon(":/images/tab_remove.png"),QString(""), this);
     removeTabButton->setEnabled(removeTabAction->isEnabled());
     connect(removeTabButton, SIGNAL(clicked()),
             removeTabAction, SLOT(trigger()));
@@ -377,7 +377,7 @@ void MainWindow::createMenus() {
 }
 
 void MainWindow::createDocks() {
-    QScrollArea *area = new QScrollArea;
+    QScrollArea *area = new QScrollArea(this);
     area->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     area->setWidgetResizable(true);
     area->setWidget(situationWidget);

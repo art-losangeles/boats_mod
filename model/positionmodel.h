@@ -33,7 +33,7 @@ class PositionModel : public QObject {
         Q_OBJECT
     public:
         PositionModel(QObject *parent = 0);
-        ~PositionModel();
+        virtual ~PositionModel();
 
         // Setters and Getters for Model Data
         QPointF position() const { return m_position; }
