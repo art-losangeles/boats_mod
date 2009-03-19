@@ -62,6 +62,15 @@ MainWindow::MainWindow(QWidget *parent)
     addDockWidget(Qt::LeftDockWidgetArea, situationDock);
 
     // View
+    newTabButton = new QPushButton(QIcon(":/images/tab_new.png"),QString(""));
+    connect(newTabButton, SIGNAL(clicked()),
+            newTabAction, SLOT(trigger()));
+    tabWidget->setCornerWidget(newTabButton, Qt::TopLeftCorner);
+    removeTabButton = new QPushButton(QIcon(":/images/tab_remove.png"),QString(""));
+    removeTabButton->setEnabled(removeTabAction->isEnabled());
+    connect(removeTabButton, SIGNAL(clicked()),
+            removeTabAction, SLOT(trigger()));
+    tabWidget->setCornerWidget(removeTabButton, Qt::TopRightCorner);
     connect(tabWidget, SIGNAL(currentChanged(int)),
             this, SLOT(setTab(int)));
     newTab();
@@ -334,9 +343,6 @@ void MainWindow::createMenus() {
     toolbar->addAction(saveAsAction);
     toolbar->addAction(exportImageAction);
     toolbar->addSeparator();
-    toolbar->addAction(newTabAction);
-    toolbar->addAction(removeTabAction);
-    toolbar->addSeparator();
     toolbar->addAction(undoAction);
     toolbar->addAction(redoAction);
     toolbar->addSeparator();
@@ -393,6 +399,7 @@ void MainWindow::newTab() {
     view->setFocus();
     if (situationList.size() > 1) {
         removeTabAction->setEnabled(true);
+        removeTabButton->setEnabled(true);
     }
 }
 
@@ -481,6 +488,7 @@ void MainWindow::removeTab() {
     situation->deleteLater();
     if (situationList.size() == 1) {
         removeTabAction->setEnabled(false);
+        removeTabButton->setEnabled(false);
     }
 }
 

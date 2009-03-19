@@ -108,6 +108,8 @@ class MainWindow : public QMainWindow {
         QMenuBar *menubar;
         QToolBar *toolbar;
         QTabWidget *tabWidget;
+        QPushButton *newTabButton;
+        QPushButton *removeTabButton;
         QToolBar *animationBar;
         QDockWidget *situationDock;
         SituationWidget *situationWidget;
