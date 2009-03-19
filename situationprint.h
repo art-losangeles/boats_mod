@@ -23,7 +23,7 @@ class SituationPrint : public QTextEdit {
     public:
         SituationPrint(SituationModel *situation, SituationView *view, QWidget *parent = 0);
         ~SituationPrint() {}
-        void render();
+        void render(QRectF pageRect);
 
     public slots:
         void print(QPrinter *printer) const { QTextEdit::print(printer); }

@@ -27,7 +27,7 @@ SituationPrint::SituationPrint(SituationModel *situation, SituationView *view, Q
     setAcceptRichText(true);
 }
 
-void SituationPrint::render() {
+void SituationPrint::render(QRectF pageRect) {
     if (!m_situation) {
         return;
     }
@@ -73,6 +73,15 @@ void SituationPrint::render() {
     cursor.insertBlock();
     cursor.insertBlock(headingblock);
     QPixmap image(m_view->screenShot());
+    qreal maxwidth = pageRect.width();
+    qreal maxheight = pageRect.height();
+    if ((image.widthMM() > maxwidth)
+        || (image.heightMM() > maxheight)) {
+        qreal width_MMtoPx = image.width()/(float)image.widthMM();
+        qreal height_MMtoPx = image.height()/(float)image.heightMM();
+        image = image.scaled(maxwidth * width_MMtoPx, maxheight * height_MMtoPx,
+                             Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    }
     document()->addResource(QTextDocument::ImageResource,
          QUrl("mydata://image.png"), QVariant(image));
     cursor.insertImage("mydata://image.png");

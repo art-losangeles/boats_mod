@@ -695,7 +695,7 @@ bool MainWindow::saveAs() {
 void MainWindow::print() {
     SituationModel *situation = situationList.at(tabWidget->currentIndex());
     SituationView *view = viewList.at(tabWidget->currentIndex());
-    QPrinter printer;
+    QPrinter printer(QPrinter::HighResolution);
 
     QPrintDialog *dialog = new QPrintDialog(&printer, this);
     dialog->setWindowTitle(tr("Print Document"));
@@ -704,7 +704,7 @@ void MainWindow::print() {
     }
 
     SituationPrint printSituation(situation, view);
-    printSituation.render();
+    printSituation.render(printer.pageRect(QPrinter::Millimeter));
     printSituation.print(&printer);
 }
 
@@ -712,9 +712,10 @@ void MainWindow::printPreview() {
     SituationModel *situation = situationList.at(tabWidget->currentIndex());
     SituationView *view = viewList.at(tabWidget->currentIndex());
     SituationPrint printSituation(situation, view);
-    printSituation.render();
+    QPrinter printer(QPrinter::HighResolution);
+    QPrintPreviewDialog dialog(&printer);
+    printSituation.render(printer.pageRect(QPrinter::Millimeter));
 
-    QPrintPreviewDialog dialog;
     connect(&dialog, SIGNAL(paintRequested(QPrinter*)),
             &printSituation, SLOT(print(QPrinter*)));
     dialog.exec();
@@ -736,9 +737,8 @@ void MainWindow::exportPdf() {
     QPrinter printer(QPrinter::HighResolution);
     printer.setOutputFormat(QPrinter::PdfFormat);
     printer.setOutputFileName(fileName);
-
     SituationPrint printSituation(situation, view);
-    printSituation.render();
+    printSituation.render(printer.pageRect(QPrinter::Millimeter));
     printSituation.print(&printer);
 }
 
