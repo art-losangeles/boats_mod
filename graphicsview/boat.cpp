@@ -28,7 +28,7 @@ extern int debugLevel;
 BoatGraphicsItem::BoatGraphicsItem(BoatModel *boat, QGraphicsItem *parent)
         : QGraphicsItem(parent),
         m_boat(boat),
-        m_angle(boat->heading()),
+        m_angle(0),
         m_trim(boat->trim()),
         m_color(boat->track()->color()),
         m_series(boat->track()->series()),
@@ -39,6 +39,7 @@ BoatGraphicsItem::BoatGraphicsItem(BoatModel *boat, QGraphicsItem *parent)
 
     setBoundingRegionGranularity(1);
 
+    setHeading(boat->heading());
     setSailAngle();
     setPos(boat->position());
     setZValue(m_order);
@@ -68,6 +69,10 @@ void BoatGraphicsItem::setHeading(qreal value) {
         m_angle = value;
         setSailAngle();
         update();
+        double a = m_angle * M_PI / 180;
+        double sina = sin(a);
+        double cosa = cos(a);
+        setTransform(QTransform(cosa, sina, -sina, cosa, 0, 0), false);
     }
 }
 
@@ -173,8 +178,6 @@ void BoatGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *
     QPainterPath path;
     int numberSize = 0;
     qreal posY = 0;
-
-    painter->rotate(m_angle);
 
     if (isSelected())
         painter->setPen(Qt::red);
