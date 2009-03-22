@@ -39,10 +39,11 @@ SituationScene::SituationScene(SituationModel *situation)
         m_time(QTime::currentTime()) {
 
     // try to set a minimum scene rect
-    QGraphicsItem *e = addEllipse(QRectF());
-    e->setPos(-500,-500);
-    e->setPos(500,500);
-    delete e;
+    QGraphicsItem *e1 = addEllipse(QRectF(-500,-500, 1, 1));
+    QGraphicsItem *e2 = addEllipse(QRectF(500, 500, 1, 1));
+    sceneRect();
+    delete e1;
+    delete e2;
 
     // react to self change of selection
     connect(this, SIGNAL(selectionChanged()),
