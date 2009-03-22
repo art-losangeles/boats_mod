@@ -41,6 +41,7 @@ class MainWindow : public QMainWindow {
     public:
         MainWindow(QWidget *parent = 0);
         ~MainWindow();
+        virtual QMenu *createPopupMenu(){return 0;}
 
     public slots:
         // State management
@@ -150,6 +151,10 @@ class MainWindow : public QMainWindow {
         QAction *zoomOutAction;
         QAction *zoomFitAction;
 
+        QAction *toggleMainToolbarAction;
+        QAction *toggleAnimationToolbarAction;
+        QAction *toggleScenarioDockAction;
+
         QAction *aboutAction;
 
         // QMenu
@@ -158,6 +163,7 @@ class MainWindow : public QMainWindow {
         QMenu *historyMenu;
         QMenu *zoomMenu;
         QMenu *animationMenu;
+        QMenu *viewMenu;
 };
 
 #endif

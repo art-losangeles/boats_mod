@@ -225,6 +225,24 @@ void MainWindow::createActions() {
     zoomFitAction = new QAction(QIcon(":/images/zoomfit.png"), tr("Zoom &Fit"), this);
     zoomFitAction->setShortcut(tr("Ctrl+F"));
 
+    toggleMainToolbarAction = new QAction(tr("Main Toolbar"), this);
+    toggleMainToolbarAction->setCheckable(true);
+    toggleMainToolbarAction->setChecked(true);
+    connect(toggleMainToolbarAction, SIGNAL(toggled(bool)),
+            toolbar, SLOT(setVisible(bool)));
+
+    toggleAnimationToolbarAction = new QAction(tr("Animation Toolbar"), this);
+    toggleAnimationToolbarAction->setCheckable(true);
+    toggleAnimationToolbarAction->setChecked(true);
+    connect(toggleAnimationToolbarAction, SIGNAL(toggled(bool)),
+            animationBar, SLOT(setVisible(bool)));
+
+    toggleScenarioDockAction = new QAction(tr("Scenario Dock"), this);
+    toggleScenarioDockAction->setCheckable(true);
+    toggleScenarioDockAction->setChecked(true);
+    connect(toggleScenarioDockAction, SIGNAL(toggled(bool)),
+            situationDock, SLOT(setVisible(bool)));
+
     aboutAction = new QAction(tr("&About"), this);
     connect(aboutAction, SIGNAL(triggered()),
             this, SLOT(about()));
@@ -334,6 +352,11 @@ void MainWindow::createMenus() {
     zoomMenu->addAction(zoomInAction);
     zoomMenu->addAction(zoomFitAction);
     zoomMenu->addAction(zoomOutAction);
+
+    viewMenu = menubar->addMenu(tr("&View"));
+    viewMenu->addAction(toggleMainToolbarAction);
+    viewMenu->addAction(toggleAnimationToolbarAction);
+    viewMenu->addAction(toggleScenarioDockAction);
 
     menubar->addAction(aboutAction);
 
@@ -498,6 +521,11 @@ void MainWindow::writeSettings() {
     settings.beginGroup("MainWindow");
     settings.setValue("size", size());
     settings.setValue("pos", pos());
+    settings.setValue("AnimationBar", animationBar->isVisible());
+    settings.setValue("AnimationBarArea", toolBarArea(animationBar));
+    settings.setValue("ToolBar", toolbar->isVisible());
+    settings.setValue("ToolBarArea", toolBarArea(toolbar));
+    settings.setValue("ScenarioDock", situationDock->isVisible());
     QStringList fileList;
     foreach(SituationModel *situation, situationList) {
         if (!situation->fileName().isEmpty()) {
@@ -520,6 +548,11 @@ void MainWindow::readSettings() {
     } else {
         showMaximized();
     }
+    toggleAnimationToolbarAction->setChecked(settings.value("AnimationBar", true).toBool());
+    addToolBar((Qt::ToolBarArea)(settings.value("AnimationBarArea").toInt()), animationBar);
+    toggleMainToolbarAction->setChecked(settings.value("ToolBar", true).toBool());
+    addToolBar((Qt::ToolBarArea)(settings.value("ToolBarArea").toInt()), toolbar);
+    toggleScenarioDockAction->setChecked(settings.value("ScenarioDock", true).toBool());
     QStringList fileList = settings.value("fileList").toStringList();
     openFiles(fileList);
     settings.endGroup();
