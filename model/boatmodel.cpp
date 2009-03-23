@@ -58,6 +58,15 @@ void BoatModel::setTrim(const qreal& theValue) {
     }
 }
 
+void BoatModel::setOverlap(const  Boats::Overlaps theValue) {
+    if (theValue != m_overlap) {
+        if (debugLevel & 1 << MODEL) std::cout
+                << "overlap = " << theValue  << std::endl;
+        m_overlap = theValue;
+        emit overlapChanged(m_overlap);
+    }
+}
+
 qreal BoatModel::getSailAngle(qreal layline, qreal heading, Boats::Series series, qreal trim) {
     qreal sailAngle;
 

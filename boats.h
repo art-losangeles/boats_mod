@@ -20,6 +20,10 @@
 
 #define ENUM_SIZE(o,e) (o::staticMetaObject.enumerator(o::staticMetaObject.indexOfEnumerator(#e)).keyCount())
 
+#define FLAG_NAME(o,e,v) (o::staticMetaObject.enumerator(o::staticMetaObject.indexOfEnumerator(#e)).valueToKeys((v)))
+
+#define FLAG_VALUE(o,e,n) (o::staticMetaObject.enumerator(o::staticMetaObject.indexOfEnumerator(#e)).keysToValue((n)))
+
 class Boats {
     Q_GADGET
 
@@ -36,9 +40,19 @@ public:
 
     static QList<QString> seriesList();
 
+    enum Overlap {
+        none = 0x0,
+        starboard = 0x1,
+        port = 0x2
+    };
+    Q_ENUMS (Overlap);
+    Q_DECLARE_FLAGS(Overlaps, Overlap)
+
 private:
     static QList<QString> m_seriesList;
 
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(Boats::Overlaps)
 
 #endif

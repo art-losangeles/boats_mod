@@ -159,6 +159,16 @@ void MainWindow::createActions() {
     connect(addMarkAction, SIGNAL(triggered()),
             this, SLOT(addMark()));
 
+    togglePortOverlapAction = new QAction(tr("&Port Overlap"), this);
+    togglePortOverlapAction->setShortcut(tr("Alt+<"));
+    connect(togglePortOverlapAction, SIGNAL(triggered()),
+            this, SLOT(togglePortOverlap()));
+
+    toggleStarboardOverlapAction = new QAction(tr("&Starboard Overlap"), this);
+    toggleStarboardOverlapAction->setShortcut(tr("Alt+>"));
+    connect(toggleStarboardOverlapAction, SIGNAL(triggered()),
+            this, SLOT(toggleStarboardOverlap()));
+
     toggleMarkZoneAction = new QAction(QIcon(":/images/zone.png"), tr("Toggle Mark &Zone"), this);
     toggleMarkZoneAction->setShortcut(tr("Z"));
     connect(toggleMarkZoneAction, SIGNAL(triggered()),
@@ -333,6 +343,8 @@ void MainWindow::createMenus() {
     trackMenu->addSeparator();
     trackMenu->addAction(addBoatAction);
     trackMenu->addAction(addMarkAction);
+    trackMenu->addAction(togglePortOverlapAction);
+    trackMenu->addAction(toggleStarboardOverlapAction);
     trackMenu->addAction(toggleMarkZoneAction);
     trackMenu->addAction(deleteAction);
 
@@ -881,6 +893,26 @@ void MainWindow::addMark() {
         scene->setState(NO_STATE);
     } else {
         scene->setState(CREATE_MARK);
+    }
+}
+
+void MainWindow::togglePortOverlap() {
+    SituationModel *situation = situationList.at(tabWidget->currentIndex());
+    SituationScene *scene = sceneList.at(tabWidget->currentIndex());
+
+    QList<BoatModel *> boatList = scene->selectedBoatModels();
+    if (! boatList.isEmpty()) {
+        situation->undoStack()->push(new OverlapBoatUndoCommand(situation, boatList, Boats::port));
+    }
+}
+
+void MainWindow::toggleStarboardOverlap() {
+    SituationModel *situation = situationList.at(tabWidget->currentIndex());
+    SituationScene *scene = sceneList.at(tabWidget->currentIndex());
+
+    QList<BoatModel *> boatList = scene->selectedBoatModels();
+    if (! boatList.isEmpty()) {
+        situation->undoStack()->push(new OverlapBoatUndoCommand(situation, boatList, Boats::starboard));
     }
 }
 

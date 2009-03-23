@@ -179,8 +179,9 @@ void BoatAnimation::afterAnimationStep(qreal step) {
     m_boat->setTrim(sailAt(step)- sailAngle);
 
     int index = (int)(step * m_maxSize);
+    BoatModel *boat;
     for (int i=m_track->size()-1; i > index; i--) {
-        BoatModel *boat = m_track->boats()[i];
+        boat = m_track->boats()[i];
         m_boats.push_back(boat);
         m_track->deleteBoat(boat);
     }
@@ -190,6 +191,9 @@ void BoatAnimation::afterAnimationStep(qreal step) {
             m_boats.pop_back();
         }
     }
+
+    boat = m_track->boats()[index];
+    m_boat->setOverlap(boat->overlap());
 
     // trigger next update rate calculation
     m_time.start();

@@ -94,6 +94,9 @@ void XmlSituationWriter::writeBoat(const BoatModel *boat) {
     writeTextElement("y",QString::number(boat->position().y()));
     writeTextElement("heading",QString::number(boat->heading()));
     writeTextElement("trim",QString::number(boat->trim()));
+    if (boat->overlap() != Boats::none) {
+        writeTextElement("overlap", FLAG_NAME(Boats, Overlaps, boat->overlap()));
+    }
     foreach (const QString discarded, boat->discardedXml())
         writeUnknownElement(discarded);
     writeEndElement();

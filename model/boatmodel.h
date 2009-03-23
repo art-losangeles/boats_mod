@@ -53,6 +53,9 @@ class BoatModel : public PositionModel {
         qreal trim() const { return m_trim; }
         void setTrim(const qreal& theValue);
 
+        Boats::Overlaps overlap() const {return m_overlap; }
+        void setOverlap(const Boats::Overlaps theValue);
+
         // Setters and Getters for Non model Data
         TrackModel* track() const { return m_track; }
 
@@ -61,6 +64,7 @@ class BoatModel : public PositionModel {
     signals:
         void headingChanged(qreal heading);
         void trimChanged(qreal trim);
+        void overlapChanged(Boats::Overlaps overlap);
 
     private:
         // Model Data
@@ -69,6 +73,9 @@ class BoatModel : public PositionModel {
 
         /// \a m_trim holds the sailing trim of a Boat
         qreal m_trim;
+
+        /// \a m_overlap holds whether an overlap line should be displayed
+        Boats::Overlaps m_overlap;
 
         // Non model Data
         /// \a m_track keeps a pointer to the TrackModel to which

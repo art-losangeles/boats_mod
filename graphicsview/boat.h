@@ -54,6 +54,7 @@ class BoatGraphicsItem : public QObject, public QGraphicsItem {
         void setPosition(QPointF position);
         void setOrder(int value);
         void setTrim(qreal value);
+        void setOverlap(Boats::Overlaps value);
         void setColor(QColor value);
         void setSeries(Boats::Series value);
         void deleteItem(BoatModel *boat);
@@ -65,6 +66,7 @@ class BoatGraphicsItem : public QObject, public QGraphicsItem {
 
     private:
         void setSailAngle();
+        void setOverlapLine();
 
         /// draw a number with font size numberSize at posY alongside boat
         void paintNumber(QPainter *painter, int numberSize, qreal posY);
@@ -83,6 +85,10 @@ class BoatGraphicsItem : public QObject, public QGraphicsItem {
 
         /// \a m_trim holds the manual trimming angle override
         qreal m_trim;
+
+        /// \a m_overlap holds whether an overlap line should be displayed
+        Boats::Overlaps m_overlap;
+        QGraphicsLineItem *m_overlapLine;
 
         /// \a m_color holds the color of the TrackModel
         QColor m_color;

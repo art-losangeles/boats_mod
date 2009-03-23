@@ -457,6 +457,49 @@ bool HeadingBoatUndoCommand::mergeWith(const QUndoCommand *command) {
     return true;
 }
 
+// Overlap Boat
+OverlapBoatUndoCommand::OverlapBoatUndoCommand(SituationModel* situation, QList<BoatModel*> &boatList, Boats::Overlaps overlaps, QUndoCommand *parent)
+        : QUndoCommand(parent),
+        m_situation(situation),
+        m_boatList(boatList),
+        m_overlaps(overlaps) {
+    if (debugLevel & 1 << COMMAND) std::cout << "new overlapboatundocommand" << std::endl;
+}
+
+OverlapBoatUndoCommand::~OverlapBoatUndoCommand() {
+    if (debugLevel & 1 << COMMAND) std::cout << "end overlapboatundocommand" << std::endl;
+}
+
+void OverlapBoatUndoCommand::undo() {
+    if (debugLevel & 1 << COMMAND) std::cout << "undo overlapboatundocommand" << std::endl;
+    for(int i=0; i< m_boatList.size(); i++) {
+        BoatModel *boat = m_boatList[i];
+        boat->setOverlap(boat->overlap() ^ m_overlaps);
+    }
+}
+
+void OverlapBoatUndoCommand::redo() {
+    if (debugLevel & 1 << COMMAND) std::cout << "redo overlapboatundocommand" << std::endl;
+    for(int i=0; i< m_boatList.size(); i++) {
+        BoatModel *boat = m_boatList[i];
+        boat->setOverlap(boat->overlap() ^ m_overlaps);
+    }
+}
+
+bool OverlapBoatUndoCommand::mergeWith(const QUndoCommand *command) {
+    const OverlapBoatUndoCommand *overlapCommand = static_cast<const OverlapBoatUndoCommand*>(command);
+    if (m_boatList != overlapCommand->m_boatList)
+        return false;
+
+    if ((m_overlaps ^ overlapCommand->m_overlaps) == Boats::none) {
+        undo();
+        m_situation->undoStack()->setIndex(m_situation->undoStack()->index()-1);
+    } else {
+        m_overlaps = m_overlaps ^ overlapCommand->m_overlaps;
+    }
+    return true;
+}
+
 // Trim Boat
 TrimBoatUndoCommand::TrimBoatUndoCommand(QList<BoatModel*> &boatList, const qreal &trim, QUndoCommand *parent)
         : QUndoCommand(parent),

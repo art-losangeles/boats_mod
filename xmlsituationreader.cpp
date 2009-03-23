@@ -145,6 +145,7 @@ void XmlSituationReader::readBoat(SituationModel *situation, TrackModel *track) 
     QPointF pos;
     qreal heading = 0;
     qreal trim = 0;
+    Boats::Overlaps overlap = Boats::none;
     QStringList discarded;
     while (!atEnd()) {
         readNext();
@@ -159,6 +160,9 @@ void XmlSituationReader::readBoat(SituationModel *situation, TrackModel *track) 
                 heading = readElementText().toFloat();
             else if (name() == "trim")
                 trim = readElementText().toFloat();
+            else if (name() == "overlap") {
+                overlap = (Boats::Overlaps)FLAG_VALUE(Boats, Overlap, readElementText().toStdString().c_str());
+            }
             else
                 discarded.append(readUnknownElement());
         }
@@ -175,6 +179,7 @@ void XmlSituationReader::readBoat(SituationModel *situation, TrackModel *track) 
         boat = command->boat();
     }
     boat->setTrim(trim);
+    boat->setOverlap(overlap);
     foreach (const QString elem, discarded) {
         boat->appendDiscardedXml(elem);
     }

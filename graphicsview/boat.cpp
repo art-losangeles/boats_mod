@@ -30,6 +30,8 @@ BoatGraphicsItem::BoatGraphicsItem(BoatModel *boat, QGraphicsItem *parent)
         m_boat(boat),
         m_angle(0),
         m_trim(boat->trim()),
+        m_overlap(Boats::none),
+        m_overlapLine(new QGraphicsLineItem(this)),
         m_color(boat->track()->color()),
         m_series(boat->track()->series()),
         m_selected(false),
@@ -38,11 +40,17 @@ BoatGraphicsItem::BoatGraphicsItem(BoatModel *boat, QGraphicsItem *parent)
     setFlag(QGraphicsItem::ItemIsSelectable);
 
     setBoundingRegionGranularity(1);
+    QPen dashPen(Qt::CustomDashLine);
+    QVector<qreal> dashes;
+    dashes << 5 << 5;
+    dashPen.setDashPattern(dashes);
+    m_overlapLine->setPen(dashPen);
 
     setHeading(boat->heading());
     setSailAngle();
     setPos(boat->position());
     setZValue(m_order);
+    setOverlap(boat->overlap());
 
     connect(boat, SIGNAL(headingChanged(qreal)),
             this, SLOT(setHeading(qreal)));
@@ -52,6 +60,8 @@ BoatGraphicsItem::BoatGraphicsItem(BoatModel *boat, QGraphicsItem *parent)
             this, SLOT(setOrder(int)));
     connect(boat, SIGNAL(trimChanged(qreal)),
             this, SLOT(setTrim(qreal)));
+    connect(boat, SIGNAL(overlapChanged(Boats::Overlaps)),
+            this, SLOT(setOverlap(Boats::Overlaps)));
     connect(boat->track(), SIGNAL(colorChanged(QColor)),
             this, SLOT(setColor(QColor)));
     connect(boat->track(), SIGNAL(seriesChanged(Boats::Series)),
@@ -104,6 +114,53 @@ void BoatGraphicsItem::setTrim(qreal value) {
     }
 }
 
+void BoatGraphicsItem::setOverlap(Boats::Overlaps value) {
+    if (m_overlap != value) {
+        m_overlap = value;
+        setOverlapLine();
+    }
+}
+
+void BoatGraphicsItem::setOverlapLine() {
+    qreal size = m_boat->track()->situation()->sizeForSeries(m_series);
+    qreal border;
+    switch(m_series) {
+        case Boats::keelboat:
+            border = 10;
+            break;
+        case Boats::laser:
+            border = 5;
+            break;
+        case Boats::optimist:
+            border = 4.6;
+            break;
+        case Boats::tornado:
+            border = 14.7;
+            break;
+        case Boats::startboat:
+            border = 17;
+            break;
+        default:
+            border = 0;
+            break;
+    }
+    QLineF line;
+    line.setP1(QPointF(border, size/2));
+    line.setP2(QPointF(-border, size/2));
+    if (m_overlap == Boats::none) {
+        m_overlapLine->setVisible(false);
+    } else {
+        if (m_overlap & Boats::starboard) {
+            line.setP2(QPointF(border + size, size/2));
+        }
+        if (m_overlap & Boats::port) {
+            line.setP1(QPointF(-border - size, size/2));
+        }
+        m_overlapLine->setVisible(true);
+        m_overlapLine->setLine(line);
+    }
+}
+
 void BoatGraphicsItem::setColor(QColor value) {
     if (m_color != value) {
         m_color = value;
@@ -116,6 +173,7 @@ void BoatGraphicsItem::setSeries(Boats::Series value) {
         prepareGeometryChange();
         m_series = value;
         setSailAngle();
+        setOverlapLine();
         update();
     }
 }
@@ -188,8 +246,8 @@ void BoatGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *
     switch (m_series) {
     case Boats::keelboat:
         path.moveTo(0,-50);
-        path.cubicTo(20, 0, 18, 13, 10, 48);
-        path.lineTo(-10, 48);
+        path.cubicTo(20, 0, 18, 13, 10, 50);
+        path.lineTo(-10, 50);
         path.cubicTo(-18, 13, -20, 0, 0, -50);
         numberSize = 12;
         posY = 25;
