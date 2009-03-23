@@ -93,7 +93,9 @@ void XmlSituationWriter::writeBoat(const BoatModel *boat) {
     writeTextElement("x",QString::number(boat->position().x()));
     writeTextElement("y",QString::number(boat->position().y()));
     writeTextElement("heading",QString::number(boat->heading()));
-    writeTextElement("trim",QString::number(boat->trim()));
+    if (boat->trim() != 0) {
+        writeTextElement("trim",QString::number(boat->trim()));
+    }
     if (boat->overlap() != Boats::none) {
         writeTextElement("overlap", FLAG_NAME(Boats, Overlaps, boat->overlap()));
     }
@@ -115,8 +117,12 @@ void XmlSituationWriter::writeMark(const MarkModel *mark) {
     writeTextElement("x",QString::number(mark->position().x()));
     writeTextElement("y",QString::number(mark->position().y()));
     writeTextElement("color",mark->color().name());
-    writeTextElement("zone",QString::number(mark->zone()));
-    writeTextElement("length",QString::number(mark->length()));
+    if (mark->zone()) {
+        writeTextElement("zone",QString::number(mark->zone()));
+    }
+    if (mark->length() != mark->situation()->situationLength()) {
+        writeTextElement("length",QString::number(mark->length()));
+    }
     foreach (const QString discarded, mark->discardedXml())
         writeUnknownElement(discarded);
     writeEndElement();
