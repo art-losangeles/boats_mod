@@ -55,6 +55,7 @@ class MainWindow : public QMainWindow {
         void newFile();
         void openFile();
         void openFiles(QStringList fileList);
+        void openRecent();
         bool saveFile();
         bool saveAs();
         void print();
@@ -94,6 +95,7 @@ class MainWindow : public QMainWindow {
         void unsetTab();
         void writeSettings();
         void readSettings();
+        void updateRecentList();
         bool maybeSave(SituationModel *situation);
 
         // File methods
@@ -106,6 +108,8 @@ class MainWindow : public QMainWindow {
         QList<SituationScene *> sceneList;
         QList<SituationView *> viewList;
         int currentSituation;
+        static const int maxRecent;
+        QStringList recentList;
 
         // Widgets on the window
         QMenuBar *menubar;
@@ -163,6 +167,7 @@ class MainWindow : public QMainWindow {
 
         // QMenu
         QMenu *fileMenu;
+        QMenu *recentMenu;
         QMenu *trackMenu;
         QMenu *historyMenu;
         QMenu *zoomMenu;

@@ -30,6 +30,8 @@
 
 extern int debugLevel;
 
+const int MainWindow::maxRecent(5);
+
 MainWindow::MainWindow(QWidget *parent)
         : QMainWindow(parent),
         menubar(new QMenuBar(this)),
@@ -321,9 +323,18 @@ void MainWindow::cleanState(bool state) {
 }
 
 void MainWindow::createMenus() {
+    recentMenu = new QMenu(tr("&Recent"));
+    for (int i = 0; i < maxRecent; ++i) {
+        QAction * recentAction = new QAction(this);
+        recentMenu->addAction(recentAction);
+        connect(recentAction, SIGNAL(triggered()),
+                this, SLOT(openRecent()));
+    }
+
     fileMenu = menubar->addMenu(tr("&File"));
     fileMenu->addAction(newFileAction);
     fileMenu->addAction(openFileAction);
+    fileMenu->addMenu(recentMenu);
     fileMenu->addAction(saveFileAction);
     fileMenu->addAction(saveAsAction);
     fileMenu->addSeparator();
@@ -544,6 +555,7 @@ void MainWindow::writeSettings() {
             fileList.append(situation->fileName());
         }
     }
+    settings.setValue("recentList", recentList);
     settings.setValue("fileList",fileList);
     settings.endGroup();
 }
@@ -565,9 +577,28 @@ void MainWindow::readSettings() {
     toggleMainToolbarAction->setChecked(settings.value("ToolBar", true).toBool());
     addToolBar((Qt::ToolBarArea)(settings.value("ToolBarArea").toInt()), toolbar);
     toggleScenarioDockAction->setChecked(settings.value("ScenarioDock", true).toBool());
+
+    recentList = settings.value("recentList").toStringList();
+    updateRecentList();
+
     QStringList fileList = settings.value("fileList").toStringList();
     openFiles(fileList);
     settings.endGroup();
+}
+
+void MainWindow::updateRecentList() {
+    int numRecentFiles = qMin(recentList.size(), maxRecent);
+    for (int i = 0; i < numRecentFiles; ++i) {
+        QString text = tr("&%1 %2").arg(i + 1).arg(QFileInfo(recentList[i]).fileName());
+        QAction * recentAction = recentMenu->actions()[i];
+        recentAction->setText(text);
+        recentAction->setData(i);
+        recentAction->setVisible(true);
+    }
+    for (int j = numRecentFiles; j < maxRecent; ++j) {
+        QAction * recentAction = recentMenu->actions()[j];
+        recentAction->setVisible(false);
+    }
 }
 
 bool MainWindow::maybeSave(SituationModel *situation) {
@@ -630,6 +661,16 @@ void MainWindow::openFile() {
         return;
 
     openFile(fileName);
+}
+
+void MainWindow::openRecent() {
+    QAction *action = qobject_cast<QAction *>(sender());
+    if (action) {
+        int item = action->data().toInt();
+        if (recentList.size() > item) {
+            openFile(recentList[item]);
+        }
+    }
 }
 
 void MainWindow::openFiles(QStringList fileList) {
@@ -835,6 +876,14 @@ void MainWindow::exportImage() {
 void MainWindow::setCurrentFile(SituationModel *situation, const QString &fileName) {
     situation->setFileName(fileName);
     situation->undoStack()->setClean();
+
+    if (!fileName.isEmpty()) {
+        recentList.removeAll(fileName);
+        recentList.prepend(fileName);
+        while (recentList.size() > maxRecent)
+            recentList.removeLast();
+        updateRecentList();
+    }
 }
 
 void MainWindow::addTrack() {
