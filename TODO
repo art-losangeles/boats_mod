@@ -1,5 +1,4 @@
 Important:
-- umpire boat
 - flags
 - polygon/generic lines
 - jib
@@ -13,7 +12,6 @@ Normal:
 - more boat shapes
 - one line for config options and their toggle
 - open in new tab
-- filename in maybeSave popup
 
 Wishlist:
 - gpx import

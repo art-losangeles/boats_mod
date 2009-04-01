@@ -623,8 +623,8 @@ bool MainWindow::maybeSave(SituationModel *situation) {
         QString shownName = QFileInfo(situation->fileName()).fileName();
         QMessageBox::StandardButton ret;
         ret = QMessageBox::warning(this, shownName,
-                    tr("The document has been modified.\n"
-                        "Do you want to save your changes?"),
+                    tr("The document %1 has been modified.\n"
+                        "Do you want to save your changes?").arg(shownName),
                     QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
         if (ret == QMessageBox::Save) {
             return saveSituation(situation, "");
