@@ -34,6 +34,7 @@ public:
         optimist,
         tornado,
         startboat,
+        rib,
         unknown
     };
     Q_ENUMS (Series);

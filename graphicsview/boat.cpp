@@ -216,6 +216,8 @@ QRectF BoatGraphicsItem::boundingRect() const {
         return QRectF(-40, -33, 81, 66);
     case Boats::startboat:
         return QRectF(-55, -55, 110, 110);
+    case Boats::rib:
+        return QRectF(-35, -35, 70, 70);
     default:
         return QRectF(-50, -50, 100, 100);
     }
@@ -303,6 +305,20 @@ void BoatGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *
         path.lineTo(-17, 50);
         path.cubicTo(-20, 30, -30, -20, 0, -50);
         path.addEllipse(-1, -10, 2, 2);
+        break;
+    case Boats::rib:
+        path.moveTo(0,-30);
+        path.cubicTo(6, -26, 12.1, -22.9, 12.4, -10.3);
+        path.lineTo(12.4, 23.5);
+        path.lineTo(8.9, 30);
+        path.lineTo(5.5, 23.5);
+        path.lineTo(-5.5, 23.5);
+        path.lineTo(-8.9, 30);
+        path.lineTo(-12.4, 23.5);
+        path.lineTo(-12.4, -10.3);
+        path.cubicTo(-12.1, -22.9, -6, -26, 0, -30);
+        numberSize = 10;
+        posY = 17;
         break;
     default:
         break;
