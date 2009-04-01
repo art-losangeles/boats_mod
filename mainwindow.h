@@ -62,7 +62,9 @@ class MainWindow : public QMainWindow {
         void printPreview();
         void exportPdf();
         void exportImage();
-
+#ifdef GIF_EXPORT
+        void exportAnimation();
+#endif
         // Track actions
         void addTrack();
         void addBoat();
@@ -74,7 +76,7 @@ class MainWindow : public QMainWindow {
         void deleteModels();
 
         // Animation actions
-        void animate(bool state);
+        void animate(bool state, bool interactive=true);
         void play();
         void pause(bool pause);
         void stop();
@@ -135,6 +137,9 @@ class MainWindow : public QMainWindow {
         QAction *printPreviewAction;
         QAction *exportPdfAction;
         QAction *exportImageAction;
+#ifdef GIF_EXPORT
+        QAction *exportAnimationAction;
+#endif
         QAction *exitAction;
 
         QAction *addTrackAction;

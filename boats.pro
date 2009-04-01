@@ -57,6 +57,13 @@ SOURCES = \
 
 RESOURCES = boats.qrc
 
+contains(GIF_EXPORT,1) {
+	DEFINES += GIF_EXPORT
+	HEADERS += gifwriter.h
+	SOURCES += gifwriter.cpp
+	LIBS += -lgif
+}
+
 TRANSLATIONS = locale/boats_fr.ts
 
 isEmpty(QMAKE_LRELEASE) {

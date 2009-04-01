@@ -28,6 +28,10 @@
 #include "situationscene.h"
 #include "situationview.h"
 
+#ifdef GIF_EXPORT
+#include "gifwriter.h"
+#endif
+
 extern int debugLevel;
 
 const int MainWindow::maxRecent(5);
@@ -136,6 +140,13 @@ void MainWindow::createActions() {
     exportImageAction->setShortcut(tr("Ctrl+I"));
     connect(exportImageAction, SIGNAL(triggered()),
             this, SLOT(exportImage()));
+
+#ifdef GIF_EXPORT
+    exportAnimationAction = new QAction(QIcon(":/images/video.png"), tr("Export Ani&mation..."), this);
+    exportAnimationAction->setShortcut(tr("Ctrl+V"));
+    connect(exportAnimationAction, SIGNAL(triggered()),
+            this, SLOT(exportAnimation()));
+#endif
 
     exitAction = new QAction(tr("E&xit"), this);
     exitAction->setShortcut(tr("Ctrl+Q"));
@@ -342,6 +353,9 @@ void MainWindow::createMenus() {
     fileMenu->addAction(printPreviewAction);
     fileMenu->addAction(exportPdfAction);
     fileMenu->addAction(exportImageAction);
+#ifdef GIF_EXPORT
+    fileMenu->addAction(exportAnimationAction);
+#endif
     fileMenu->addSeparator();
     fileMenu->addAction(newTabAction);
     fileMenu->addAction(removeTabAction);
@@ -388,6 +402,9 @@ void MainWindow::createMenus() {
     toolbar->addAction(saveFileAction);
     toolbar->addAction(saveAsAction);
     toolbar->addAction(exportImageAction);
+#ifdef GIF_EXPORT
+    toolbar->addAction(exportAnimationAction);
+#endif
     toolbar->addSeparator();
     toolbar->addAction(undoAction);
     toolbar->addAction(redoAction);
@@ -873,6 +890,71 @@ void MainWindow::exportImage() {
     pixmap.save(fileName);
 }
 
+#ifdef GIF_EXPORT
+void MainWindow::exportAnimation() {
+    SituationModel *situation = situationList.at(tabWidget->currentIndex());
+    SituationView *view = viewList.at(tabWidget->currentIndex());
+
+    QString defaultName(situation->fileName());
+    defaultName.chop(4);
+    QString format("GIF Files (*.gif)");
+    QString ext;
+    QString fileName =
+            QFileDialog::getSaveFileName(this, tr("Export Animation"),
+                                         defaultName,
+                                         format,
+                                         &ext);
+    if (fileName.isEmpty()) {
+        return;
+    }
+
+    // if no provided extension or incorrect extension, use selected filter
+    int dotIndex = fileName.lastIndexOf(".");
+    QString baseName = fileName.left(dotIndex);
+    QString newExt = fileName.right(fileName.size()-dotIndex-1);
+    if (!newExt.toAscii().contains("gif")) {
+        fileName.append(".gif");
+    }
+
+    GifWriter *writer = new GifWriter();
+    QFile file(fileName);
+    if (!file.open(QFile::WriteOnly)) {
+        QMessageBox::warning(this, tr("Export Animation"),
+                             tr("Cannot write file %1:\n%2.")
+                             .arg(fileName)
+                             .arg(file.errorString()));
+        return;
+    }
+    writer->setDevice(&file);
+
+    animate(true, false);
+    timeline->setCurrentTime(timeline->duration()/2);
+    QPixmap pixmap = view->screenShot();
+    QImage shot = pixmap.toImage().convertToFormat(QImage::Format_Indexed8);
+    writer->setColorMap(shot);
+
+    QProgressBar *progress = new QProgressBar(this);
+    progress->setRange(0, timeline->duration());
+    statusbar->showMessage("Exporting animation");
+    statusbar->addPermanentWidget(progress);
+
+    QList<QImage*> imageList;
+    for (int i=0; i<=timeline->duration(); i+=80) {
+        timeline->setCurrentTime(i);
+        pixmap = view->screenShot();
+        QImage *image = new QImage(pixmap.toImage()
+                                   .convertToFormat(QImage::Format_Indexed8, writer->colormap()));
+        imageList.append(image);
+        progress->setValue(i);
+        QApplication::processEvents();
+    }
+    writer->write(imageList);
+    statusbar->removeWidget(progress);
+    delete progress;
+    animate(false);
+}
+#endif
+
 void MainWindow::setCurrentFile(SituationModel *situation, const QString &fileName) {
     situation->setFileName(fileName);
     situation->undoStack()->setClean();
@@ -977,21 +1059,23 @@ void MainWindow::toggleMarkZone() {
     }
 }
 
-void MainWindow::animate(bool state) {
+void MainWindow::animate(bool state, bool interactive) {
     SituationScene *scene = sceneList.at(tabWidget->currentIndex());
 
     if (state) {
         if (scene->state() != ANIMATE) {
             scene->setState(ANIMATE);
             scene->setAnimation(timeline);
-            animationSlider->setRange(0,timeline->duration());
-            animationSlider->setEnabled(true);
             timeline->setFrameRange(0,timeline->duration());
             timeline->setCurrentTime(timeline->duration());
             timeline->setCurrentTime(0);
-            startAction->setEnabled(true);
-            loopAction->setEnabled(true);
-        }
+            if (interactive) {
+                animationSlider->setRange(0,timeline->duration());
+                animationSlider->setEnabled(true);
+                startAction->setEnabled(true);
+                loopAction->setEnabled(true);
+                }
+            }
     } else {
         if (scene->state() == ANIMATE) {
             scene->setState(NO_STATE);
