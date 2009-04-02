@@ -14,6 +14,7 @@
 
 #include "situationprint.h"
 
+#include "commontypes.h"
 #include "situationmodel.h"
 #include "situationview.h"
 
@@ -75,12 +76,18 @@ void SituationPrint::render(QRectF pageRect) {
     QPixmap image(m_view->screenShot());
     qreal maxwidth = pageRect.width();
     qreal maxheight = pageRect.height();
+    if (debugLevel & 1 << EXPORT) std::cout << "page width " << maxwidth
+            << " height " << maxheight << std::endl;
+    if (debugLevel & 1 << EXPORT) std::cout << "image width " << image.widthMM()
+            << " height " << image.heightMM() << std::endl;
     if ((image.widthMM() > maxwidth)
         || (image.heightMM() > maxheight)) {
         qreal width_MMtoPx = image.width()/(float)image.widthMM();
         qreal height_MMtoPx = image.height()/(float)image.heightMM();
         image = image.scaled(maxwidth * width_MMtoPx, maxheight * height_MMtoPx,
                              Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    if (debugLevel & 1 << EXPORT) std::cout << "resized image width " << image.widthMM()
+            << " height " << image.heightMM() << std::endl;
     }
     document()->addResource(QTextDocument::ImageResource,
          QUrl("mydata://image.png"), QVariant(image));
