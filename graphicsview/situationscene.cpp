@@ -282,12 +282,12 @@ void SituationScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     QGraphicsScene::mouseReleaseEvent(event);
     switch (m_state) {
         case NO_STATE:
-            if (event->buttons() == Qt::LeftButton
+            if (event->button() == Qt::LeftButton
                 && (event->modifiers() & Qt::MetaModifier) == 0) {
                 mouseMoveModelEvent(event);
             }
-            if (event->buttons() == Qt::RightButton
-                || (event->buttons() == Qt::LeftButton
+            if (event->button() == Qt::RightButton
+                || (event->button() == Qt::LeftButton
                     && ((event->modifiers() & Qt::MetaModifier) != 0))) {
                 mouseHeadingEvent(event);
             }
@@ -305,8 +305,8 @@ void SituationScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
                     mouseCreateBoatEvent(event);
                 }
             }
-            if (event->buttons() == Qt::RightButton
-                || (event->buttons() == Qt::LeftButton
+            if (event->button() == Qt::RightButton
+                || (event->button() == Qt::LeftButton
                     && ((event->modifiers() & Qt::MetaModifier) != 0))) {
                 mouseHeadingEvent(event);
             }
