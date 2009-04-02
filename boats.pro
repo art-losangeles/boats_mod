@@ -20,6 +20,7 @@ HEADERS = \
 	itemviews/colorpickerwidget.h \
 	itemviews/trackdelegate.h \
 	itemviews/tracktablemodel.h \
+	boatapplication.h \
 	boats.h \
 	commontypes.h \
 	mainwindow.h \
@@ -45,6 +46,7 @@ SOURCES = \
 	itemviews/colorpickerwidget.cpp \
 	itemviews/trackdelegate.cpp \
 	itemviews/tracktablemodel.cpp \
+	boatapplication.cpp \
 	boats.cpp \
 	main.cpp \
 	mainwindow.cpp \

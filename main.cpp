@@ -11,14 +11,16 @@
 //
 #include <iostream>
 
-#include <QApplication>
+#include <QtCore>
 
+#include "boatapplication.h"
 #include "mainwindow.h"
 
 int debugLevel = 0;
 
+
 int main(int argc, char *argv[]) {
-    QApplication app(argc, argv);
+    BoatApplication app(argc, argv);
 
     int i;
     QStringList arguments = QCoreApplication::arguments();
@@ -39,6 +41,7 @@ int main(int argc, char *argv[]) {
 
     // MainWindow
     MainWindow window;
+    app.setWindow(&window);
     window.show();
     window.openFiles(arguments);
 
