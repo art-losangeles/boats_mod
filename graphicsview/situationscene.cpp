@@ -36,7 +36,9 @@ SituationScene::SituationScene(SituationModel *situation)
         m_situation(situation),
         m_trackCreated(0),
         m_state(NO_STATE),
-        m_time(QTime::currentTime()) {
+        m_time(QTime::currentTime()),
+        m_clickTime(QTime::currentTime()),
+        m_actionMenu(0) {
 
     // try to set a minimum scene rect
     QGraphicsItem *e1 = addEllipse(QRectF(-500,-500, 1, 1));
@@ -226,6 +228,8 @@ void SituationScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
         default:
             break;
     }
+
+    m_clickTime.start();
 }
 
 /**
@@ -280,6 +284,15 @@ void SituationScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
 
 void SituationScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     QGraphicsScene::mouseReleaseEvent(event);
+
+    bool click = (m_clickTime.elapsed() < 250);
+    if (click && (event->button() == Qt::RightButton
+                || (event->button() == Qt::LeftButton
+                    && ((event->modifiers() & Qt::MetaModifier) != 0)))) {
+        m_actionMenu->popup(event->screenPos());
+        return;
+    }
+
     switch (m_state) {
         case NO_STATE:
             if (event->button() == Qt::LeftButton

@@ -389,13 +389,14 @@ void MainWindow::createMenus() {
 
     trackMenu = menubar->addMenu(tr("&Edit"));
     trackMenu->addAction(addTrackAction);
-    trackMenu->addAction(deleteTrackAction);
-    trackMenu->addSeparator();
     trackMenu->addAction(addBoatAction);
     trackMenu->addAction(addMarkAction);
+    trackMenu->addSeparator();
     trackMenu->addAction(togglePortOverlapAction);
     trackMenu->addAction(toggleStarboardOverlapAction);
     trackMenu->addAction(toggleMarkZoneAction);
+    trackMenu->addSeparator();
+    trackMenu->addAction(deleteTrackAction);
     trackMenu->addAction(deleteAction);
 
     historyMenu = menubar->addMenu(tr("&History"));
@@ -480,6 +481,7 @@ void MainWindow::newTab() {
 
     situationList.append(situation);
     sceneList.append(scene);
+    scene->setActionMenu(trackMenu);
     viewList.append(view);
     tabWidget->addTab(view, "");
 

@@ -103,6 +103,7 @@ class SituationScene : public QGraphicsScene {
         SceneState state() const { return m_state; }
         QList< BoatModel * > selectedBoatModels() const { return m_selectedBoatModels; }
         QList< MarkModel * > selectedMarkModels() const { return m_selectedMarkModels; }
+        void setActionMenu(QMenu *theValue) { m_actionMenu = theValue; }
 
     signals:
         void itemMoved(QList<BoatModel*> movedItems, const QPointF &movedFromPosition);
@@ -172,6 +173,11 @@ class SituationScene : public QGraphicsScene {
 
         /// \a m_time holds the timer used for movement filtering
         QTime m_time;
+
+        /// \a m_clickTime holds the timer used for click/press detection
+        QTime m_clickTime;
+
+        QMenu *m_actionMenu;
 };
 
 #endif
