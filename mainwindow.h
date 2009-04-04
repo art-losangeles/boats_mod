@@ -47,6 +47,7 @@ class MainWindow : public QMainWindow {
         // State management
         void changeState(SceneState newState);
         void cleanState(bool state);
+        void updateActions();
 
         // File actions
         void newTab();

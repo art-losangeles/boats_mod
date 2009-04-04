@@ -413,6 +413,7 @@ void SituationScene::setSelectedModels() {
         }
     }
     if (debugLevel & 1 << VIEW) std::cout << "SelectedModels update " << m_selectedModels.size() << std::endl;
+    emit selectedModelsChanged();
 }
 
 

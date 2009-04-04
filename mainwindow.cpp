@@ -174,11 +174,13 @@ void MainWindow::createActions() {
 
     togglePortOverlapAction = new QAction(tr("&Port Overlap"), this);
     togglePortOverlapAction->setShortcut(tr("Alt+<"));
+    togglePortOverlapAction->setCheckable(true);
     connect(togglePortOverlapAction, SIGNAL(triggered()),
             this, SLOT(togglePortOverlap()));
 
     toggleStarboardOverlapAction = new QAction(tr("&Starboard Overlap"), this);
     toggleStarboardOverlapAction->setShortcut(tr("Alt+>"));
+    toggleStarboardOverlapAction->setCheckable(true);
     connect(toggleStarboardOverlapAction, SIGNAL(triggered()),
             this, SLOT(toggleStarboardOverlap()));
 
@@ -271,6 +273,28 @@ void MainWindow::createActions() {
             this, SLOT(about()));
 }
 
+void MainWindow::updateActions() {
+    SituationScene *scene = sceneList.at(tabWidget->currentIndex());
+
+    bool selectedItems = !scene->selectedItems().isEmpty();
+    bool selectedBoats = !scene->selectedBoatModels().isEmpty();
+
+    addBoatAction->setEnabled(selectedBoats || scene->state() == CREATE_BOAT);
+    togglePortOverlapAction->setEnabled(selectedBoats);
+    toggleStarboardOverlapAction->setEnabled(selectedBoats);
+    deleteTrackAction->setEnabled(selectedBoats);
+    deleteAction->setEnabled(selectedItems);
+
+    bool allPortSet = 1;
+    bool allStarboardSet = 1;
+    foreach(BoatModel *boat, scene->selectedBoatModels()) {
+        allPortSet = allPortSet && (boat->overlap() & Boats::port);
+        allStarboardSet = allStarboardSet && (boat->overlap() & Boats::starboard);
+    }
+    togglePortOverlapAction->setChecked(selectedBoats && allPortSet);
+    toggleStarboardOverlapAction->setChecked(selectedBoats && allStarboardSet);
+}
+
 void MainWindow::changeState(SceneState newState) {
     SituationView *view = viewList.at(tabWidget->currentIndex());
 
@@ -314,6 +338,7 @@ void MainWindow::changeState(SceneState newState) {
             addMarkAction->setChecked(false);
             animateAction->setChecked(false);
     }
+    updateActions();
 }
 
 void MainWindow::cleanState(bool state) {
@@ -524,6 +549,10 @@ void MainWindow::setTab(int index) {
     connect(scene, SIGNAL(stateChanged(SceneState)),
             this, SLOT(changeState(SceneState)));
     changeState(scene->state());
+
+    connect(scene, SIGNAL(selectedModelsChanged()),
+            this, SLOT(updateActions()));
+    updateActions();
 }
 
 void MainWindow::removeTab() {

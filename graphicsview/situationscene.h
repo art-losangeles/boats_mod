@@ -107,6 +107,7 @@ class SituationScene : public QGraphicsScene {
     signals:
         void itemMoved(QList<BoatModel*> movedItems, const QPointF &movedFromPosition);
         void stateChanged(SceneState newState);
+        void selectedModelsChanged();
 
     public slots:
         // Slot for selection mechanism
