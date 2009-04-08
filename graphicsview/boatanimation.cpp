@@ -39,7 +39,10 @@ BoatAnimation::BoatAnimation(TrackModel *track, BoatGraphicsItem *boat, int maxS
     m_time(QTime::currentTime()) {
 
     QPainterPath path = m_track->path();
-    qreal size = m_track->boats().size() - 1;
+    int size = m_track->size() - 1;
+    if (size <= 0) {
+        return;
+    }
 
     QPointF point = path.elementAt(0);
     setPosAt(0,point);
@@ -178,7 +181,7 @@ void BoatAnimation::afterAnimationStep(qreal step) {
     qreal sailAngle = BoatModel::getSailAngle(m_track->situation()->laylineAngle(), heading, m_track->series(), 0);
     m_boat->setTrim(sailAt(step)- sailAngle);
 
-    int index = (int)(step * m_maxSize);
+    int index = floor(step * m_maxSize);
     BoatModel *boat;
     for (int i=m_track->size()-1; i > index; i--) {
         boat = m_track->boats()[i];
@@ -190,6 +193,10 @@ void BoatAnimation::afterAnimationStep(qreal step) {
             m_track->addBoat(m_boats.last());
             m_boats.pop_back();
         }
+    }
+
+    if (index > m_track->size() - 1) {
+        return;
     }
 
     boat = m_track->boats()[index];
