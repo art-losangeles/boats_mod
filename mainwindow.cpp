@@ -959,15 +959,13 @@ void MainWindow::exportAnimation() {
     writer->setDevice(&file);
 
     animate(true, false);
+    QProgressDialog progress(tr("Exporting Animation..."), tr("Abort"), 0, timeline->duration(), this);
+    progress.setWindowModality(Qt::WindowModal);
+    statusbar->showMessage("Exporting animation");
     timeline->setCurrentTime(timeline->duration()/2);
     QPixmap pixmap = view->screenShot();
     QImage shot = pixmap.toImage().convertToFormat(QImage::Format_Indexed8);
     writer->setColorMap(shot);
-
-    QProgressBar *progress = new QProgressBar(this);
-    progress->setRange(0, timeline->duration());
-    statusbar->showMessage("Exporting animation");
-    statusbar->addPermanentWidget(progress);
 
     QList<QImage*> imageList;
     for (int i=0; i<=timeline->duration(); i+=80) {
@@ -976,12 +974,9 @@ void MainWindow::exportAnimation() {
         QImage *image = new QImage(pixmap.toImage()
                                    .convertToFormat(QImage::Format_Indexed8, writer->colormap()));
         imageList.append(image);
-        progress->setValue(i);
-        QApplication::processEvents();
+        progress.setValue(i);
     }
     writer->write(imageList);
-    statusbar->removeWidget(progress);
-    delete progress;
     animate(false);
 }
 #endif
