@@ -74,20 +74,27 @@ void SituationPrint::render(QRectF pageRect) {
     cursor.insertBlock();
     cursor.insertBlock(headingblock);
     QPixmap image(m_view->screenShot());
-    qreal maxwidth = pageRect.width();
-    qreal maxheight = pageRect.height();
-    if (debugLevel & 1 << EXPORT) std::cout << "page width " << maxwidth
-            << " height " << maxheight << std::endl;
-    if (debugLevel & 1 << EXPORT) std::cout << "image width " << image.widthMM()
-            << " height " << image.heightMM() << std::endl;
-    if ((image.widthMM() > maxwidth)
-        || (image.heightMM() > maxheight)) {
-        qreal width_MMtoPx = image.width()/(float)image.widthMM();
-        qreal height_MMtoPx = image.height()/(float)image.heightMM();
-        image = image.scaled(maxwidth * width_MMtoPx, maxheight * height_MMtoPx,
+    int maxWidthMM = pageRect.width();
+    int maxHeightMM = pageRect.height();
+    if (debugLevel & 1 << EXPORT) std::cout << "page width " << maxWidthMM
+            << " height " << maxHeightMM << std::endl;
+    if (debugLevel & 1 << EXPORT) std::cout << "image (px) width " << image.width()
+            << " height " << image.height() << std::endl;
+
+    int resolution = image.logicalDpiX();
+    if (debugLevel & 1 << EXPORT) std::cout << "image resolution " << resolution << std::endl;
+    int widthMM = (image.width() * 254 + 5 * resolution) / (10 * resolution);
+    int heightMM = (image.height() * 254 + 5 * resolution) / (10 * resolution);
+    if (debugLevel & 1 << EXPORT) std::cout << "image (MM) width " << widthMM
+            << " height " << heightMM << std::endl;
+    if ((widthMM > maxWidthMM)
+        || (heightMM > maxHeightMM)) {
+        int maxWidth = pageRect.width() * 10 * resolution / 254;
+        int maxHeight = pageRect.height() * 10 * resolution / 254;
+        image = image.scaled(maxWidth, maxHeight,
                              Qt::KeepAspectRatio, Qt::SmoothTransformation);
-    if (debugLevel & 1 << EXPORT) std::cout << "resized image width " << image.widthMM()
-            << " height " << image.heightMM() << std::endl;
+    if (debugLevel & 1 << EXPORT) std::cout << "resized image (px) width " << image.width()
+            << " height " << image.height() << std::endl;
     }
     document()->addResource(QTextDocument::ImageResource,
          QUrl("mydata://image.png"), QVariant(image));
