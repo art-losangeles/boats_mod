@@ -41,8 +41,8 @@ SituationScene::SituationScene(SituationModel *situation)
         m_actionMenu(0) {
 
     // try to set a minimum scene rect
-    QGraphicsItem *e1 = addEllipse(QRectF(-500,-500, 1, 1));
-    QGraphicsItem *e2 = addEllipse(QRectF(500, 500, 1, 1));
+    QGraphicsItem *e1 = addEllipse(QRectF(-1000,-1000, 1, 1));
+    QGraphicsItem *e2 = addEllipse(QRectF(1000, 1000, 1, 1));
     sceneRect();
     delete e1;
     delete e2;
