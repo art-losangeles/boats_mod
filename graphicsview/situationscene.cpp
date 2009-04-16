@@ -450,7 +450,10 @@ void SituationScene::setLaylines(const int angle) {
     QPainter painter(&pixmap);
     QPen pen;
     pen.setWidth(2);
-    pen.setStyle(Qt::DashLine);
+    QVector<qreal> dashes;
+    dashes << length/10.0 << length/5.0;
+    pen.setStyle(Qt::CustomDashLine);
+    pen.setDashPattern(dashes);
     painter.setPen(pen);
     painter.setRenderHints(QPainter::Antialiasing);
     painter.drawLine(QLineF(0,0,x,y));
