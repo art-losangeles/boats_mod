@@ -61,9 +61,10 @@ BoatAnimation::BoatAnimation(TrackModel *track, BoatGraphicsItem *boat, int maxS
         QPainterPath curve(point);
         curve.cubicTo(c1,c2,end);
         qreal length = curve.length();
-        for (int j=1; j<=4; j++) {
-            qreal percent = curve.percentAtLength(length*j/4.0);
-            index = (i*4.0+j)/(maxSize*4.0);
+        float e = 8;
+        for (int j=1; j<=e; j++) {
+            qreal percent = curve.percentAtLength(length*j/e);
+            index = (i*e+j)/(maxSize*e);
             setPosAt(index, curve.pointAtPercent(percent));
             if (!stalled) {
                 setRotationAt(index, fmod(360+90-curve.angleAtPercent(percent),360.0));
