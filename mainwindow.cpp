@@ -948,15 +948,6 @@ void MainWindow::exportAnimation() {
     }
 
     GifWriter *writer = new GifWriter();
-    QFile file(fileName);
-    if (!file.open(QFile::WriteOnly)) {
-        QMessageBox::warning(this, tr("Export Animation"),
-                             tr("Cannot write file %1:\n%2.")
-                             .arg(fileName)
-                             .arg(file.errorString()));
-        return;
-    }
-    writer->setDevice(&file);
 
     animate(true, false);
     QProgressDialog progress(tr("Exporting Animation..."), tr("Abort"), 0, timeline->duration(), this);
@@ -975,8 +966,22 @@ void MainWindow::exportAnimation() {
                                    .convertToFormat(QImage::Format_Indexed8, writer->colormap()));
         imageList.append(image);
         progress.setValue(i);
+        if (progress.wasCanceled()) {
+            break;
+        }
     }
-    writer->write(imageList);
+    if (!progress.wasCanceled()) {
+        QFile file(fileName);
+        if (!file.open(QFile::WriteOnly)) {
+            QMessageBox::warning(this, tr("Export Animation"),
+                                 tr("Cannot write file %1:\n%2.")
+                                 .arg(fileName)
+                                 .arg(file.errorString()));
+            return;
+        }
+        writer->setDevice(&file);
+        writer->write(imageList);
+    }
     animate(false);
 }
 #endif
