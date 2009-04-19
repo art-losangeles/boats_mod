@@ -4,9 +4,22 @@
 // Description:
 //
 //
-// Author: Thibaut GRIDEL <tgridel@free.fr>, (C) 2008
+// Author: Thibaut GRIDEL <tgridel@free.fr>
 //
-// Copyright: See COPYING file that comes with this distribution
+// Copyright (c) 2008-2009 Thibaut GRIDEL
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 //
 #include <iostream>
@@ -1194,12 +1207,12 @@ void MainWindow::about() {
         tr("<center><img src=\":/images/about.png\">"
             "<p><b>Boat Scenario</b> - a Race Scenario drawing tool.</p>"
             "<p>Version %1</p></center>"
-            "<p>Copyright (C) 2008 Thibaut GRIDEL </p>"
+            "<p>Copyright (C) 2008-2009 Thibaut GRIDEL </p>"
             "<p></p>"
             "<p>visit <a href=\"http://boats.berlios.de\">http://boats.berlios.de</a></p>"
             "<p>This program is free software; you can redistribute it and/or modify "
             "it under the terms of the GNU General Public License as published by "
-            "the Free Software Foundation; either version 2 of the License, or "
+            "the Free Software Foundation; either version 3 of the License, or "
             "(at your option) any later version.</p>"
             "<p></p>"
             "<p>This program is distributed in the hope that it will be useful, "
