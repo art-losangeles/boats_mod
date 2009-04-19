@@ -729,7 +729,10 @@ void MainWindow::openFiles(QStringList fileList) {
     }
     foreach (const QString fileName, fileList) {
         std::cout << "opening " << fileName.toStdString() << std::endl;
-        openFile(fileName, fileList.first() != fileName);
+        QFile file(fileName);
+        if (file.open(QFile::ReadOnly | QFile::Text)) {
+            openFile(fileName, fileList.first() != fileName);
+        }
     }
 }
 
