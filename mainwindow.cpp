@@ -1104,6 +1104,9 @@ void MainWindow::animate(bool state, bool interactive) {
             timeline->setCurrentTime(timeline->duration());
             timeline->setCurrentTime(0);
             if (interactive) {
+                if (!toggleAnimationToolbarAction->isChecked()) {
+                    toggleAnimationToolbarAction->setChecked(true);
+                }
                 animationSlider->setRange(0,timeline->duration());
                 animationSlider->setEnabled(true);
                 startAction->setEnabled(true);
