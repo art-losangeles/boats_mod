@@ -419,7 +419,7 @@ Voulez-vous sauver vos modifications?</translation>
 <context>
     <name>SituationPrint</name>
     <message>
-        <source>Rule </source>
+        <source>Rule</source>
         <translation>Règle</translation>
     </message>
 </context>

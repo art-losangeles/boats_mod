@@ -71,7 +71,7 @@ void SituationPrint::render(QRectF pageRect) {
     if (!m_situation->rules().isEmpty()) {
         cursor.insertBlock();
         cursor.insertBlock(descblock);
-        cursor.insertText(tr("Rule "), descchar);
+        cursor.insertText(tr("Rule") + " ", descchar);
         cursor.insertText(m_situation->rules(), textchar);
     }
 
