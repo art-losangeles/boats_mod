@@ -790,6 +790,8 @@ bool MainWindow::saveSituation(SituationModel *situation, QString fileName) {
         if (name.isEmpty()) {
             return false;
         }
+        if (QFileInfo(name).suffix().isEmpty())
+            name.append(".xbs");
     }
 
     QFile file(name);
