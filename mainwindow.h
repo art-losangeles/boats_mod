@@ -56,6 +56,7 @@ class MainWindow : public QMainWindow {
         void newFile();
         void openFile();
         void openFiles(QStringList fileList);
+        void openFile(const QString &fileName, bool inNewTab = false);
         void openRecent();
         bool saveFile();
         bool saveAs();
@@ -102,7 +103,6 @@ class MainWindow : public QMainWindow {
         bool maybeSave(SituationModel *situation);
 
         // File methods
-        void openFile(const QString &fileName, bool inNewTab = false);
         bool saveSituation(SituationModel *situation, QString name);
         void setCurrentFile(SituationModel *situation, const QString &fileName);
 

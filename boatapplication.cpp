@@ -16,9 +16,7 @@ bool BoatApplication::event(QEvent *event) {
         switch (event->type()) {
         case QEvent::FileOpen:
             if (m_window) {
-                QStringList files(static_cast<QFileOpenEvent *>(
-                    event)->file());
-                m_window->openFiles(files);
+                m_window->openFile(static_cast<QFileOpenEvent *>(event)->file());
                 return true;
             }
             break;
