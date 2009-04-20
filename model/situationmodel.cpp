@@ -62,6 +62,9 @@ int SituationModel::sizeForSeries(const Boats::Series series) {
         case Boats::tornado:
             size = 61;
             break;
+	case Boats::rib:
+	    size = 60;
+	    break;
         default:
             size = 100;
             break;
