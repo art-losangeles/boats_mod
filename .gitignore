@@ -3,7 +3,7 @@
 
 # qt-creator
 qtc-*
-
+*.user
 # windows
 *.dll
 
@@ -11,6 +11,8 @@ qtc-*
 .moc
 qrc_*
 *qm
+*.Debug
+*.Release
 
 #products
 Makefile*
