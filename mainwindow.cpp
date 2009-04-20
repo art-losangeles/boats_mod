@@ -864,7 +864,7 @@ void MainWindow::print() {
     }
 
     SituationPrint printSituation(situation, view);
-    printSituation.render(printer.pageRect(QPrinter::Millimeter));
+    printSituation.render(printer.paperRect(QPrinter::Millimeter).adjusted(20, 20, -20, -20));
     printSituation.print(&printer);
 }
 
@@ -874,7 +874,7 @@ void MainWindow::printPreview() {
     SituationPrint printSituation(situation, view);
     QPrinter printer(QPrinter::HighResolution);
     QPrintPreviewDialog dialog(&printer);
-    printSituation.render(printer.pageRect(QPrinter::Millimeter));
+    printSituation.render(printer.paperRect(QPrinter::Millimeter).adjusted(20, 20, -20, -20));
 
     connect(&dialog, SIGNAL(paintRequested(QPrinter*)),
             &printSituation, SLOT(print(QPrinter*)));
@@ -898,7 +898,7 @@ void MainWindow::exportPdf() {
     printer.setOutputFormat(QPrinter::PdfFormat);
     printer.setOutputFileName(fileName);
     SituationPrint printSituation(situation, view);
-    printSituation.render(printer.pageRect(QPrinter::Millimeter));
+    printSituation.render(printer.paperRect(QPrinter::Millimeter).adjusted(20, 20, -20, -20));
     printSituation.print(&printer);
 }
 
