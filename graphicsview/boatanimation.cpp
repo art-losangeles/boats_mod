@@ -53,7 +53,7 @@ BoatAnimation::BoatAnimation(TrackModel *track, BoatGraphicsItem *boat, int maxS
 
     QPainterPath path = m_track->path();
     int size = m_track->size() - 1;
-    if (size <= 0) {
+    if (size < 0) {
         return;
     }
 
@@ -66,7 +66,7 @@ BoatAnimation::BoatAnimation(TrackModel *track, BoatGraphicsItem *boat, int maxS
     setsailAt(0, model->getSailAngle(layline, model->heading(), series, model->trim()));
 
     for (int i=0; i< size; i++) {
-        qreal index;
+        qreal index = 0;
         QPointF c1 = path.elementAt(i*3+1);
         QPointF c2 = path.elementAt(i*3+2);
         QPointF end = path.elementAt(i*3+3);
