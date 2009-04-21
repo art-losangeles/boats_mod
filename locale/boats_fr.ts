@@ -259,10 +259,6 @@ Voulez-vous sauver vos modifications?</translation>
         <translation>A propos de Boat Scenario</translation>
     </message>
     <message>
-        <source>&lt;center&gt;&lt;img src=&quot;:/images/about.png&quot;&gt;&lt;p&gt;&lt;b&gt;Boat Scenario&lt;/b&gt; - a Race Scenario drawing tool.&lt;/p&gt;&lt;p&gt;Version %1&lt;/p&gt;&lt;/center&gt;&lt;p&gt;Copyright (C) 2008 Thibaut GRIDEL &lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;visit &lt;a href=&quot;http://boats.berlios.de&quot;&gt;http://boats.berlios.de&lt;/a&gt;&lt;/p&gt;&lt;p&gt;This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.&lt;/p&gt;</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Zoom &amp;In</source>
         <translation>Zoom A&amp;vant</translation>
     </message>
@@ -407,6 +403,20 @@ Voulez-vous sauver vos modifications?</translation>
     <message>
         <source>Abort</source>
         <translation>Annuler</translation>
+    </message>
+    <message>
+        <source>&amp;Restore Last Session...</source>
+        <translation>&amp;Restaurer la Session précédente</translation>
+    </message>
+    <message>
+        <source>%1 already exists.
+Do you want to replace it?</source>
+        <translation>%1 existe déja.
+Voulez-vous le remplacer?</translation>
+    </message>
+    <message>
+        <source>&lt;center&gt;&lt;img src=&quot;:/images/about.png&quot;&gt;&lt;p&gt;&lt;b&gt;Boat Scenario&lt;/b&gt; - a Race Scenario drawing tool.&lt;/p&gt;&lt;p&gt;Version %1&lt;/p&gt;&lt;/center&gt;&lt;p&gt;Copyright (C) 2008-2009 Thibaut GRIDEL &lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;visit &lt;a href=&quot;http://boats.berlios.de&quot;&gt;http://boats.berlios.de&lt;/a&gt;&lt;/p&gt;&lt;p&gt;This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.&lt;/p&gt;</source>
+        <translation></translation>
     </message>
 </context>
 <context>
