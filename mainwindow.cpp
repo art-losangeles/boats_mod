@@ -134,6 +134,10 @@ void MainWindow::createActions() {
     connect(removeTabAction, SIGNAL(triggered()),
             this, SLOT(removeTab()));
 
+    restoreFilesAction = new QAction(tr("&Restore Last Session..."), this);
+    connect(restoreFilesAction, SIGNAL(triggered()),
+            this, SLOT(restoreFiles()));
+
     printAction = new QAction(QIcon(":images/fileprint.png"), tr("&Print..."), this);
     printAction->setShortcut(tr("Ctrl+p"));
     connect(printAction, SIGNAL(triggered()),
@@ -397,6 +401,7 @@ void MainWindow::createMenus() {
     fileMenu->addSeparator();
     fileMenu->addAction(newTabAction);
     fileMenu->addAction(removeTabAction);
+    fileMenu->addAction(restoreFilesAction);
     fileMenu->addSeparator();
     fileMenu->addAction(exitAction);
 
@@ -642,8 +647,7 @@ void MainWindow::readSettings() {
     recentList = settings.value("recentList").toStringList();
     updateRecentList();
 
-    QStringList fileList = settings.value("fileList").toStringList();
-    openFiles(fileList);
+    fileList = settings.value("fileList").toStringList();
     settings.endGroup();
 }
 
@@ -734,12 +738,11 @@ void MainWindow::openRecent() {
     }
 }
 
+void MainWindow::restoreFiles() {
+    openFiles(fileList);
+}
+
 void MainWindow::openFiles(QStringList fileList) {
-    foreach(SituationModel *situation, situationList) {
-        if (!maybeSave(situation)) {
-            return;
-        }
-    }
     foreach (const QString fileName, fileList) {
         std::cout << "opening " << fileName.toStdString() << std::endl;
         QFile file(fileName);

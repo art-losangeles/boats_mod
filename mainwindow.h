@@ -67,6 +67,7 @@ class MainWindow : public QMainWindow {
         void setTab(int index);
         void removeTab();
         void newFile();
+        void restoreFiles();
         void openFile();
         void openFiles(QStringList fileList);
         void openFile(const QString &fileName, bool inNewTab = false);
@@ -126,6 +127,7 @@ class MainWindow : public QMainWindow {
         int currentSituation;
         static const int maxRecent;
         QStringList recentList;
+        QStringList fileList;
 
         // Widgets on the window
         QMenuBar *menubar;
@@ -143,6 +145,7 @@ class MainWindow : public QMainWindow {
         // QActions
         QAction *newFileAction;
         QAction *openFileAction;
+        QAction *restoreFilesAction;
         QAction *saveFileAction;
         QAction *saveAsAction;
         QAction *newTabAction;
