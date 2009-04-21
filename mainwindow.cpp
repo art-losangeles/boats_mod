@@ -802,12 +802,23 @@ bool MainWindow::saveSituation(SituationModel *situation, QString fileName) {
         }
         name = QFileDialog::getSaveFileName(this, tr("Save Scenario"),
                                             defaultFile,
-                                            tr("xmlscenario Files (*.xbs)"));
+                                            tr("xmlscenario Files (*.xbs)"),
+                                            NULL,
+                                            QFileDialog::DontConfirmOverwrite);
         if (name.isEmpty()) {
             return false;
         }
         if (QFileInfo(name).suffix().isEmpty())
             name.append(".xbs");
+        if (QFile::exists(name)) {
+            if (QMessageBox::warning(this, tr("Save Scenario"),
+                                     tr("%1 already exists.\nDo you want to replace it?")
+                                     .arg(QFileInfo(name).baseName()),
+                                     QMessageBox::Yes | QMessageBox::No, QMessageBox::No)
+                    == QMessageBox::No) {
+                return false;
+            }
+        }
     }
 
     QFile file(name);
