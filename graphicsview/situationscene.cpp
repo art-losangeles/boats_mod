@@ -458,13 +458,14 @@ void SituationScene::setLaylines(const int angle) {
     qreal x = 2*length*sin(theta) * 4;
     qreal y = 2*length*cos(theta) * 4;
 
-    QPixmap pixmap(x,y);
+    QPixmap pixmap(int( ceil(x) ),int( ceil(y) ));  // AE, round up to next biggest integer for pixmap size
     pixmap.fill(Qt::transparent);
     QPainter painter(&pixmap);
     QPen pen;
-    pen.setWidth(2);
+    pen.setWidth(3);                                // AE, new grid style, 3-wide instead of 2-wide
+    pen.setColor(Qt::gray);                         // AE, new grid style, gray instead of black
     QVector<qreal> dashes;
-    dashes << length/10.0 << length/5.0;
+    dashes << 9 << 8 ;                              // AE, new grid style, slightly different dash pattern
     pen.setStyle(Qt::CustomDashLine);
     pen.setDashPattern(dashes);
     painter.setPen(pen);
